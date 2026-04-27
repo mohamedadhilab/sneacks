@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sneacks — Login</title>
+
+  <!-- ✅ Correct CSS path -->
+  <link rel="stylesheet" href="/styles/global.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--cream);
+      position: relative;
+      overflow: hidden;
+      padding: 40px 20px;
+    }
+
+    .bg-panels {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-panel-left {
+      width: 23%;
+      height: 85%;
+      align-self: flex-end;
+      background: #1a1a1a;
+      overflow: hidden;
+    }
+
+    .bg-panel-left img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.92;
+    }
+
+    .bg-panel-right {
+      width: 23%;
+      height: 85%;
+      align-self: flex-end;
+      margin-left: auto;
+      background: #555;
+      overflow: hidden;
+    }
+
+    .bg-panel-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.92;
+    }
+
+    .page-content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .logo .logo-title {
+      font-size: 2.4rem;
+    }
+
+    .auth-card {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background Panels -->
+  <div class="bg-panels">
+    <div class="bg-panel-left">
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" />
+    </div>
+    <div class="bg-panel-right">
+      <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&q=80" />
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    <!-- Logo -->
+    <div class="logo">
+      <div class="logo-title">SNEACKS</div>
+      <div class="logo-sub">The Curated Atelier</div>
+    </div>
+
+    <!-- Card -->
+    <div class="auth-card">
+      <h1 class="card-title">Welcome Back</h1>
+      <p class="card-subtitle">Sign in to your curated collection</p>
+
+      <!-- ✅ FORM START -->
+      <form action="/login" method="POST">
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" class="form-input" placeholder="curator@atelier.com" required />
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-row">
+            <label class="form-label">Password</label>
+            <!-- ✅ fixed route -->
+            <a href="/forgot-password" class="forgot-link">Forgot?</a>
+          </div>
+          <input type="password" name="password" class="form-input" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn-primary">Login</button>
+
+      </form>
+      <!-- ✅ FORM END -->
+
+      <div class="or-divider">or continue with</div>
+
+      <button class="btn-google">
+        Continue with Google
+      </button>
+
+      <div class="auth-footer" style="margin-top: 20px;">
+        New to the atelier?
+        <!-- ✅ fixed route -->
+        <a href="/signup">Create Account</a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+</html>

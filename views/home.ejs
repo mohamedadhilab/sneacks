@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sneacks — The Curated Atelier</title>
+  <link rel="stylesheet" href="/styles/global.css" />
+</head>
+
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav class="site-nav">
+    <a href="home.ejs" class="nav-brand">Sneacks</a>
+
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="#">Store</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+
+    <div class="nav-icons">
+      <!-- Search -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="11" cy="11" r="7" />
+        <line x1="16.5" y1="16.5" x2="22" y2="22" />
+      </svg>
+      <!-- Wishlist -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+      </svg>
+      <!-- Account -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+      <!-- Cart -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <path d="M16 10a4 4 0 0 1-8 0" />
+      </svg>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-left">
+      <h1 class="hero-heading">
+        Curated for<br />
+        the<br />
+        Modern<br />
+        Fl<em>â</em>neur
+      </h1>
+      <p class="hero-body">
+        Footwear that bridges the gap between heritage craftsmanship and the rhythm of contemporary urban life.
+      </p>
+      <a href="#arrivals" class="btn-explore">
+        Explore Collection
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="hero-right">
+      <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=900&q=85"
+        alt="White sneaker hero shot" />
+    </div>
+  </section>
+
+  <!-- ===== NEW ARRIVALS ===== -->
+  <section class="new-arrivals" id="arrivals">
+    <div class="arrivals-header">
+      <div>
+        <div class="section-tag">Seasonal Edit</div>
+        <h2 class="section-title">New Arrivals</h2>
+      </div>
+      <a href="#" class="view-all-link">
+        View All
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="products-grid">
+
+      <!-- Card 1 -->
+      <div class="product-card">
+        <div class="product-img-wrap" style="background:#e8e0d0;">
+          <span class="product-badge">New</span>
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80" alt="The Canvas Low-Top" />
+        </div>
+        <div class="product-info">
+          <span class="product-name">The Canvas Low-Top</span>
+          <span class="product-price">$185</span>
+        </div>
+        <div class="product-desc">Organic Cotton &amp; Recycled Rubber</div>
+        <button class="btn-buy">Buy Now</button>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="product-card">
+        <div class="product-img-wrap" style="background:#1c1c14;">
+          <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&q=80" alt="The Atelier Runner" />
+        </div>
+        <div class="product-info">
+          <span class="product-name">The Atelier Runner</span>
+          <span class="product-price">$340</span>
+        </div>
+        <div class="product-desc">Suede &amp; Italian Calf Leather</div>
+        <button class="btn-buy">Buy Now</button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="product-card">
+        <div class="product-img-wrap" style="background:#1a1f2e;">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80&grayscale"
+            alt="The Obsidian Ace" style="filter:brightness(0.4) contrast(1.2);" />
+        </div>
+        <div class="product-info">
+          <span class="product-name">The Obsidian Ace</span>
+          <span class="product-price">$210</span>
+        </div>
+        <div class="product-desc">Monochrome Sport Series</div>
+        <button class="btn-buy">Buy Now</button>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="product-card">
+        <div class="product-img-wrap" style="background:#dce4e8;">
+          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=80" alt="The Driftwood Mesh"
+            style="filter:grayscale(30%) brightness(0.85);" />
+        </div>
+        <div class="product-info">
+          <span class="product-name">The Driftwood Mesh</span>
+          <span class="product-price">$195</span>
+        </div>
+        <div class="product-desc">Breathable Mesh &amp; Nubuck</div>
+        <button class="btn-buy">Buy Now</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== TRENDING NOW ===== -->
+  <section class="trending">
+    <div class="trending-header">
+      <h2 class="section-title">Trending Now</h2>
+    </div>
+
+    <div class="trending-grid">
+
+      <!-- Main large card -->
+      <div class="trend-main">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=85" alt="Aero-Luxe Series"
+          style="filter:brightness(0.75) saturate(0.9);" />
+        <div class="trend-main-overlay">
+          <div class="trend-tag">Most Coveted</div>
+          <div class="trend-name">The Aero-Luxe Series</div>
+          <a href="#" class="btn-buy-white">Buy Now</a>
+        </div>
+      </div>
+
+      <!-- Right side two smaller cards -->
+      <div class="trend-side">
+        <div class="trend-small">
+          <img src="https://images.unsplash.com/photo-1543168256-418811576931?w=700&q=85" alt="Green sneakers" />
+        </div>
+        <div class="trend-small">
+          <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=700&q=85" alt="Clean white sneaker"
+            style="filter:brightness(0.88);" />
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== SITE FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+
+      <div>
+        <div class="footer-brand-name">Sneacks</div>
+        <p class="footer-brand-desc">
+          Curating the finest footwear for those who walk with intention. Based in London, shipping globally to the
+          modern flâneur.
+        </p>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Explore</div>
+        <ul class="footer-col-links">
+          <li><a href="#">Locations</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Shipping &amp; Returns</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <ul class="footer-col-links">
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Pinterest</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      © 2024 Sneacks. Crafted for the Curated Atelier
+    </div>
+  </footer>
+
+</body>
+
+</html>

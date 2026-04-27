@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sneacks — Verify Identity</title>
+
+  <!-- ✅ FIXED CSS PATH -->
+  <link rel="stylesheet" href="/styles/global.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--cream);
+    }
+
+    .main-row {
+      display: flex;
+      flex: 1;
+    }
+
+    .left-panel {
+      width: 50%;
+      background: #b8a88a;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .left-caption {
+      position: absolute;
+      bottom: 48px;
+      left: 40px;
+    }
+
+    .caption-tag {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+    }
+
+    .caption-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #fff;
+    }
+
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 60px;
+    }
+
+    .logo {
+      margin-bottom: 60px;
+      text-align: center;
+    }
+
+    .verify-card {
+      background: var(--cream-card);
+      border-radius: 4px;
+      padding: 48px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .verify-title {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .verify-sub {
+      font-size: 0.75rem;
+      margin-bottom: 36px;
+    }
+
+    .otp-input {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.2rem;
+      text-align: center;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+    }
+
+    .back-row {
+      margin-top: 28px;
+      text-align: center;
+    }
+
+    .error-text {
+      color: red;
+      font-size: 0.7rem;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="main-row">
+
+    <!-- LEFT -->
+    <div class="left-panel">
+      <img src="https://images.unsplash.com/photo-1543168256-418811576931?w=800&q=80" />
+      <div class="left-caption">
+        <div class="caption-tag">Limited Collection</div>
+        <div class="caption-main">Crafted for the curated atelier.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-panel">
+
+      <div class="logo">
+        <div class="logo-title">SNEACKS</div>
+        <div class="logo-sub">The Curated Atelier</div>
+      </div>
+
+      <div class="verify-card">
+
+        <h1 class="verify-title">Verify Your Identity</h1>
+        <p class="verify-sub">Enter the 6-digit code sent to your email.</p>
+
+        <!-- 🔴 ERROR -->
+        <% if (error) { %>
+          <div class="error-text"><%= error %></div>
+        <% } %>
+
+        <!-- ✅ FORM -->
+        <form action="/verify-otp" method="POST">
+
+          <!-- IMPORTANT -->
+          <input type="hidden" name="email" value="<%= email %>" />
+          <input type="hidden" name="purpose" value="<%= purpose %>" />
+
+          <!-- SIMPLE OTP INPUT -->
+          <input 
+            type="text" 
+            name="otp"
+            maxlength="6"
+            class="otp-input"
+            placeholder="------"
+            required
+          />
+
+          <button type="submit" class="btn-primary">
+            Verify
+          </button>
+
+        </form>
+
+        <div class="resend-row">
+          Didn't receive? <a href="/resend-otp?email=<%= email %>&purpose=<%= purpose %>">Resend</a>
+        </div>
+
+      </div>
+
+      <div class="back-row">
+        <a href="/login" class="back-link">← Back to Login</a>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>
