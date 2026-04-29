@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 const userController = require('../controllers/userController');
 
@@ -53,6 +54,24 @@ router.get('/home', (req, res) => {
 
 
 router.get('/logout', userController.logout);
+
+
+// start Google login
+router.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+// callback
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: '/login'
+  }),
+  (req, res) => {
+    res.redirect('/home');
+  }
+);
 
 
 module.exports = router;

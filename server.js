@@ -6,17 +6,18 @@ require('dotenv').config();
 
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoute');
+const session = require('express-session');
+const passport = require('passport');
+require('./config/passport');
 
 const app = express();
 
-// DB
+
 connectDB();
 
-// middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const session = require('express-session');
 
 app.use(
   session({
@@ -26,17 +27,16 @@ app.use(
   })
 );
 
-// view engine
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// static
 app.use(express.static(path.join(__dirname, 'public')));
 
-// routes
 app.use('/', userRoutes);
 
-// server
 app.listen(3000, () => {
   console.log('Server running on port 3000');
 });
