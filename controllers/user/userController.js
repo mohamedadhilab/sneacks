@@ -1,12 +1,12 @@
-const User = require('../models/userModel');
+const User = require('../../models/userModel');
 const bcrypt = require('bcrypt');
-const sendOtpMail = require('../utils/mail');
+const sendOtpMail = require('../../utils/mail');
 
 const {
   generateOTP,
   saveOTP,
   verifyOTP
-} = require('../utils/otpService');
+} = require('../../utils/otpService');
 
 
 // ================= SIGNUP =================

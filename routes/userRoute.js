@@ -3,11 +3,11 @@ const router = express.Router();
 const passport = require('passport');
 
 const upload = require('../middleware/upload');
-const userController = require('../controllers/userController');
+const userController = require('../controllers/user/userController');
 
 const { isLoggedIn } = require('../middleware/authMiddleware');
 const noCache = require('../middleware/noCache');
-
+const addressController = require('../controllers/user/addressController');
 
 
 router.get('/', (req, res) => {
@@ -90,6 +90,16 @@ req.session.user = {
     res.redirect('/home');
   }
 );
+
+
+
+router.get('/address', addressController.getAddressPage);
+
+router.post('/add-address', addressController.addAddress);
+
+router.post('/update-address/:id', addressController.updateAddress);
+
+router.get('/delete-address/:id', addressController.deleteAddress);
 
 
 
