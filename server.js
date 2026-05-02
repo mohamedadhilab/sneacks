@@ -17,15 +17,25 @@ connectDB();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
 
 app.use(
   session({
-    secret: 'mysecretkey',
+    secret: 'your_secret_key', // change later
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // true only in HTTPS
+      maxAge: 1000 * 60 * 60 // 1 hour
+    }
   })
 );
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());

@@ -30,7 +30,19 @@ const userSchema = new mongoose.Schema({
   isBlocked: {
     type: Boolean,
     default: false
-  }
+  },
+  profileImage: {
+  type: String,
+  default: null
+},
+phone: {
+  type: String,
+  default: ''
+},
+dob: {
+  type: String,
+  default: ''
+}
 
 }, { timestamps: true });
 
