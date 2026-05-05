@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Details | SNEACKS Admin</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/styles/admin/layout.css">
+  <link rel="stylesheet" href="/styles/admin/user-details.css">
+</head>
+<body>
+
+<!-- Sidebar -->
+<%- include('../partials/admin/sidebar', { page: 'users' }) %>
+
+<div class="main-content">
+
+  <!-- Topbar -->
+  <%- include('../partials/admin/topbar', { searchPlaceholder: 'Search terminal...' }) %>
+
+  <div class="page-container">
+
+    <!-- ================= PROFILE SECTION ================= -->
+    <div class="top-section">
+
+      <!-- PROFILE CARD -->
+      <div class="card profile-card">
+
+        <div class="profile-image">
+
+        <% if (user.profileImage) { %>
+
+            <!-- ✅ Show uploaded image -->
+            <img src="<%= user.profileImage %>" alt="User Image" />
+
+        <% } else { %>
+
+            <!-- ✅ Show default letter avatar -->
+            <div class="avatar-default">
+            <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+            </div>
+
+        <% } %>
+
+        </div>
+
+        <div class="profile-details">
+
+          <div class="profile-header-row">
+            <h2 class="profile-name"><%= user.name %></h2>
+
+            <% if (user.isBlocked) { %>
+              <span class="badge-elite" style="background:red;">BLOCKED</span>
+            <% } else { %>
+              <span class="badge-elite">ACTIVE</span>
+            <% } %>
+          </div>
+
+          <div class="profile-id">ID: <%= user._id %></div>
+
+          <div class="contact-info-grid">
+
+            <div class="info-group">
+              <span class="info-label">PHONE</span>
+              <span class="info-value"><%= user.phone || 'Not provided' %></span>
+            </div>
+
+            <div class="info-group">
+              <span class="info-label">EMAIL</span>
+              <span class="info-value"><%= user.email %></span>
+            </div>
+
+            <div class="info-group">
+              <span class="info-label">DOB</span>
+              <span class="info-value"><%= user.dob || 'Not provided' %></span>
+            </div>
+
+            <div class="info-group">
+              <span class="info-label">JOINED</span>
+              <span class="info-value">
+                <%= new Date(user.createdAt).toDateString() %>
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- LTV CARD -->
+      <div class="card ltv-card">
+        <div class="ltv-label">LIFETIME VALUE</div>
+        <div class="ltv-value">
+          ₹<%= typeof ltvValue !== 'undefined' ? ltvValue : 0 %>
+        </div>
+        <div class="ltv-change">Based on orders</div>
+      </div>
+
+    </div>
+
+    <!-- ================= ORDER HISTORY ================= -->
+    <div class="card order-history-card">
+
+      <div class="section-header">
+        <h3 class="section-title">ORDER HISTORY</h3>
+      </div>
+
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>REFERENCE</th>
+            <th>DATE</th>
+            <th>ITEMS</th>
+            <th>AMOUNT</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <% if (orders && orders.length > 0) { %>
+
+            <% orders.forEach(order => { %>
+              <tr>
+
+                <td><%= order._id %></td>
+
+                <td>
+                  <%= new Date(order.createdAt).toDateString() %>
+                </td>
+
+                <td>
+                  <%= order.items ? order.items.length : 0 %> items
+                </td>
+
+                <td>₹<%= order.totalAmount || 0 %></td>
+
+                <td>
+                  <% if (order.status === 'delivered') { %>
+                    <span class="badge badge-active">DELIVERED</span>
+                  <% } else if (order.status === 'pending') { %>
+                    <span class="badge badge-inactive">PENDING</span>
+                  <% } else { %>
+                    <span class="badge badge-restricted">
+                      <%= order.status ? order.status.toUpperCase() : 'UNKNOWN' %>
+                    </span>
+                  <% } %>
+                </td>
+
+              </tr>
+            <% }) %>
+
+          <% } else { %>
+
+            <tr>
+              <td colspan="5" style="text-align:center; padding:30px;">
+                No orders found for this user
+              </td>
+            </tr>
+
+          <% } %>
+
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

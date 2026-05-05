@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verify OTP - SNEACKS Admin</title>
+  <link rel="stylesheet" href="/styles/admin/admin-auth.css">
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<header class="admin-header">
+  <h1 class="admin-logo">SNEACKS</h1>
+  <div class="admin-subtitle">KINETIC EDGE TERMINAL</div>
+</header>
+
+<main class="auth-card" style="max-width: 460px;">
+
+  <% if (error) { %>
+    <div class="admin-alert"><%= error %></div>
+  <% } %>
+
+  <h2 class="auth-card-title">Verify OTP</h2>
+  <p class="auth-card-desc">
+    Enter the 6-digit code sent to your admin email (<%= email %>)
+  </p>
+
+  <!-- ✅ OTP FORM -->
+  <form action="/admin/verify-otp" method="POST" id="otpForm">
+
+    <input type="hidden" name="email" value="<%= email %>">
+    <input type="hidden" name="purpose" value="<%= purpose %>"> <!-- 🔥 IMPORTANT -->
+    <input type="hidden" name="otp" id="fullOtpInput">
+
+    <div class="otp-grid">
+      <% for(let i=0;i<6;i++){ %>
+        <input type="text" class="otp-input" maxlength="1" required>
+      <% } %>
+    </div>
+
+    <button type="submit" class="btn-primary" style="margin-top: 1rem;">
+      Verify OTP →
+    </button>
+
+  </form>
+
+  <!-- ✅ RESEND SECTION -->
+  <div class="resend-text" style="margin-top:15px;">
+    <span id="timerText">Resend in 30s</span>
+
+    <!-- 🔥 USE GET (matches backend) -->
+    <a id="resendBtn"
+       href="/admin/resend-otp?email=<%= email %>&purpose=<%= purpose %>"
+       style="display:none; margin-top:10px; color:#ff7849; cursor:pointer;">
+       RESEND OTP
+    </a>
+  </div>
+
+  <div class="back-link">
+    <a href="/admin/login">&lt; Back to Login</a>
+  </div>
+
+</main>
+
+<script>
+  // ===== OTP INPUT =====
+  const inputs = document.querySelectorAll('.otp-input');
+  const fullOtpInput = document.getElementById('fullOtpInput');
+
+  inputs.forEach((input, index) => {
+    input.addEventListener('input', () => {
+      if (input.value && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !input.value && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+  });
+
+  document.getElementById('otpForm').addEventListener('submit', () => {
+    let otp = '';
+    inputs.forEach(i => otp += i.value);
+    fullOtpInput.value = otp;
+  });
+
+  // ===== TIMER =====
+  let timeLeft = 30;
+  const timerText = document.getElementById('timerText');
+  const resendBtn = document.getElementById('resendBtn');
+
+  const timer = setInterval(() => {
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+
+      timerText.style.display = "none";
+      resendBtn.style.display = "block";
+
+    } else {
+      timerText.innerText = "Resend in " + timeLeft + "s";
+      timeLeft--;
+    }
+
+  }, 1000);
+</script>
+
+</body>
+</html>

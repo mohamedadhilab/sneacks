@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manage Addresses — Sneacks</title>
-  <link rel="stylesheet" href="/styles/global.css" />
-  <link rel="stylesheet" href="/styles/address.css" />
+  <link rel="stylesheet" href="/styles/user/global.css" />
+  <link rel="stylesheet" href="/styles/user/address.css" />
 </head>
 <body>
 
@@ -109,11 +109,9 @@
         </button>
 
         <!-- DELETE -->
-        <form action="/address/delete/<%= address._id %>" method="POST">
-          <button class="btn-text-action text-danger">
-            REMOVE
-          </button>
-        </form>
+        <a href="/delete-address/<%= address._id %>" class="btn-text-action text-danger" style="text-decoration: none;">
+          REMOVE
+        </a>
 
       </div>
     </div>
@@ -138,45 +136,51 @@
       </div>
 
       <div class="modal-body-card">
-          <form action="/address/add" method="POST" class="edit-form grid-form">
-            <div class="form-group full-width">
+          <form action="/add-address" method="POST" class="edit-form grid-form">
+          <div class="form-group full-width">
             <label class="form-label">FULL NAME</label>
-            <input type="text" class="form-input" placeholder="E.g. Julian Atelier" />
+            <input 
+              type="text" 
+              name="full_name" 
+              class="form-input" 
+              value="<%= user?.name || '' %>" 
+              placeholder="Enter your name"
+              required 
+            />          
           </div>
           <div class="form-group full-width">
             <label class="form-label">STREET ADDRESS</label>
-            <input type="text" class="form-input" placeholder="123 Cobbler's Lane" />
-          </div>
-          <div class="form-group full-width">
-            <label class="form-label">APARTMENT, SUITE, ETC. <span class="text-optional">(optional)</span></label>
-            <input type="text" class="form-input" placeholder="Studio 4B" />
+            <input type="text" name="address" class="form-input" placeholder="123 Cobbler's Lane" required />
           </div>
           
           <div class="form-group">
             <label class="form-label">CITY</label>
-            <input type="text" class="form-input" placeholder="Florence" />
+            <input type="text" name="city" class="form-input" placeholder="Florence" required />
           </div>
           <div class="form-group">
             <label class="form-label">STATE/PROVINCE</label>
-            <input type="text" class="form-input" placeholder="Tuscany" />
+            <input type="text" name="state" class="form-input" placeholder="Tuscany" required />
           </div>
           
           <div class="form-group">
             <label class="form-label">ZIP/POSTAL CODE</label>
-            <input type="text" class="form-input" placeholder="50123" />
+            <input type="text" name="pincode" class="form-input" placeholder="50123" required />
           </div>
           <div class="form-group">
-            <label class="form-label">COUNTRY</label>
-            <select class="form-input select-input">
-              <option>Italy</option>
-              <option>United States</option>
-              <option>United Kingdom</option>
-            </select>
+            <label class="form-label">PHONE NUMBER</label>
+            <input 
+              type="text" 
+              name="phone_number" 
+              class="form-input" 
+              value="<%= user?.phone || '' %>" 
+              placeholder="+91 234 567 8900"
+              required 
+            />          
           </div>
 
           <div class="form-group full-width checkbox-group">
             <label class="custom-checkbox">
-              <input type="checkbox" />
+              <input type="checkbox" name="is_default" value="true" />
               <span class="checkmark"></span>
               Set as my default shipping address
             </label>
@@ -201,45 +205,37 @@
       </div>
 
       <div class="modal-body-card">
-        <form class="edit-form grid-form">
+        <form id="editAddressForm" method="POST" class="edit-form grid-form">
           <div class="form-group full-width">
             <label class="form-label">FULL NAME</label>
-            <input type="text" class="form-input" value="Julianne Sterling" />
+            <input type="text" id="edit_full_name" name="full_name" class="form-input" required />
           </div>
           <div class="form-group full-width">
             <label class="form-label">STREET ADDRESS</label>
-            <input type="text" class="form-input" value="420 Artisanal Avenue" />
-          </div>
-          <div class="form-group full-width">
-            <label class="form-label">APARTMENT, SUITE, ETC. <span class="text-optional">(optional)</span></label>
-            <input type="text" class="form-input" value="Studio 4B" />
+            <input type="text" id="edit_address" name="address" class="form-input" required />
           </div>
           
           <div class="form-group">
             <label class="form-label">CITY</label>
-            <input type="text" class="form-input" value="Boston" />
+            <input type="text" id="edit_city" name="city" class="form-input" required />
           </div>
           <div class="form-group">
             <label class="form-label">STATE/PROVINCE</label>
-            <input type="text" class="form-input" value="MA" />
+            <input type="text" id="edit_state" name="state" class="form-input" required />
           </div>
           
           <div class="form-group">
             <label class="form-label">ZIP/POSTAL CODE</label>
-            <input type="text" class="form-input" value="02111" />
+            <input type="text" id="edit_pincode" name="pincode" class="form-input" required />
           </div>
           <div class="form-group">
-            <label class="form-label">COUNTRY</label>
-            <select class="form-input select-input">
-              <option>United States</option>
-              <option>Italy</option>
-              <option>United Kingdom</option>
-            </select>
+            <label class="form-label">PHONE NUMBER</label>
+            <input type="text" id="edit_phone_number" name="phone_number" class="form-input" required />
           </div>
 
           <div class="form-group full-width checkbox-group">
             <label class="custom-checkbox">
-              <input type="checkbox" checked />
+              <input type="checkbox" id="edit_is_default" name="is_default" value="true" />
               <span class="checkmark"></span>
               Set as my default shipping address
             </label>
@@ -295,6 +291,21 @@
     }
     function closeModal(id) {
       document.getElementById(id).classList.remove('active');
+    }
+    
+    function openEditModal(id, fullName, address, city, state, pincode, phone) {
+      // Set the action of the form to point to the update route with the correct id
+      document.getElementById('editAddressForm').action = '/update-address/' + id;
+      
+      // Populate the fields
+      document.getElementById('edit_full_name').value = fullName;
+      document.getElementById('edit_address').value = address;
+      document.getElementById('edit_city').value = city;
+      document.getElementById('edit_state').value = state;
+      document.getElementById('edit_pincode').value = pincode;
+      document.getElementById('edit_phone_number').value = phone;
+      
+      openModal('editAddressModal');
     }
   </script>
 </body>

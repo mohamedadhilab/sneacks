@@ -3,11 +3,19 @@ const Address = require('../../models/addressModel');
 // ================= GET ADDRESS PAGE =================
 exports.getAddressPage = async (req, res) => {
   try {
+    // ✅ SAFETY CHECK (VERY IMPORTANT)
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+
     const addresses = await Address.find({
       user_id: req.session.user.id
     });
 
-    res.render('address', { addresses });
+    res.render('user/address', {
+      addresses,
+      user: req.session.user
+    });
 
   } catch (error) {
     console.log(error);
@@ -19,18 +27,28 @@ exports.getAddressPage = async (req, res) => {
 // ================= ADD ADDRESS =================
 exports.addAddress = async (req, res) => {
   try {
-    const data = req.body;
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
 
-    // 🔥 handle default address
-    if (data.is_default) {
+    const data = req.body;
+    const isDefault = data.is_default === 'true';
+
+    if (isDefault) {
       await Address.updateMany(
         { user_id: req.session.user.id },
-        { is_default: false }
+        { $set: { is_default: false } }
       );
     }
 
     await Address.create({
-      ...data,
+      full_name: data.full_name,
+      address: data.address,
+      city: data.city,
+      state: data.state,
+      pincode: data.pincode,
+      phone_number: data.phone_number,
+      is_default: isDefault,
       user_id: req.session.user.id
     });
 
@@ -46,19 +64,34 @@ exports.addAddress = async (req, res) => {
 // ================= UPDATE ADDRESS =================
 exports.updateAddress = async (req, res) => {
   try {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+
     const { id } = req.params;
     const data = req.body;
+    const isDefault = data.is_default === 'true';
 
-    if (data.is_default) {
+    if (isDefault) {
       await Address.updateMany(
         { user_id: req.session.user.id },
-        { is_default: false }
+        { $set: { is_default: false } }
       );
     }
 
     await Address.updateOne(
       { _id: id, user_id: req.session.user.id },
-      { $set: data }
+      {
+        $set: {
+          full_name: data.full_name,
+          address: data.address,
+          city: data.city,
+          state: data.state,
+          pincode: data.pincode,
+          phone_number: data.phone_number,
+          is_default: isDefault
+        }
+      }
     );
 
     res.redirect('/address');
@@ -73,12 +106,28 @@ exports.updateAddress = async (req, res) => {
 // ================= DELETE ADDRESS =================
 exports.deleteAddress = async (req, res) => {
   try {
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+
     const { id } = req.params;
 
-    await Address.deleteOne({
+    const deleted = await Address.findOneAndDelete({
       _id: id,
       user_id: req.session.user.id
     });
+
+    // 🔥 maintain default logic
+    if (deleted && deleted.is_default) {
+      const firstAddress = await Address.findOne({
+        user_id: req.session.user.id
+      });
+
+      if (firstAddress) {
+        firstAddress.is_default = true;
+        await firstAddress.save();
+      }
+    }
 
     res.redirect('/address');
 

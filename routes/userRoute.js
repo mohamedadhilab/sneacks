@@ -15,15 +15,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', noCache, (req, res) => {
-  res.render('login');
+  res.render('user/login');
 });
 
 router.get('/signup', noCache, (req, res) => {
-  res.render('signup');
+  res.render('user/signup');
 });
 
 router.get('/forgot-password', noCache, (req, res) => {
-  res.render('forgot-password', { error: null });
+  res.render('user/forgot-password', { error: null });
 });
 
 
@@ -45,7 +45,7 @@ router.post('/reset-password', userController.resetPassword);
 
 
 router.get('/home', isLoggedIn,noCache, (req, res) => {
-  res.render('home');
+  res.render('user/home');
 });
 
 
@@ -53,7 +53,7 @@ router.get('/logout', userController.logout);
 
 router.get('/profile', isLoggedIn, noCache, async (req, res) => {
   const user = await require('../models/userModel').findById(req.session.user.id);
-  res.render('profile', { user });
+  res.render('user/profile', { user });
 });
 
 router.post(

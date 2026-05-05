@@ -77,7 +77,7 @@ exports.forgotPassword = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.render('forgot-password', { error: 'User not found' });
+      return res.render('user/forgot-password', { error: 'User not found' });
     }
 
     const otp = generateOTP();
@@ -101,7 +101,7 @@ exports.forgotPassword = async (req, res) => {
 exports.getOtpPage = (req, res) => {
   const { email, purpose } = req.query;
 
-  res.render('otp', {
+  res.render('user/otp', {
     email,
     purpose,
     error: null,
@@ -115,7 +115,7 @@ exports.verifyOtp = async (req, res) => {
   const isValid = await verifyOTP(email, otp, purpose);
 
   if (!isValid) {
-    return res.render('otp', {
+    return res.render('user/otp', {
       email,
       purpose,
       error: 'Invalid OTP'
@@ -153,12 +153,13 @@ if (purpose === 'email-change') {
   if (!newEmail) {
     return res.send('Session expired');
   }
+  
 
   // 🔥 CHECK IF EMAIL ALREADY EXISTS
   const existingUser = await User.findOne({ email: newEmail });
 
   if (existingUser) {
-    return res.render('otp', {
+    return res.render('user/otp', {
       email,
       purpose,
       error: 'Email already in use'
@@ -211,7 +212,7 @@ exports.resendOtp = async (req, res) => {
 // ================= RESET PAGE =================
 exports.getResetPage = (req, res) => {
   const { email } = req.query;
-  res.render('reset-password', { email });
+  res.render('user/reset-password', { email });
 };
 
 

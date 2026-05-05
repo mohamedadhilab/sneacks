@@ -3,7 +3,7 @@ const path = require('path');
 require('dotenv').config();
 
 
-
+const adminRoute = require('./routes/adminRoute');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoute');
 const session = require('express-session');
@@ -36,6 +36,7 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   next();
 });
+app.use('/admin', adminRoute);   
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -48,5 +49,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', userRoutes);
 
 app.listen(3000, () => {
-  console.log('Server running on port 3000');
+  console.log('Server running on http://localhost:3000');
 });

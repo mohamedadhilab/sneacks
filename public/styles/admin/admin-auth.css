@@ -1,0 +1,572 @@
+/* ============================================================
+   SNEACKS ADMIN TERMINAL - KINETIC EDGE
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --admin-bg: #1c1d1e;
+  --admin-card-bg: #222222;
+  --admin-text-main: #f0f0f0;
+  --admin-text-sub: #888888;
+  --admin-input-bg: #151515;
+  --admin-border: #333333;
+  --admin-accent: #ff7a50; /* Coral/Orange */
+  --admin-accent-glow: rgba(255, 122, 80, 0.4);
+  --admin-cyan: #00e5ff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--admin-bg);
+  color: var(--admin-text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* BACKGROUND EFFECTS (Mimicking the shoe silhouette & gradients) */
+body::before {
+  content: '01';
+  position: absolute;
+  top: -5%;
+  left: 2%;
+  font-size: 40vw;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.02);
+  z-index: -2;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.bg-glow {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 30% 50%, rgba(0, 229, 255, 0.05) 0%, transparent 60%),
+              radial-gradient(circle at 70% 80%, rgba(255, 122, 80, 0.05) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   HEADER & TYPOGRAPHY
+   ============================================================ */
+.admin-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  z-index: 10;
+}
+
+.admin-logo {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--admin-accent);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.admin-subtitle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--admin-text-sub);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   AUTH CARD
+   ============================================================ */
+.auth-card {
+  background: var(--admin-card-bg);
+  width: 100%;
+  max-width: 420px;
+  border-radius: 16px;
+  padding: 2.5rem;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Top Gradient Border */
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--admin-accent), var(--admin-cyan));
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.auth-card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.auth-card-desc {
+  font-size: 0.8rem;
+  color: var(--admin-text-sub);
+  text-align: center;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+/* Icon above title (for Forgot Password / Reset) */
+.auth-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.auth-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 122, 80, 0.1);
+  color: var(--admin-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ============================================================
+   FORMS & INPUTS
+   ============================================================ */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--admin-text-sub);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.form-label a {
+  color: var(--admin-cyan);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--admin-text-sub);
+  display: flex;
+  align-items: center;
+}
+
+.input-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.input-action {
+  position: absolute;
+  right: 14px;
+  color: var(--admin-text-sub);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.input-action svg {
+  width: 16px;
+  height: 16px;
+}
+
+.input-action:hover {
+  color: var(--admin-text-main);
+}
+
+.form-input {
+  width: 100%;
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 14px 14px;
+  color: var(--admin-text-main);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrap .form-input {
+  padding-left: 40px; /* Space for icon */
+}
+
+.form-input:focus {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 2px rgba(255, 122, 80, 0.2);
+}
+
+/* Checkbox */
+.checkbox-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.checkbox-wrap input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-wrap input[type="checkbox"]:checked {
+  background: var(--admin-accent);
+  border-color: var(--admin-accent);
+}
+
+.checkbox-wrap input[type="checkbox"]:checked::after {
+  content: '';
+  width: 4px;
+  height: 8px;
+  border: solid var(--admin-bg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.checkbox-wrap label {
+  font-size: 0.8rem;
+  color: var(--admin-text-sub);
+  cursor: pointer;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-primary {
+  width: 100%;
+  background: var(--admin-accent);
+  color: var(--admin-card-bg);
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px var(--admin-accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 122, 80, 0.6);
+}
+
+.btn-link {
+  display: inline-block;
+  color: var(--admin-text-sub);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.btn-link:hover {
+  color: var(--admin-text-main);
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1.5rem;
+}
+
+/* ============================================================
+   OTP GRID
+   ============================================================ */
+.otp-grid {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.otp-input {
+  width: 45px;
+  height: 45px;
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--admin-text-main);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.otp-input:focus {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 2px rgba(255, 122, 80, 0.2);
+}
+
+.resend-text {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--admin-text-sub);
+  margin-top: 1.5rem;
+}
+
+.resend-text span {
+  color: var(--admin-text-main);
+  font-weight: 600;
+}
+
+.resend-link {
+  color: var(--admin-accent);
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+/* ============================================================
+   BOTTOM PORTAL LINKS (Login Page)
+   ============================================================ */
+.portal-links {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+}
+
+.portal-links::before {
+  content: 'AUTHORIZED ACCESS ONLY';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--admin-card-bg);
+  padding: 0 10px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--admin-text-sub);
+  letter-spacing: 0.15em;
+}
+
+.portal-links-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.portal-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--admin-text-sub);
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.portal-link svg {
+  width: 14px;
+  height: 14px;
+  color: var(--admin-cyan);
+}
+
+.portal-link:hover {
+  color: var(--admin-text-main);
+}
+
+/* ============================================================
+   FOOTERS & BADGES
+   ============================================================ */
+.auth-footer {
+  margin-top: 2rem;
+  text-align: center;
+  max-width: 400px;
+}
+
+.auth-footer p {
+  font-size: 0.65rem;
+  color: var(--admin-text-sub);
+  line-height: 1.5;
+}
+
+.core-engine-text {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  text-align: right;
+  z-index: 10;
+}
+
+.core-engine-text .main {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.1);
+  letter-spacing: 0.2em;
+}
+
+.core-engine-text .sub {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.05);
+  letter-spacing: 0.4em;
+}
+
+.encrypted-badge {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--admin-text-sub);
+  letter-spacing: 0.1em;
+  z-index: 10;
+}
+
+.encrypted-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--admin-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--admin-cyan);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(0, 229, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+}
+
+.security-features {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--admin-text-sub);
+}
+
+.feature-item svg {
+  width: 16px;
+  height: 16px;
+}
+
+.feature-item span {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bottom-terminal-text {
+  margin-top: 1.5rem;
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Pager dots */
+.pager-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2rem;
+}
+
+.dot {
+  width: 24px;
+  height: 2px;
+  background: var(--admin-border);
+}
+
+.dot.active {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--admin-accent);
+}
+
+/* Alerts */
+.admin-alert {
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  color: #ff3b30;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.admin-alert.success {
+  background: rgba(48, 209, 88, 0.1);
+  border: 1px solid rgba(48, 209, 88, 0.3);
+  color: #30d158;
+}

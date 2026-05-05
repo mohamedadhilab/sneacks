@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Profile — Sneacks</title>
-  <link rel="stylesheet" href="/styles/global.css?v=2" />
-  <link rel="stylesheet" href="/styles/profile.css?v=6" />
+  <link rel="stylesheet" href="/styles/user/global.css?v=2" />
+  <link rel="stylesheet" href="/styles/user/profile.css?v=6" />
 </head>
 
 <body>
@@ -26,7 +26,8 @@
         <line x1="16.5" y1="16.5" x2="22" y2="22" />
       </svg>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+        <path
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
       </svg>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -65,17 +66,19 @@
           <div class="avatar-letter" id="mainDefaultAvatar" style="display: none;">
             <%= user.name.charAt(0).toUpperCase() %>
           </div>
-        <% } else { %>
-          <div class="avatar-letter" id="mainDefaultAvatar">
-            <%= user.name.charAt(0).toUpperCase() %>
-          </div>
-        <% } %>
+          <% } else { %>
+            <div class="avatar-letter" id="mainDefaultAvatar">
+              <%= user.name.charAt(0).toUpperCase() %>
+            </div>
+            <% } %>
       </div>
 
       <div class="profile-details-grid">
         <div class="detail-item full-width">
           <div class="detail-label">FULL NAME</div>
-          <div class="detail-value"><%= user.name %></div>
+          <div class="detail-value">
+            <%= user.name %>
+          </div>
           <button class="btn-edit-icon" onclick="openModal('editProfileModal')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -87,20 +90,24 @@
           <div class="detail-label">EMAIL ADDRESS</div>
           <div class="detail-value">
             <%= user.email %>
-            <% if (user.isVerified) { %>
-              <span class="badge-verified">VERIFIED</span>
-            <% } %>
+              <% if (user.isVerified) { %>
+                <span class="badge-verified">VERIFIED</span>
+                <% } %>
           </div>
         </div>
 
         <div class="detail-item">
           <div class="detail-label">PHONE NUMBER</div>
-          <div class="detail-value"><%= user.phone %></div>
+          <div class="detail-value">
+            <%= user.phone %>
+          </div>
         </div>
 
         <div class="detail-item">
           <div class="detail-label">DATE OF BIRTH</div>
-          <div class="detail-value"><%= user.dob %></div>
+          <div class="detail-value">
+            <%= user.dob %>
+          </div>
         </div>
       </div>
 
@@ -156,54 +163,54 @@
 
   <!-- ===== UPDATE PASSWORD MODAL ===== -->
   <!-- ===== UPDATE PASSWORD MODAL ===== -->
-<div class="modal-overlay" id="updatePasswordModal">
-  <div class="modal-content modal-md">
+  <div class="modal-overlay" id="updatePasswordModal">
+    <div class="modal-content modal-md">
 
-    <div class="modal-header-centered">
-      <span class="modal-tag">ACCOUNT SETTINGS</span>
-      <h2>Update Password</h2>
-      <p>Update your password to keep your account secure.</p>
-    </div>
+      <div class="modal-header-centered">
+        <span class="modal-tag">ACCOUNT SETTINGS</span>
+        <h2>Update Password</h2>
+        <p>Update your password to keep your account secure.</p>
+      </div>
 
-    <div class="modal-body-card">
+      <div class="modal-body-card">
 
-      <!-- ✅ FORM INSIDE MODAL -->
-      <form action="/update-password" method="POST" class="edit-form">
+        <!-- ✅ FORM INSIDE MODAL -->
+        <form action="/update-password" method="POST" class="edit-form">
 
-        <div class="form-group full-width">
-          <label class="form-label">CURRENT PASSWORD</label>
-          <div class="password-input-wrap">
-            <input type="password" name="currentPassword" class="form-input-box" required>
-            <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+          <div class="form-group full-width">
+            <label class="form-label">CURRENT PASSWORD</label>
+            <div class="password-input-wrap">
+              <input type="password" name="currentPassword" class="form-input-box" required>
+              <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group full-width">
-          <label class="form-label">NEW PASSWORD</label>
-          <div class="password-input-wrap">
-            <input type="password" name="newPassword" class="form-input-box" required>
-            <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+          <div class="form-group full-width">
+            <label class="form-label">NEW PASSWORD</label>
+            <div class="password-input-wrap">
+              <input type="password" name="newPassword" class="form-input-box" required>
+              <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group full-width">
-          <label class="form-label">CONFIRM PASSWORD</label>
-          <div class="password-input-wrap">
-            <input type="password" name="confirmPassword" class="form-input-box" required>
-            <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+          <div class="form-group full-width">
+            <label class="form-label">CONFIRM PASSWORD</label>
+            <div class="password-input-wrap">
+              <input type="password" name="confirmPassword" class="form-input-box" required>
+              <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+            </div>
           </div>
-        </div>
 
-        <div class="modal-actions">
-          <button type="button" class="btn-text" onclick="closeModal('updatePasswordModal')">CANCEL</button>
-          <button type="submit" class="btn-primary-sm">UPDATE PASSWORD</button>
-        </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-text" onclick="closeModal('updatePasswordModal')">CANCEL</button>
+            <button type="submit" class="btn-primary-sm">UPDATE PASSWORD</button>
+          </div>
 
-      </form>
+        </form>
 
+      </div>
     </div>
   </div>
-</div>
   <!-- ===== EDIT PROFILE MODAL ===== -->
   <div class="modal-overlay" id="editProfileModal">
     <div class="modal-content modal-md">
@@ -225,42 +232,45 @@
                   <%= user.name.charAt(0).toUpperCase() %>
                 </div>
                 <button type="button" class="btn-remove-photo" onclick="removePhoto(event)" title="Remove Photo">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                   </svg>
                 </button>
-              <% } else { %>
-                <div class="avatar-letter">
-                  <%= user.name.charAt(0).toUpperCase() %>
-                </div>
-              <% } %>
-              <input type="file" id="profileUpload" name="profileImage" accept="image/*" hidden>
-              <input type="hidden" id="removeImageFlag" name="removeImage" value="false">
+                <% } else { %>
+                  <div class="avatar-letter">
+                    <%= user.name.charAt(0).toUpperCase() %>
+                  </div>
+                  <% } %>
+                    <input type="file" id="profileUpload" name="profileImage" accept="image/*" hidden>
+                    <input type="hidden" id="removeImageFlag" name="removeImage" value="false">
             </div>
             <div class="change-photo-text">CHANGE PHOTO</div>
-            <div class="user-name"><%= user.name %></div>
+            <div class="user-name">
+              <%= user.name %>
+            </div>
           </div>
 
           <div class="form-group" id="field-name">
-  <label class="form-label">FULL NAME</label>
-  <input type="text" name="name" class="form-input-box" value="<%= user.name %>" required>
-</div>
+            <label class="form-label">FULL NAME</label>
+            <input type="text" name="name" class="form-input-box" value="<%= user.name %>" required>
+          </div>
 
-<div class="form-group" id="field-email">
-  <label class="form-label">EMAIL ADDRESS</label>
-  <input type="email" name="email" class="form-input-box" value="<%= user.email %>" required>
-</div>
+          <div class="form-group" id="field-email">
+            <label class="form-label">EMAIL ADDRESS</label>
+            <input type="email" name="email" class="form-input-box" value="<%= user.email %>" required>
+          </div>
 
-<div class="form-group" id="field-phone">
-  <label class="form-label">PHONE NUMBER</label>
-  <input type="text" name="phone" class="form-input-box" value="<%= user.phone || '' %>">
-</div>
+          <div class="form-group" id="field-phone">
+            <label class="form-label">PHONE NUMBER</label>
+            <input type="text" name="phone" class="form-input-box" value="<%= user.phone || '' %>">
+          </div>
 
-<div class="form-group" id="field-dob">
-  <label class="form-label">DATE OF BIRTH</label>
-  <input type="date" name="dob" class="form-input-box" value="<%= user.dob || '' %>">
-</div>
+          <div class="form-group" id="field-dob">
+            <label class="form-label">DATE OF BIRTH</label>
+            <input type="date" name="dob" class="form-input-box" value="<%= user.dob || '' %>">
+          </div>
           <div class="modal-actions">
             <button type="button" class="btn-text" onclick="closeModal('editProfileModal')">CANCEL</button>
             <button type="submit" class="btn-primary-sm">SAVE CHANGES</button>
@@ -279,7 +289,8 @@
       <div>
         <div class="footer-brand-name">SNEACKS</div>
         <p class="footer-brand-desc">
-          A CURATED SPACE FOR THOSE WHO VALUE THE ART OF THE STEP. ARCHITECTURAL FOOTWEAR DESIGNED FOR THE MODERN ICONOCLAST.
+          A CURATED SPACE FOR THOSE WHO VALUE THE ART OF THE STEP. ARCHITECTURAL FOOTWEAR DESIGNED FOR THE MODERN
+          ICONOCLAST.
         </p>
       </div>
       <div>
@@ -322,8 +333,8 @@
     }
 
     // FIX 5: Click backdrop to close modal
-    document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
-      overlay.addEventListener('click', function(e) {
+    document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
+      overlay.addEventListener('click', function (e) {
         if (e.target === overlay) {
           overlay.classList.remove('active');
         }
@@ -332,23 +343,23 @@
 
     function removePhoto(event) {
       event.stopPropagation(); // Don't trigger the upload click
-      
+
       // Update Modal
       var currentImg = document.getElementById('currentProfileImage');
-      if(currentImg) currentImg.style.display = 'none';
+      if (currentImg) currentImg.style.display = 'none';
       var defaultAvatar = document.getElementById('defaultAvatar');
-      if(defaultAvatar) defaultAvatar.style.display = 'flex';
-      
+      if (defaultAvatar) defaultAvatar.style.display = 'flex';
+
       // Update Main Profile Page (live preview)
       var mainImg = document.getElementById('mainProfileImage');
-      if(mainImg) mainImg.style.display = 'none';
+      if (mainImg) mainImg.style.display = 'none';
       var mainDefaultAvatar = document.getElementById('mainDefaultAvatar');
-      if(mainDefaultAvatar) mainDefaultAvatar.style.display = 'flex';
-      
+      if (mainDefaultAvatar) mainDefaultAvatar.style.display = 'flex';
+
       // Set Flag for Backend
       var flag = document.getElementById('removeImageFlag');
-      if(flag) flag.value = 'true';
-      
+      if (flag) flag.value = 'true';
+
       event.target.style.display = 'none'; // hide the X button
     }
     function togglePassword(btn) {
@@ -388,4 +399,5 @@
     }
   </script>
 </body>
+
 </html>
