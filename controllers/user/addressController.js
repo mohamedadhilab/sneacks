@@ -52,6 +52,7 @@ exports.addAddress = async (req, res) => {
       user_id: req.session.user.id
     });
 
+    req.session.message = { type: 'success', text: 'Address added successfully.' };
     res.redirect('/address');
 
   } catch (error) {
@@ -94,6 +95,7 @@ exports.updateAddress = async (req, res) => {
       }
     );
 
+    req.session.message = { type: 'success', text: 'Address updated successfully.' };
     res.redirect('/address');
 
   } catch (error) {
@@ -129,6 +131,7 @@ exports.deleteAddress = async (req, res) => {
       }
     }
 
+    req.session.message = { type: 'success', text: 'Address deleted successfully.' };
     res.redirect('/address');
 
   } catch (error) {

@@ -404,3 +404,22 @@
   background: var(--brand-orange);
   color: white;
 }
+
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:30px;
+}
+
+.pagination a{
+  padding:10px 14px;
+  background:#111;
+  color:white;
+  border-radius:8px;
+  text-decoration:none;
+}
+
+.active-page{
+  background:#ff5c35 !important;
+}

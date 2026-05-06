@@ -17,18 +17,31 @@ exports.login = async (req, res) => {
     const admin = await Admin.findOne({ email });
 
     if (!admin) {
-      return res.render('admin/login', { error: 'Admin not found' });
+      req.session.message = {
+        type: 'error',
+        text: 'Admin not found'
+      };
+      return res.redirect('/admin/login');
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
 
     if (!isMatch) {
-      return res.render('admin/login', { error: 'Invalid password' });
+      req.session.message = {
+        type: 'error',
+        text: 'Invalid password'
+      };
+      return res.redirect('/admin/login');
     }
 
     req.session.admin = {
       id: admin._id,
       email: admin.email
+    };
+
+    req.session.message = {
+      type: 'success',
+      text: 'Welcome back, Admin!'
     };
 
     return res.redirect('/admin/dashboard');
@@ -47,10 +60,16 @@ exports.getDashboard = async (req, res) => {
   }
 };
 
-// ================= LOGOUT =================
 exports.logout = (req, res) => {
-  req.session.admin = null;
-  res.redirect('/admin/login');
+
+  delete req.session.admin;
+
+  req.session.message = {
+    type: 'success',
+    text: 'Logged out successfully'
+  };
+
+  return res.redirect('/admin/login');
 };
 
 // ================= FORGOT PASSWORD PAGE =================
@@ -146,23 +165,61 @@ exports.resetPassword = async (req, res) => {
 };
 
 
+// ================= GET USERS =================
 exports.getUsers = async (req, res) => {
+
   try {
-    const users = await User.find();
-    res.render('admin/users', { users });
+
+    // ================= PAGINATION =================
+    const page = parseInt(req.query.page) || 1;
+
+    const limit = 5;
+
+    const skip = (page - 1) * limit;
+
+    // ================= USERS =================
+    const users = await User.find()
+
+      // NEWEST FIRST
+      .sort({ createdAt: -1 })
+
+      // SKIP PREVIOUS PAGE USERS
+      .skip(skip)
+
+      // LIMIT USERS PER PAGE
+      .limit(limit);
+
+    // ================= TOTAL USERS =================
+    const totalUsers = await User.countDocuments();
+
+    // ================= TOTAL PAGES =================
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    // ================= RENDER =================
+    res.render('admin/users', {
+      users,
+      currentPage: page,
+      totalPages
+    });
 
   } catch (error) {
+
     console.log(error);
-    res.send('User page error');
+
+    res.send('Users page error');
   }
 };
-
 exports.blockUser = async (req, res) => {
   try {
     await User.updateOne(
       { _id: req.params.id },
       { $set: { isBlocked: true } }
     );
+
+    req.session.message = {
+      type: 'success',
+      text: 'User has been blocked successfully.'
+    };
 
     res.redirect('/admin/users');
 
@@ -178,6 +235,11 @@ exports.unblockUser = async (req, res) => {
       { $set: { isBlocked: false } }
     );
 
+    req.session.message = {
+      type: 'success',
+      text: 'User has been unblocked successfully.'
+    };
+
     res.redirect('/admin/users');
 
   } catch (error) {
@@ -190,15 +252,21 @@ exports.getUserDetails = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      return res.send('User not found');
+      return req.session.message = {
+      type: 'error',
+      text: 'User not found'
+    };
     }
 
     res.render('admin/user-details', {
     user,
-    orders: []   // always send
+    orders: []  
     });
   } catch (error) {
     console.log(error);
-    res.send('User detail error');
+     req.session.message = {
+      type: 'error',
+      text: 'User detail error'
+    };
   }
 };

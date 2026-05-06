@@ -132,6 +132,9 @@
   font-size: 2.2rem;
   font-weight: 500;
 }
+.hidden {
+  display: none !important;
+}
 
 .profile-details-grid {
   display: grid;
@@ -818,4 +821,37 @@
   .btn-primary-sm {
     width: 100%;
   }
+}
+
+/* ================= LOGOUT ================= */
+
+.logout-item {
+  margin-top: 42px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 24px;
+}
+
+.logout-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+
+  color: #8c4b4b;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 500;
+
+  transition: all 0.25s ease;
+}
+
+.logout-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.logout-link:hover {
+  color: #b64f4f;
+  transform: translateX(4px);
 }

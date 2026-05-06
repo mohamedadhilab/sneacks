@@ -309,3 +309,28 @@ body {
   padding: 24px;
   border: 1px solid var(--border-color);
 }
+
+.logout-btn{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:12px 16px;
+
+  border-radius:12px;
+
+  background:#111;
+
+  color:#ff5c5c;
+
+  text-decoration:none;
+
+  font-weight:600;
+
+  transition:0.3s;
+}
+
+.logout-btn:hover{
+  background:#1e1e1e;
+  transform:translateX(4px);
+}

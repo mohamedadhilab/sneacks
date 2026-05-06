@@ -1,22 +1,32 @@
 <header class="topbar">
-  <div class="search-container">
+
+  <form action="/admin/users" method="GET" class="search-container">
+
     <i class="fas fa-search"></i>
-    <input type="text" class="search-input" placeholder="<%= typeof searchPlaceholder !== 'undefined' ? searchPlaceholder : 'Search orders, SKU, or customers...' %>">
-  </div>
-  
+
+    <input
+      type="text"
+      name="search"
+      class="search-input"
+      placeholder="<%= typeof searchPlaceholder !== 'undefined' ? searchPlaceholder : 'Search users...' %>"
+      value="<%= typeof search !== 'undefined' ? search : '' %>"
+    >
+
+  </form>
+
   <div class="topbar-actions">
-    <i class="fas fa-bell action-icon has-notification"></i>
-    <i class="fas fa-cog action-icon"></i>
-    <i class="far fa-question-circle action-icon"></i>
-    
+
     <div class="admin-profile">
       <div class="admin-info">
         <span class="admin-name">Admin User</span>
-        <span class="admin-role">Superuser</span>
+        <span class="admin-role">SUPERUSER</span>
       </div>
+
       <div class="admin-avatar">
         <i class="far fa-user"></i>
       </div>
     </div>
+
   </div>
+
 </header>

@@ -107,20 +107,20 @@
         <!-- NAME -->
         <div class="form-group">
           <label class="form-label">Full Name</label>
-          <input type="text" name="name" class="form-input" placeholder="Julian Vane" required />
+          <input type="text" name="name" class="form-input" placeholder="Julian Vane" />
         </div>
 
         <!-- EMAIL -->
         <div class="form-group">
           <label class="form-label">Email Address</label>
-          <input type="email" name="email" class="form-input" placeholder="atelier@sneacks.com" required />
+          <input type="email" name="email" class="form-input" placeholder="atelier@sneacks.com"  />
         </div>
 
         <!-- PASSWORD -->
         <div class="form-group">
           <label class="form-label">Password</label>
         <div class="password-input-wrap">
-          <input type="password" name="password" class="form-input" placeholder="••••••••" required />
+          <input type="password" name="password" class="form-input" placeholder="••••••••" />
 
           <button type="button" class="btn-eye" onclick="togglePassword(this)">
             
@@ -149,7 +149,7 @@
           <label class="form-label">Confirm Password</label>
 
           <div class="password-input-wrap">
-            <input type="password" name="confirmPassword" class="form-input" required />
+            <input type="password" name="confirmPassword" class="form-input"  />
 
             <button type="button" class="btn-eye" onclick="togglePassword(this)">
               
@@ -208,5 +208,6 @@
     }
   </script>
 
+<%- include("../partials/toast") %>
 </body>
 </html>

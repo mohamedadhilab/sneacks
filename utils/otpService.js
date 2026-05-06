@@ -13,6 +13,7 @@ exports.saveOTP = async (email, otp, purpose) => {
     purpose,
     expiresAt: new Date(Date.now() + 5 * 60 * 1000) // 5 mins
   });
+  console.log("otp is"+otp)
 };
 
 exports.verifyOTP = async (email, otp, purpose) => {

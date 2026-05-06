@@ -3,104 +3,206 @@ const router = express.Router();
 const passport = require('passport');
 
 const upload = require('../middleware/upload');
-const userController = require('../controllers/user/userController');
 
-const { isLoggedIn } = require('../middleware/authMiddleware');
-const noCache = require('../middleware/noCache');
+const authController = require('../controllers/user/authController');
+const profileController = require('../controllers/user/profileController');
 const addressController = require('../controllers/user/addressController');
 
+const {
+  isLoggedIn,
+  isLoggedOut
+} = require('../middleware/authMiddleware');
 
+const noCache = require('../middleware/noCache');
+
+const validate = require('../middleware/validateMiddleware');
+
+const userValidation = require('../validations/userValidation');
+
+
+// ================= ROOT =================
 router.get('/', (req, res) => {
   res.redirect('/login');
 });
 
-router.get('/login', noCache, (req, res) => {
-  res.render('user/login');
-});
 
-router.get('/signup', noCache, (req, res) => {
-  res.render('user/signup');
-});
+// ================= AUTH PAGES =================
+router.get(
+  '/login',
+  isLoggedOut,
+  noCache,
+  (req, res) => {
+    res.render('user/login');
+  }
+);
 
-router.get('/forgot-password', noCache, (req, res) => {
-  res.render('user/forgot-password', { error: null });
-});
+router.get(
+  '/signup',
+  isLoggedOut,
+  noCache,
+  (req, res) => {
+    res.render('user/signup');
+  }
+);
 
-
-router.post('/signup', userController.signup);
-router.post('/login', userController.login);
-
-router.post('/forgot-password', userController.forgotPassword);
-
-
-
-router.get('/otp', userController.getOtpPage);
-router.post('/verify-otp', userController.verifyOtp);
-router.get('/resend-otp', userController.resendOtp);
-
-
-router.get('/reset-password', userController.getResetPage);
-router.post('/reset-password', userController.resetPassword);
-
-
-
-router.get('/home', isLoggedIn,noCache, (req, res) => {
-  res.render('user/home');
-});
+router.get(
+  '/forgot-password',
+  isLoggedOut,
+  noCache,
+  (req, res) => {
+    res.render('user/forgot-password');
+  }
+);
 
 
-router.get('/logout', userController.logout);
+// ================= AUTH =================
+router.post(
+  '/signup',
+  isLoggedOut,
+  validate(userValidation.signupSchema),
+  authController.signup
+);
 
-router.get('/profile', isLoggedIn, noCache, async (req, res) => {
-  const user = await require('../models/userModel').findById(req.session.user.id);
-  res.render('user/profile', { user });
-});
+router.post(
+  '/login',
+  isLoggedOut,
+  validate(userValidation.loginSchema),
+  authController.login
+);
+
+router.get(
+  '/logout',
+  isLoggedIn,
+  authController.logout
+);
+
+
+// ================= FORGOT PASSWORD =================
+router.post(
+  '/forgot-password',
+  isLoggedOut,
+  validate(userValidation.forgotPasswordSchema),
+  authController.forgotPassword
+);
+
+router.get(
+  '/reset-password',
+  isLoggedOut,
+  noCache,
+  authController.getResetPage
+);
+
+router.post(
+  '/reset-password',
+  isLoggedOut,
+  validate(userValidation.resetPasswordSchema),
+  authController.resetPassword
+);
+
+
+// ================= OTP =================
+router.get(
+  '/otp',
+  noCache,
+  authController.getOtpPage
+);
+
+router.post(
+  '/verify-otp',
+  validate(userValidation.otpSchema),
+  authController.verifyOtp
+);
+
+router.get(
+  '/resend-otp',
+  authController.resendOtp
+);
+
+
+// ================= HOME =================
+router.get(
+  '/home',
+  isLoggedIn,
+  noCache,
+  (req, res) => {
+    res.render('user/home');
+  }
+);
+
+
+// ================= PROFILE =================
+router.get(
+  '/profile',
+  isLoggedIn,
+  noCache,
+  profileController.getProfile
+);
 
 router.post(
   '/update-profile',
   isLoggedIn,
   upload.single('profileImage'),
-  userController.updateProfile
+  validate(userValidation.profileSchema),
+  profileController.updateProfile
 );
 
-router.post('/update-password', isLoggedIn, userController.updatePassword);
+router.post(
+  '/update-password',
+  isLoggedIn,
+  validate(userValidation.changePasswordSchema),
+  profileController.updatePassword
+);
 
+
+// ================= GOOGLE AUTH =================
 router.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  isLoggedOut,
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
 );
 
 router.get(
   '/auth/google/callback',
+
+  isLoggedOut,
+
   passport.authenticate('google', {
     failureRedirect: '/login'
   }),
-  (req, res) => {
 
-if (!req.user) {
-  return res.redirect('/login');
-}
-
-req.session.user = {
-  id: req.user._id,
-  name: req.user.name,
-  email: req.user.email
-}
-
-    res.redirect('/home');
-  }
+  authController.googleCallback
 );
 
 
+// ================= ADDRESS =================
+router.get(
+  '/address',
+  isLoggedIn,
+  noCache,
+  addressController.getAddressPage
+);
 
-router.get('/address', addressController.getAddressPage);
+router.post(
+  '/add-address',
+  isLoggedIn,
+  validate(userValidation.addressSchema),
+  addressController.addAddress
+);
 
-router.post('/add-address', addressController.addAddress);
+router.post(
+  '/update-address/:id',
+  isLoggedIn,
+  validate(userValidation.addressSchema),
+  addressController.updateAddress
+);
 
-router.post('/update-address/:id', addressController.updateAddress);
-
-router.get('/delete-address/:id', addressController.deleteAddress);
-
+router.post(
+  '/delete-address/:id',
+  isLoggedIn,
+  addressController.deleteAddress
+);
 
 
 module.exports = router;

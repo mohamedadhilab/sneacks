@@ -39,6 +39,19 @@
         <li><a href="/orders">ORDERS</a></li>
         <li><a href="/address" class="active">ADDRESS</a></li>
         <li><a href="/wallet">WALLET</a></li>
+        <li class="logout-item">
+  <a href="/logout" class="logout-link">
+    
+    <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+      <polyline points="16 17 21 12 16 7"></polyline>
+      <line x1="21" y1="12" x2="9" y2="12"></line>
+    </svg>
+
+    <span>LOGOUT</span>
+
+  </a>
+</li>
       </ul>
     </aside>
 
@@ -109,9 +122,14 @@
         </button>
 
         <!-- DELETE -->
-        <a href="/delete-address/<%= address._id %>" class="btn-text-action text-danger" style="text-decoration: none;">
-          REMOVE
-        </a>
+        <form
+  action="/delete-address/<%= address._id %>" class="btn-text-action text-danger" 
+  method="POST"
+>
+  <button type="submit">
+    Delete
+  </button>
+</form>
 
       </div>
     </div>
@@ -308,5 +326,6 @@
       openModal('editAddressModal');
     }
   </script>
+<%- include("../partials/toast") %>
 </body>
 </html>

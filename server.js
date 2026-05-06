@@ -22,24 +22,30 @@ app.use(express.static('public'));
 
 app.use(
   session({
-    secret: 'your_secret_key', // change later
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // true only in HTTPS
-      maxAge: 1000 * 60 * 60 // 1 hour
+      secure: false,
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 // 24 hours
     }
   })
 );
-
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
+  res.locals.message = req.session.message || null;
+  delete req.session.message;
   next();
 });
-app.use('/admin', adminRoute);   
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+app.use('/admin', adminRoute);   
+
+
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));

@@ -145,7 +145,7 @@
         <!-- EMAIL -->
         <div class="form-group">
           <label class="form-label">Email Address</label>
-          <input type="email" name="email" class="form-input" placeholder="curator@atelier.com" required />
+          <input type="email" name="email" class="form-input" placeholder="curator@atelier.com"  />
         </div>
 
         <!-- PASSWORD (FIXED) -->
@@ -156,7 +156,7 @@
           </div>
 
           <div class="password-input-wrap">
-            <input type="password" name="password" class="form-input" placeholder="••••••••" required />
+            <input type="password" name="password" class="form-input" placeholder="••••••••"  />
 
             <button type="button" class="btn-eye" onclick="togglePassword(this)">
               
@@ -213,5 +213,6 @@
     }
   </script>
 
+<%- include("../partials/toast") %>
 </body>
 </html>

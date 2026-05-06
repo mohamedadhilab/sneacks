@@ -50,6 +50,19 @@
         <li><a href="/orders">ORDERS</a></li>
         <li><a href="/address">ADDRESS</a></li>
         <li><a href="/wallet">WALLET</a></li>
+        <li class="logout-item">
+  <a href="/logout" class="logout-link">
+    
+    <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+      <polyline points="16 17 21 12 16 7"></polyline>
+      <line x1="21" y1="12" x2="9" y2="12"></line>
+    </svg>
+
+    <span>LOGOUT</span>
+
+  </a>
+</li>
       </ul>
     </aside>
 
@@ -60,18 +73,25 @@
         <h1 class="account-heading">Profile Details</h1>
       </div>
 
-      <div class="profile-photo-wrap">
-        <% if (user.profileImage) { %>
-          <img src="<%= user.profileImage %>" alt="Profile" id="mainProfileImage">
-          <div class="avatar-letter" id="mainDefaultAvatar" style="display: none;">
-            <%= user.name.charAt(0).toUpperCase() %>
-          </div>
-          <% } else { %>
-            <div class="avatar-letter" id="mainDefaultAvatar">
-              <%= user.name.charAt(0).toUpperCase() %>
-            </div>
-            <% } %>
-      </div>
+<!-- PROFILE IMAGE (MAIN PAGE) -->
+<div class="profile-photo-wrap">
+
+  <!-- PROFILE IMAGE -->
+  <img 
+    id="mainProfileImage"
+    src="<%= user.profileImage ? user.profileImage + '?t=' + Date.now() : '' %>"
+    class="<%= user.profileImage ? '' : 'hidden' %>"
+  >
+
+  <!-- DEFAULT AVATAR -->
+  <div 
+    id="mainDefaultAvatar"
+    class="avatar-letter <%= user.profileImage ? 'hidden' : '' %>"
+  >
+    <%= user.name.charAt(0).toUpperCase() %>
+  </div>
+
+</div>
 
       <div class="profile-details-grid">
         <div class="detail-item full-width">
@@ -162,7 +182,6 @@
   </div><!-- /account-layout  FIX 3: Closed account-layout -->
 
   <!-- ===== UPDATE PASSWORD MODAL ===== -->
-  <!-- ===== UPDATE PASSWORD MODAL ===== -->
   <div class="modal-overlay" id="updatePasswordModal">
     <div class="modal-content modal-md">
 
@@ -224,33 +243,39 @@
       <div class="modal-body-card">
         <form action="/update-profile" method="POST" enctype="multipart/form-data" class="edit-form grid-form">
 
-          <div class="modal-photo-edit">
-            <div class="photo-wrap" onclick="triggerUpload()" style="cursor: pointer;">
-              <% if (user.profileImage) { %>
-                <img src="<%= user.profileImage %>?t=<%= Date.now() %>" id="currentProfileImage" />
-                <div class="avatar-letter" id="defaultAvatar" style="display: none;">
-                  <%= user.name.charAt(0).toUpperCase() %>
-                </div>
-                <button type="button" class="btn-remove-photo" onclick="removePhoto(event)" title="Remove Photo">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-                <% } else { %>
-                  <div class="avatar-letter">
-                    <%= user.name.charAt(0).toUpperCase() %>
-                  </div>
-                  <% } %>
-                    <input type="file" id="profileUpload" name="profileImage" accept="image/*" hidden>
-                    <input type="hidden" id="removeImageFlag" name="removeImage" value="false">
-            </div>
-            <div class="change-photo-text">CHANGE PHOTO</div>
-            <div class="user-name">
-              <%= user.name %>
-            </div>
-          </div>
+ <div class="modal-photo-edit">
+
+  <div class="photo-wrap" onclick="triggerUpload()" style="cursor:pointer; position:relative;">
+
+    <!-- IMAGE -->
+    <img 
+      id="currentProfileImage"
+      src="<%= user.profileImage ? user.profileImage + '?t=' + Date.now() : '' %>"
+      class="<%= user.profileImage ? '' : 'hidden' %>"
+    />
+
+    <!-- DEFAULT AVATAR -->
+    <div 
+      id="defaultAvatar" 
+      class="avatar-letter <%= user.profileImage ? 'hidden' : '' %>"
+    >
+      <%= user.name.charAt(0).toUpperCase() %>
+    </div>
+
+    <!-- REMOVE BUTTON -->
+    <button type="button" class="btn-remove-photo" onclick="removePhoto(event)">
+      ✕
+    </button>
+
+    <input type="file" id="profileUpload" name="profileImage" accept="image/*" hidden>
+    <input type="hidden" id="removeImageFlag" name="removeImage" value="false">
+
+  </div>
+
+  <div class="change-photo-text">CHANGE PHOTO</div>
+  <div class="user-name"><%= user.name %></div>
+
+</div>
 
           <div class="form-group" id="field-name">
             <label class="form-label">FULL NAME</label>
@@ -319,85 +344,111 @@
     </div>
   </footer>
 
-  <script>
-    function openModal(id) {
-      document.getElementById(id).classList.add('active');
-    }
+<script>
 
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
-    }
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+  }
 
-    function triggerUpload() {
-      document.getElementById('profileUpload').click();
-    }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+  }
 
-    // FIX 5: Click backdrop to close modal
-    document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
-      overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) {
-          overlay.classList.remove('active');
-        }
-      });
+  function triggerUpload() {
+    document.getElementById('profileUpload').click();
+  }
+
+  // Close modal on backdrop click
+  document.querySelectorAll('.modal-overlay').forEach((overlay) => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('active');
     });
+  });
 
-    function removePhoto(event) {
-      event.stopPropagation(); // Don't trigger the upload click
+  // ============================
+  // ✅ IMAGE PREVIEW (CLEAN)
+  // ============================
+  const uploadInput = document.getElementById('profileUpload');
 
-      // Update Modal
-      var currentImg = document.getElementById('currentProfileImage');
-      if (currentImg) currentImg.style.display = 'none';
-      var defaultAvatar = document.getElementById('defaultAvatar');
-      if (defaultAvatar) defaultAvatar.style.display = 'flex';
+  if (uploadInput) {
+    uploadInput.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
 
-      // Update Main Profile Page (live preview)
-      var mainImg = document.getElementById('mainProfileImage');
-      if (mainImg) mainImg.style.display = 'none';
-      var mainDefaultAvatar = document.getElementById('mainDefaultAvatar');
-      if (mainDefaultAvatar) mainDefaultAvatar.style.display = 'flex';
+      const reader = new FileReader();
 
-      // Set Flag for Backend
-      var flag = document.getElementById('removeImageFlag');
-      if (flag) flag.value = 'true';
+      reader.onload = function (event) {
+        const previewImg = document.getElementById('currentProfileImage');
+        const defaultAvatar = document.getElementById('defaultAvatar');
 
-      event.target.style.display = 'none'; // hide the X button
+        const mainImg = document.getElementById('mainProfileImage');
+        const mainDefault = document.getElementById('mainDefaultAvatar');
+
+        // Modal
+        previewImg.src = event.target.result;
+        previewImg.classList.remove('hidden');
+        defaultAvatar.classList.add('hidden');
+
+        // Main page
+        if (mainImg) {
+          mainImg.src = event.target.result;
+          mainImg.classList.remove('hidden');
+        }
+
+        if (mainDefault) {
+          mainDefault.classList.add('hidden');
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ============================
+  // ✅ REMOVE IMAGE (CLEAN)
+  // ============================
+  function removePhoto(event) {
+    event.stopPropagation();
+
+    const previewImg = document.getElementById('currentProfileImage');
+    const defaultAvatar = document.getElementById('defaultAvatar');
+
+    const mainImg = document.getElementById('mainProfileImage');
+    const mainDefault = document.getElementById('mainDefaultAvatar');
+
+    // Modal reset
+    previewImg.src = '';
+    previewImg.classList.add('hidden');
+    defaultAvatar.classList.remove('hidden');
+
+    // Main reset
+    if (mainImg) {
+      mainImg.src = '';
+      mainImg.classList.add('hidden');
     }
-    function togglePassword(btn) {
-      const input = btn.previousElementSibling;
-      if (input.type === 'password') {
-        input.type = 'text';
-      } else {
-        input.type = 'password';
-      }
+
+    if (mainDefault) {
+      mainDefault.classList.remove('hidden');
     }
 
-    function checkStrength(val) {
-      const bar1 = document.getElementById('bar1');
-      const bar2 = document.getElementById('bar2');
-      const bar3 = document.getElementById('bar3');
-      const text = document.getElementById('strengthText');
+    // Clear file input (IMPORTANT)
+    document.getElementById('profileUpload').value = '';
 
-      let strength = 0;
-      if (val.length >= 8) strength += 1;
-      if (/[A-Za-z]/.test(val) && /[0-9]/.test(val)) strength += 1;
-      if (/[^A-Za-z0-9]/.test(val) && val.length >= 8) strength += 1;
+    // Backend flag
+    document.getElementById('removeImageFlag').value = 'true';
 
-      bar1.style.background = strength >= 1 ? '#e1a95f' : 'var(--border)';
-      bar2.style.background = strength >= 2 ? '#8f9a82' : 'var(--border)';
-      bar3.style.background = strength >= 3 ? '#627351' : 'var(--border)';
+    event.currentTarget.style.display = 'none';
+  }
 
-      if (val.length === 0) {
-        bar1.style.background = 'var(--border)';
-        text.innerText = 'WEAK';
-      } else if (strength === 1) {
-        text.innerText = 'LOW';
-      } else if (strength === 2) {
-        text.innerText = 'MEDIUM';
-      } else if (strength >= 3) {
-        text.innerText = 'STRONG';
-      }
-    }
-  </script>
+  // ============================
+  // PASSWORD TOGGLE
+  // ============================
+  function togglePassword(btn) {
+    const input = btn.previousElementSibling;
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+</script>
+<%- include("../partials/toast") %>
 </body>
 
 </html>
