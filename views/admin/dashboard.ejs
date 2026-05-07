@@ -182,5 +182,44 @@
     </div>
 
 <%- include("../partials/toast") %>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+function confirmAdminLogout() {
+
+  Swal.fire({
+
+    title: 'Logout Admin?',
+
+    text: 'Your admin session will end.',
+
+    icon: 'warning',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#111111',
+
+    cancelButtonColor: '#666666',
+
+    confirmButtonText: 'Yes, Logout',
+
+    cancelButtonText: 'Cancel',
+
+    reverseButtons: true
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      window.location.href = '/admin/logout';
+
+    }
+
+  });
+
+}
+
+</script>
 </body>
 </html>

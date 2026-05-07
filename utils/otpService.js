@@ -11,7 +11,7 @@ exports.saveOTP = async (email, otp, purpose) => {
     email,
     otp,
     purpose,
-    expiresAt: new Date(Date.now() + 5 * 60 * 1000) // 5 mins
+    expiresAt: new Date(Date.now() + 5 * 60 * 1000) 
   });
   console.log("otp is"+otp)
 };

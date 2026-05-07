@@ -51,8 +51,7 @@
         <li><a href="/address">ADDRESS</a></li>
         <li><a href="/wallet">WALLET</a></li>
         <li class="logout-item">
-  <a href="/logout" class="logout-link">
-    
+<a href="#" class="logout-link" onclick="confirmLogout()">    
     <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
       <polyline points="16 17 21 12 16 7"></polyline>
@@ -447,7 +446,45 @@
     const input = btn.previousElementSibling;
     input.type = input.type === 'password' ? 'text' : 'password';
   }
+  function confirmLogout() {
+
+  Swal.fire({
+
+    title: 'Logout?',
+
+    text: 'You will need to login again.',
+
+    icon: 'question',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#556B2F',
+
+    cancelButtonColor: '#A89F91',
+
+    confirmButtonText: 'Yes, Logout',
+
+    cancelButtonText: 'Stay Here',
+
+    reverseButtons: true,
+
+    background: '#F6F1E9',
+
+    color: '#2B2B2B'
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      window.location.href = '/logout';
+
+    }
+
+  });
+
+}
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <%- include("../partials/toast") %>
 </body>
 

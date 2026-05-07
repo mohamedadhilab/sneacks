@@ -20,13 +20,11 @@ const validate = require('../middleware/validateMiddleware');
 const userValidation = require('../validations/userValidation');
 
 
-// ================= ROOT =================
 router.get('/', (req, res) => {
-  res.redirect('/login');
+  res.redirect('/home');
 });
 
 
-// ================= AUTH PAGES =================
 router.get(
   '/login',
   isLoggedOut,
@@ -55,7 +53,6 @@ router.get(
 );
 
 
-// ================= AUTH =================
 router.post(
   '/signup',
   isLoggedOut,
@@ -77,7 +74,6 @@ router.get(
 );
 
 
-// ================= FORGOT PASSWORD =================
 router.post(
   '/forgot-password',
   isLoggedOut,
@@ -100,7 +96,6 @@ router.post(
 );
 
 
-// ================= OTP =================
 router.get(
   '/otp',
   noCache,
@@ -119,10 +114,8 @@ router.get(
 );
 
 
-// ================= HOME =================
 router.get(
   '/home',
-  isLoggedIn,
   noCache,
   (req, res) => {
     res.render('user/home');
@@ -130,7 +123,6 @@ router.get(
 );
 
 
-// ================= PROFILE =================
 router.get(
   '/profile',
   isLoggedIn,
@@ -154,7 +146,6 @@ router.post(
 );
 
 
-// ================= GOOGLE AUTH =================
 router.get(
   '/auth/google',
   isLoggedOut,
@@ -176,7 +167,6 @@ router.get(
 );
 
 
-// ================= ADDRESS =================
 router.get(
   '/address',
   isLoggedIn,
@@ -198,7 +188,7 @@ router.post(
   addressController.updateAddress
 );
 
-router.post(
+router.get(
   '/delete-address/:id',
   isLoggedIn,
   addressController.deleteAddress

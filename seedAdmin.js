@@ -6,7 +6,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/sneacks');
 
 async function createAdmin() {
   try {
-    // ✅ Check if admin already exists
     const existing = await Admin.findOne({ email: 'admin@sneacks.com' });
 
     if (existing) {
@@ -14,12 +13,10 @@ async function createAdmin() {
       process.exit();
     }
 
-    // ✅ Hash password
     const hashedPassword = await bcrypt.hash('admin123', 10);
 
-    // ✅ Create admin
         await Admin.create({
-        full_name: 'Super Admin',   // ✅ REQUIRED FIELD
+        full_name: 'Super Admin',   
         email: 'admin@sneacks.com',
         password: hashedPassword
         });

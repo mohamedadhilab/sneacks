@@ -1,7 +1,6 @@
 const Joi = require('joi');
 
 
-// ================= SIGNUP =================
 exports.signupSchema = Joi.object({
 
   name: Joi.string()
@@ -47,7 +46,6 @@ exports.signupSchema = Joi.object({
 });
 
 
-// ================= LOGIN =================
 exports.loginSchema = Joi.object({
 
   email: Joi.string()
@@ -67,7 +65,6 @@ exports.loginSchema = Joi.object({
 });
 
 
-// ================= OTP =================
 exports.otpSchema = Joi.object({
 
   email: Joi.string()
@@ -88,7 +85,6 @@ exports.otpSchema = Joi.object({
 });
 
 
-// ================= FORGOT PASSWORD =================
 exports.forgotPasswordSchema = Joi.object({
 
   email: Joi.string()
@@ -101,7 +97,6 @@ exports.forgotPasswordSchema = Joi.object({
 });
 
 
-// ================= RESET PASSWORD =================
 exports.resetPasswordSchema = Joi.object({
 
   email: Joi.string()
@@ -126,7 +121,6 @@ exports.resetPasswordSchema = Joi.object({
 });
 
 
-// ================= PROFILE =================
 exports.profileSchema = Joi.object({
 
   name: Joi.string()
@@ -169,7 +163,6 @@ exports.profileSchema = Joi.object({
 });
 
 
-// ================= CHANGE PASSWORD =================
 exports.changePasswordSchema = Joi.object({
 
   currentPassword: Joi.string()
@@ -196,7 +189,6 @@ exports.changePasswordSchema = Joi.object({
 });
 
 
-// ================= ADDRESS =================
 exports.addressSchema = Joi.object({
 
   full_name: Joi.string()
@@ -246,6 +238,13 @@ exports.addressSchema = Joi.object({
       'string.empty': 'Phone number is required',
       'string.pattern.base': 'Phone number must be 10 digits'
     }),
+    type: Joi.string()
+  .valid('home', 'work', 'other')
+  .required()
+  .messages({
+    'any.only': 'Invalid address type',
+    'string.empty': 'Address type is required'
+  }),
 
   is_default: Joi.boolean().optional()
 })

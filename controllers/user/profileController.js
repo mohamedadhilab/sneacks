@@ -12,14 +12,12 @@ const sendOtpMail = require('../../utils/mail');
 
 
 
-// ================= GET PROFILE =================
 exports.getProfile = async (req, res) => {
 
   try {
 
     const user = await User.findById(req.session.user.id);
 
-    // USER NOT FOUND
     if (!user) {
 
       req.session.message = {
@@ -30,7 +28,6 @@ exports.getProfile = async (req, res) => {
       return res.redirect('/login');
     }
 
-    // RENDER PROFILE
     res.render('user/profile', { user });
 
   } catch (error) {
@@ -47,14 +44,12 @@ exports.getProfile = async (req, res) => {
 };
 
 
-// ================= UPDATE PROFILE =================
 exports.updateProfile = async (req, res) => {
   console.log("UPDATE PROFILE CONTROLLER HIT");
   try {
 
     const { name, email, phone, dob, removeImage } = req.body;
 
-    // FIND USER
     const user = await User.findById(req.session.user.id);
 
     if (!user) {
@@ -67,12 +62,9 @@ exports.updateProfile = async (req, res) => {
       return res.redirect('/login');
     }
 
-    // ============================
-    // EMAIL CHANGE FLOW
-    // ============================
+    
     if (email !== user.email) {
 
-      // CHECK EMAIL EXISTS
       const existingUser = await User.findOne({ email });
 
       if (existingUser) {
@@ -103,18 +95,14 @@ exports.updateProfile = async (req, res) => {
       return res.redirect(`/otp?email=${email}&purpose=email-change`);
     }
 
-    // ============================
-    // UPDATE BASIC DETAILS
-    // ============================
+  
     user.name = name;
 
     user.phone = phone || null;
 
     user.dob = dob || null;
 
-    // ============================
-    // REMOVE IMAGE
-    // ============================
+
     if (removeImage === 'true') {
 
       if (user.profileImage) {
@@ -133,12 +121,9 @@ exports.updateProfile = async (req, res) => {
       user.profileImage = null;
     }
 
-    // ============================
-    // NEW IMAGE UPLOAD
-    // ============================
+
     if (req.file) {
 
-      // DELETE OLD IMAGE
       if (user.profileImage) {
 
         const oldImagePath = path.join(
@@ -152,11 +137,9 @@ exports.updateProfile = async (req, res) => {
         }
       }
 
-      // SAVE NEW IMAGE
       user.profileImage = '/uploads/' + req.file.filename;
     }
 
-    // SAVE USER
     await user.save();
 
     req.session.message = {
@@ -180,14 +163,12 @@ exports.updateProfile = async (req, res) => {
 };
 
 
-// ================= UPDATE PASSWORD =================
 exports.updatePassword = async (req, res) => {
 
   try {
 
     const { currentPassword, newPassword } = req.body;
 
-    // FIND USER
     const user = await User.findById(req.session.user.id);
 
     if (!user) {
@@ -200,7 +181,6 @@ exports.updatePassword = async (req, res) => {
       return res.redirect('/login');
     }
 
-    // CHECK CURRENT PASSWORD
     const isMatch = await bcrypt.compare(
       currentPassword,
       user.password
@@ -216,7 +196,6 @@ exports.updatePassword = async (req, res) => {
       return res.redirect('/profile');
     }
 
-    // CHECK SAME PASSWORD
     if (currentPassword === newPassword) {
 
       req.session.message = {
@@ -227,10 +206,8 @@ exports.updatePassword = async (req, res) => {
       return res.redirect('/profile');
     }
 
-    // HASH PASSWORD
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // UPDATE PASSWORD
     user.password = hashedPassword;
 
     await user.save();

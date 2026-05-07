@@ -4,12 +4,10 @@ const Admin = require('../../models/adminModel');
 const bcrypt = require('bcrypt');
 const User = require('../../models/userModel');
 
-// ================= LOGIN PAGE =================
 exports.getLogin = (req, res) => {
   res.render('admin/login', { error: null });
 };
 
-// ================= LOGIN =================
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -53,7 +51,7 @@ exports.login = async (req, res) => {
 };
 exports.getDashboard = async (req, res) => {
   try {
-    res.render('admin/dashboard'); // 🔥 THIS IS IMPORTANT
+    res.render('admin/dashboard'); 
   } catch (error) {
     console.log(error);
     res.send('Dashboard error');
@@ -72,12 +70,10 @@ exports.logout = (req, res) => {
   return res.redirect('/admin/login');
 };
 
-// ================= FORGOT PASSWORD PAGE =================
 exports.getForgotPasswordPage = (req, res) => {
   res.render('admin/forgot-password', { error: null });
 };
 
-// ================= SEND OTP =================
 exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -98,26 +94,25 @@ exports.forgotPassword = async (req, res) => {
 
     await sendOtpMail(email, otp);
 
-    // ✅ FIXED (admin route)
     return res.redirect(`/admin/otp?email=${email}&purpose=admin-forgot`);
 
   } catch (error) {
     console.log(error);
-    res.send('Forgot password error');
-  }
+ req.session.message = {
+    type: 'error',
+    text: 'forgot password errorr'
+  };  }
 };
 
-// ================= OTP PAGE =================
 exports.getOtpPage = (req, res) => {
   const { email, purpose } = req.query;
   res.render('admin/otp', { email, purpose, error: null });
 };
 
-// ================= VERIFY OTP =================
 exports.verifyOtp = async (req, res) => {
   let { email, otp, purpose } = req.body;
 
-  otp = otp.toString().trim(); // 🔥 FIX
+  otp = otp.toString().trim();
 
   const isValid = await verifyOTP(email, otp, purpose);
 
@@ -134,19 +129,20 @@ exports.verifyOtp = async (req, res) => {
   }
 };
 
-// ================= RESET PAGE =================
 exports.getResetPage = (req, res) => {
   const { email } = req.query;
   res.render('admin/reset-password', { email });
 };
 
-// ================= RESET PASSWORD =================
 exports.resetPassword = async (req, res) => {
   try {
     const { email, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
-      return res.send('Passwords do not match');
+      return  req.session.message = {
+    type: 'error',
+    text: 'password do not match'
+  };
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -160,42 +156,35 @@ exports.resetPassword = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    res.send('Reset password error');
-  }
+ req.session.message = {
+    type: 'error',
+    text: 'reset password error'
+  };  }
 };
 
 
-// ================= GET USERS =================
 exports.getUsers = async (req, res) => {
 
   try {
 
-    // ================= PAGINATION =================
     const page = parseInt(req.query.page) || 1;
 
     const limit = 5;
 
     const skip = (page - 1) * limit;
 
-    // ================= USERS =================
     const users = await User.find()
 
-      // NEWEST FIRST
       .sort({ createdAt: -1 })
 
-      // SKIP PREVIOUS PAGE USERS
       .skip(skip)
 
-      // LIMIT USERS PER PAGE
       .limit(limit);
 
-    // ================= TOTAL USERS =================
     const totalUsers = await User.countDocuments();
 
-    // ================= TOTAL PAGES =================
     const totalPages = Math.ceil(totalUsers / limit);
 
-    // ================= RENDER =================
     res.render('admin/users', {
       users,
       currentPage: page,
@@ -206,8 +195,10 @@ exports.getUsers = async (req, res) => {
 
     console.log(error);
 
-    res.send('Users page error');
-  }
+req.session.message = {
+    type: 'error',
+    text: 'user page error'
+  };  }
 };
 exports.blockUser = async (req, res) => {
   try {

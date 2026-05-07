@@ -15,7 +15,6 @@ const {
 } = require('../middleware/adminAuth');
 
 
-// ===== AUTH =====
 router.get(
   '/login',
   isAdminLoggedOut,
@@ -31,7 +30,6 @@ router.post(
 );
 
 
-// ===== FORGOT PASSWORD =====
 router.get(
   '/forgot-password',
   isAdminLoggedOut,
@@ -69,7 +67,6 @@ router.post(
 );
 
 
-// ===== DASHBOARD =====
 router.get(
   '/dashboard',
   isAdminLoggedIn,
@@ -78,7 +75,6 @@ router.get(
 );
 
 
-// ===== USER MANAGEMENT =====
 router.get(
   '/users',
   isAdminLoggedIn,
@@ -105,7 +101,6 @@ router.get(
 );
 
 
-// ===== LOGOUT =====
 router.get(
   '/logout',
   isAdminLoggedIn,

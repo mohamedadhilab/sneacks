@@ -1,9 +1,7 @@
 const Address = require('../../models/addressModel');
 
-// ================= GET ADDRESS PAGE =================
 exports.getAddressPage = async (req, res) => {
   try {
-    // ✅ SAFETY CHECK (VERY IMPORTANT)
     if (!req.session.user) {
       return res.redirect('/login');
     }
@@ -19,12 +17,13 @@ exports.getAddressPage = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    res.send('Error loading address page');
-  }
+req.session.message = {
+    type: 'error',
+    text: 'error loading address page'
+  };  }
 };
 
 
-// ================= ADD ADDRESS =================
 exports.addAddress = async (req, res) => {
   try {
     if (!req.session.user) {
@@ -48,6 +47,7 @@ exports.addAddress = async (req, res) => {
       state: data.state,
       pincode: data.pincode,
       phone_number: data.phone_number,
+      type : data.type,
       is_default: isDefault,
       user_id: req.session.user.id
     });
@@ -57,12 +57,13 @@ exports.addAddress = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    res.send('Add address error');
-  }
+req.session.message = {
+    type: 'error',
+    text: ' add address error '
+  };  }
 };
 
 
-// ================= UPDATE ADDRESS =================
 exports.updateAddress = async (req, res) => {
   try {
     if (!req.session.user) {
@@ -90,6 +91,7 @@ exports.updateAddress = async (req, res) => {
           state: data.state,
           pincode: data.pincode,
           phone_number: data.phone_number,
+         type : data.type,
           is_default: isDefault
         }
       }
@@ -100,12 +102,13 @@ exports.updateAddress = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    res.send('Update address error');
-  }
+req.session.message = {
+    type: 'error',
+    text: 'update address error'
+  };  }
 };
 
 
-// ================= DELETE ADDRESS =================
 exports.deleteAddress = async (req, res) => {
   try {
     if (!req.session.user) {
@@ -119,7 +122,6 @@ exports.deleteAddress = async (req, res) => {
       user_id: req.session.user.id
     });
 
-    // 🔥 maintain default logic
     if (deleted && deleted.is_default) {
       const firstAddress = await Address.findOne({
         user_id: req.session.user.id
@@ -136,6 +138,8 @@ exports.deleteAddress = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    res.send('Delete address error');
-  }
+req.session.message = {
+    type: 'error',
+    text: 'delete address error'
+  };  }
 };

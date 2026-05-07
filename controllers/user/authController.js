@@ -11,14 +11,12 @@ const {
 } = require('../../utils/otpService');
 
 
-// ================= SIGNUP =================
 exports.signup = async (req, res) => {
 
   try {
 
     const { name, email, password } = req.body;
 
-    // CHECK EXISTING USER
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -31,15 +29,12 @@ exports.signup = async (req, res) => {
       return res.redirect('/signup');
     }
 
-    // GENERATE OTP
     const otp = generateOTP();
 
     await saveOTP(email, otp, 'signup');
 
-    // SEND MAIL
     await sendOtpMail(email, otp);
 
-    // SESSION STORE
     req.session.otpTime = Date.now();
 
     req.session.tempUser = {
@@ -48,13 +43,11 @@ exports.signup = async (req, res) => {
       password
     };
 
-    // SUCCESS MESSAGE
     req.session.message = {
       type: 'success',
       text: 'OTP sent successfully'
     };
 
-    // REDIRECT OTP PAGE
     res.redirect(`/otp?email=${email}&purpose=signup`);
 
   } catch (error) {
@@ -70,7 +63,6 @@ exports.signup = async (req, res) => {
   }
 };
 
-// ================= LOGIN =================
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -117,7 +109,6 @@ return res.redirect('/login');  }
 
 
 
-// ================= FORGOT PASSWORD =================
 exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -144,7 +135,6 @@ exports.forgotPassword = async (req, res) => {
 };
 
 
-// ================= OTP PAGE =================
 exports.getOtpPage = (req, res) => {
 
   try {
@@ -170,14 +160,12 @@ exports.getOtpPage = (req, res) => {
   }
 };
 
-// ================= VERIFY OTP =================
 exports.verifyOtp = async (req, res) => {
 
   try {
 
     const { email, otp, purpose } = req.body;
 
-    // INVALID PURPOSE
     if (!purpose) {
 
       req.session.message = {
@@ -188,7 +176,6 @@ exports.verifyOtp = async (req, res) => {
       return res.redirect('/login');
     }
 
-    // VERIFY OTP
     const isValid = await verifyOTP(email, otp, purpose);
 
     if (!isValid) {
@@ -201,12 +188,9 @@ exports.verifyOtp = async (req, res) => {
       return res.redirect(`/otp?email=${email}&purpose=${purpose}`);
     }
 
-    // OTP VERIFIED
     req.session.otpVerified = true;
 
-    // =========================
-    // SIGNUP
-    // =========================
+  
     if (purpose === 'signup') {
 
       const tempUser = req.session.tempUser;
@@ -239,9 +223,7 @@ exports.verifyOtp = async (req, res) => {
       return res.redirect('/login');
     }
 
-    // =========================
-    // FORGOT PASSWORD
-    // =========================
+
     if (purpose === 'forgot') {
 
       req.session.message = {
@@ -252,9 +234,7 @@ exports.verifyOtp = async (req, res) => {
       return res.redirect(`/reset-password?email=${email}`);
     }
 
-    // =========================
-    // EMAIL CHANGE
-    // =========================
+ 
     if (purpose === 'email-change') {
 
       const newEmail = req.session.newEmail;
@@ -269,7 +249,6 @@ exports.verifyOtp = async (req, res) => {
         return res.redirect('/profile');
       }
 
-      // CHECK EXISTING EMAIL
       const existingUser = await User.findOne({ email: newEmail });
 
       if (existingUser) {
@@ -282,7 +261,6 @@ exports.verifyOtp = async (req, res) => {
         return res.redirect(`/otp?email=${email}&purpose=${purpose}`);
       }
 
-      // UPDATE EMAIL
       await User.updateOne(
         { _id: req.session.user.id },
         { $set: { email: newEmail } }
@@ -313,7 +291,6 @@ exports.verifyOtp = async (req, res) => {
   }
 };
 
-// ================= RESEND OTP =================
 exports.resendOtp = async (req, res) => {
   try {
     let { email, purpose } = req.query;
@@ -338,14 +315,12 @@ exports.resendOtp = async (req, res) => {
 };
 
 
-// ================= RESET PAGE =================
 exports.getResetPage = (req, res) => {
 
   try {
 
     const { email } = req.query;
 
-    // CHECK OTP VERIFIED
     if (!req.session.otpVerified) {
 
       req.session.message = {
@@ -372,12 +347,10 @@ exports.getResetPage = (req, res) => {
 };
 
 
-// ================= RESET PASSWORD =================
 exports.resetPassword = async (req, res) => {
 
   try {
 
-    // OTP CHECK
     if (!req.session.otpVerified) {
 
       req.session.message = {
@@ -390,7 +363,6 @@ exports.resetPassword = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // FIND USER
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -403,18 +375,14 @@ exports.resetPassword = async (req, res) => {
       return res.redirect('/forgot-password');
     }
 
-    // HASH PASSWORD
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // UPDATE PASSWORD
     user.password = hashedPassword;
 
     await user.save();
 
-    // CLEAR SESSION
     delete req.session.otpVerified;
 
-    // SUCCESS MESSAGE
     req.session.message = {
       type: 'success',
       text: 'Password reset successful'
@@ -447,12 +415,10 @@ exports.logout = (req, res) => {
   return res.redirect('/login');
 };
 
-// ================= GOOGLE CALLBACK =================
 exports.googleCallback = async (req, res) => {
 
   try {
 
-    // LOGIN FAILED
     if (!req.user) {
 
       req.session.message = {
@@ -463,7 +429,6 @@ exports.googleCallback = async (req, res) => {
       return res.redirect('/login');
     }
 
-    // BLOCKED USER
     if (req.user.isBlocked) {
 
       req.session.message = {
@@ -474,7 +439,6 @@ exports.googleCallback = async (req, res) => {
       return res.redirect('/login');
     }
 
-    // SESSION STORE
     req.session.user = {
       id: req.user._id,
       name: req.user.name,
