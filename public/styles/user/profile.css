@@ -1,0 +1,857 @@
+/* ============================================================
+   ACCOUNT & PROFILE STYLES
+   ============================================================ */
+
+.account-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 48px;
+  min-height: calc(100vh - 200px);
+  gap: 80px;
+}
+
+.account-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-menu a {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text-light);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.sidebar-menu a:hover {
+  color: var(--text-dark);
+}
+
+.sidebar-menu a.active {
+  color: var(--text-dark);
+  font-weight: 600;
+  border-bottom: 1px solid var(--text-dark);
+  padding-bottom: 2px;
+  width: fit-content;
+}
+
+.account-main {
+  flex: 1;
+  max-width: 800px;
+}
+
+.account-header {
+  margin-bottom: 40px;
+}
+
+.account-tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-placeholder);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.account-heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: 2.8rem;
+  color: var(--text-dark);
+}
+
+.account-subheading {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  margin-top: 12px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.account-card {
+  background: var(--cream-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 40px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+/* ============================================================
+   PROFILE CARDS
+   ============================================================ */
+
+/* FIX: overflow visible so nothing clips outside the circle */
+.profile-photo-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 32px;
+  border: 2px solid var(--white);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.profile-photo-wrap img,
+.profile-photo-wrap .avatar-letter {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-photo-wrap .avatar-letter {
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 500;
+}
+.hidden {
+  display: none !important;
+}
+
+.profile-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 40px;
+}
+
+.detail-item {
+  position: relative;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(216, 212, 200, 0.5);
+}
+
+.detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.detail-label {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--text-placeholder);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.detail-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge-verified {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  background: #e8e6df;
+  padding: 3px 8px;
+  border-radius: 12px;
+  color: var(--text-mid);
+}
+
+.btn-edit-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-placeholder);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn-edit-icon:hover {
+  color: var(--text-dark);
+}
+
+.btn-edit-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.security-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px 40px;
+}
+
+.security-info h3, .referral-info h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.security-info p {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+}
+
+.btn-secondary {
+  background: var(--olive-dark);
+  color: var(--white);
+  border: none;
+  padding: 12px 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.referral-card {
+  overflow: hidden;
+}
+
+.referral-info {
+  position: relative;
+  z-index: 2;
+}
+
+.referral-info h3 {
+  margin-bottom: 24px;
+}
+
+.referral-code-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white);
+  padding: 16px 20px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+
+.referral-code-box .code {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-dark);
+}
+
+.btn-copy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
+}
+
+.btn-copy svg {
+  width: 14px;
+  height: 14px;
+}
+
+.referral-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  color: var(--text-mid);
+}
+
+.referral-hint svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-placeholder);
+}
+
+.referral-bg-icon {
+  position: absolute;
+  right: -20px;
+  bottom: -40px;
+  color: rgba(216, 212, 200, 0.4);
+  z-index: 1;
+}
+
+.referral-bg-icon svg {
+  width: 200px;
+  height: 200px;
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(240, 236, 228, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  overflow-y: auto;
+  padding: 40px 20px;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.modal-header-centered {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.modal-tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-placeholder);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.modal-header-centered h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.modal-header-centered p {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.modal-body-card {
+  background: var(--cream-card);
+  border-radius: 8px;
+  padding: 48px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+}
+
+/* ============================================================
+   EDIT FORM GRID
+   ============================================================ */
+
+.edit-form.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 32px;
+  align-items: start;
+}
+
+/* ============================================================
+   PHOTO SECTION — FIX: spans full width, pinned to row 1
+   ============================================================ */
+
+.modal-photo-edit {
+  grid-column: 1 / -1;
+  grid-row: 1;                         /* ← FIX: explicitly pinned to row 1 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(216, 212, 200, 0.4);
+}
+
+/* FIX: overflow VISIBLE so the × button can sit outside the circle */
+.photo-wrap {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto;
+  overflow: visible;                   /* ← FIX: was clipping the remove button */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.photo-wrap:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+/* FIX: clip the circle on the element itself, NOT the wrapper */
+.photo-wrap img,
+.photo-wrap .avatar-letter {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;                    /* ← FIX: clipping moved here */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.photo-wrap .avatar-letter {
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 2.8rem;
+  font-weight: 500;
+}
+
+/* FIX: button now floats cleanly outside the circle */
+.btn-remove-photo {
+  position: absolute;
+  top: -6px;
+  right: -6px;                         /* ← FIX: visible since parent is overflow:visible */
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #1a1a1a;
+  border: 1.5px solid rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  padding: 0;
+}
+
+.btn-remove-photo:hover {
+  transform: scale(1.12) translateY(-1px);
+  background: #ff3b30;
+  color: #ffffff;
+  border-color: #ff3b30;
+  box-shadow: 0 5px 14px rgba(255, 59, 48, 0.35);
+}
+
+.change-photo-text {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.user-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--text-dark);
+}
+
+/* ============================================================
+   GRID FIELD PLACEMENT
+   ============================================================ */
+
+#field-name {
+  grid-column: 1 / 2;
+  grid-row: 2;
+}
+
+#field-email {
+  grid-column: 2 / 3;
+  grid-row: 2;
+}
+
+#field-dob {
+  grid-column: 1 / 2;
+  grid-row: 3;
+}
+
+#field-phone {
+  grid-column: 2 / 3;
+  grid-row: 3;
+}
+
+/* ============================================================
+   FORM INPUTS
+   ============================================================ */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.form-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: #888;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.form-input-box {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e0ddd8;
+  border-radius: 6px;
+  background: #f5f3ef;
+  font-size: 0.95rem;
+  font-family: 'Montserrat', sans-serif;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+
+.form-input-box:focus {
+  border-color: #1a1a1a;
+  background: #fff;
+}
+
+.select-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+/* ============================================================
+   CHECKBOX
+   ============================================================ */
+
+.checkbox-group {
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  cursor: pointer;
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border-input);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background: var(--olive-dark);
+  border-color: var(--olive-dark);
+}
+
+.custom-checkbox input:checked ~ .checkmark::after {
+  content: '';
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+/* ============================================================
+   MODAL ACTIONS
+   ============================================================ */
+
+.modal-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.modal-actions.space-between {
+  justify-content: space-between;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn-text {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #999;
+  text-transform: uppercase;
+  padding: 10px 4px;
+  transition: color 0.2s;
+}
+
+.btn-text:hover {
+  color: #1a1a1a;
+}
+
+.btn-text-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-dark);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.btn-primary-sm {
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.btn-primary-sm:hover {
+  background: #333;
+}
+
+.text-optional {
+  text-transform: lowercase;
+  color: var(--text-placeholder);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* ============================================================
+   PASSWORD MODAL STYLES
+   ============================================================ */
+
+.password-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrap .form-input-box {
+  padding-right: 40px;
+}
+
+.btn-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-placeholder);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.btn-eye svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-eye:hover {
+  color: var(--text-dark);
+}
+
+.password-strength-container {
+  margin-bottom: 24px;
+}
+
+.strength-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.strength-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--text-placeholder);
+  text-transform: uppercase;
+}
+
+.strength-text {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-mid);
+  text-transform: uppercase;
+}
+
+.strength-bars {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  height: 3px;
+}
+
+.strength-bar {
+  background: var(--border);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.password-hint-box {
+  display: flex;
+  gap: 12px;
+  background: rgba(216, 212, 200, 0.15);
+  border: 1px solid rgba(216, 212, 200, 0.5);
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.password-hint-box svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--text-mid);
+  margin-top: 2px;
+}
+
+.password-hint-box p {
+  font-size: 0.65rem;
+  color: var(--text-mid);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .edit-form.grid-form {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .modal-photo-edit,
+  #field-name,
+  #field-email,
+  #field-phone,
+  #field-dob {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .modal-actions {
+    justify-content: center;
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+
+  .btn-primary-sm {
+    width: 100%;
+  }
+}
+
+/* ================= LOGOUT ================= */
+
+.logout-item {
+  margin-top: 42px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 24px;
+}
+
+.logout-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+
+  color: #8c4b4b;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 500;
+
+  transition: all 0.25s ease;
+}
+
+.logout-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.logout-link:hover {
+  color: #b64f4f;
+  transform: translateX(4px);
+}

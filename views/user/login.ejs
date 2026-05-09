@@ -6,14 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sneacks — Login</title>
 
-  <!-- ✅ Correct CSS path -->
-  <link rel="stylesheet" href="/styles/global.css" />
+  <link rel="stylesheet" href="/styles/user/global.css" />
 
   <style>
     body {
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       background-color: var(--cream);
@@ -34,7 +32,6 @@
       width: 23%;
       height: 85%;
       align-self: flex-end;
-      background: #1a1a1a;
       overflow: hidden;
     }
 
@@ -42,15 +39,13 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.92;
     }
 
     .bg-panel-right {
       width: 23%;
       height: 85%;
-      align-self: flex-end;
       margin-left: auto;
-      background: #555;
+      align-self: flex-end;
       overflow: hidden;
     }
 
@@ -58,7 +53,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.92;
     }
 
     .page-content {
@@ -72,19 +66,58 @@
       gap: 28px;
     }
 
-    .logo .logo-title {
-      font-size: 2.4rem;
-    }
-
     .auth-card {
       width: 100%;
+    }
+
+    /* ===== PASSWORD FIX ===== */
+    .password-input-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .password-input-wrap input {
+      width: 100%;
+      padding-right: 45px;
+    }
+
+    .btn-eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-eye svg {
+      width: 18px;
+      height: 18px;
+      stroke: #999;
+    }
+
+    .btn-eye:hover svg {
+      stroke: #333;
+    }
+
+    .eye-close {
+      display: none;
+    }
+
+    .btn-eye.active .eye-open {
+      display: none;
+    }
+
+    .btn-eye.active .eye-close {
+      display: block;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Background Panels -->
+  <!-- Background -->
   <div class="bg-panels">
     <div class="bg-panel-left">
       <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" />
@@ -107,43 +140,79 @@
       <h1 class="card-title">Welcome Back</h1>
       <p class="card-subtitle">Sign in to your curated collection</p>
 
-      <!-- ✅ FORM START -->
       <form action="/login" method="POST">
 
+        <!-- EMAIL -->
         <div class="form-group">
           <label class="form-label">Email Address</label>
           <input type="email" name="email" class="form-input" placeholder="curator@atelier.com" required />
         </div>
 
+        <!-- PASSWORD (FIXED) -->
         <div class="form-group">
           <div class="form-label-row">
             <label class="form-label">Password</label>
-            <!-- ✅ fixed route -->
             <a href="/forgot-password" class="forgot-link">Forgot?</a>
           </div>
-          <input type="password" name="password" class="form-input" placeholder="••••••••" required />
+
+          <div class="password-input-wrap">
+            <input type="password" name="password" class="form-input" placeholder="••••••••" required />
+
+            <button type="button" class="btn-eye" onclick="togglePassword(this)">
+              
+              <!-- OPEN EYE -->
+              <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+
+             <svg class="eye-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <!-- eye shape -->
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+              
+              <!-- slash -->
+              <line x1="2" y1="2" x2="22" y2="22"/>
+            </svg>
+
+            </button>
+          </div>
         </div>
 
         <button type="submit" class="btn-primary">Login</button>
 
       </form>
-      <!-- ✅ FORM END -->
 
       <div class="or-divider">or continue with</div>
 
-      <button class="btn-google">
+      <a href="/auth/google" class="btn-google">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="google-icon" />
         Continue with Google
-      </button>
+      </a>
 
       <div class="auth-footer" style="margin-top: 20px;">
         New to the atelier?
-        <!-- ✅ fixed route -->
         <a href="/signup">Create Account</a>
       </div>
 
     </div>
   </div>
 
-</body>
+  <!-- JS -->
+  <script>
+    function togglePassword(btn) {
+      const input = btn.parentElement.querySelector('input');
 
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.classList.add('active');
+      } else {
+        input.type = 'password';
+        btn.classList.remove('active');
+      }
+    }
+  </script>
+  <%- include("../partials/toast") %>
+
+</body>
 </html>

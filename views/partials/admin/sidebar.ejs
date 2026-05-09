@@ -1,0 +1,68 @@
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h1>SNEACKS</h1>
+    <p>ADMIN TERMINAL</p>
+  </div>
+  <ul class="nav-menu">
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'dashboard' ? 'active' : '' %>">
+      <a href="/admin/dashboard" class="nav-link">
+        <i class="fas fa-border-all"></i> Dashboard
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'sales' ? 'active' : '' %>">
+      <a href="#" class="nav-link">
+        <i class="fas fa-chart-line"></i> Sales
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && (page === 'users' || page === 'user-details') ? 'active' : '' %>">
+      <a href="/admin/users" class="nav-link">
+        <i class="fas fa-users"></i> Users
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">
+      <a href="#" class="nav-link">
+        <i class="fas fa-box"></i> Products
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">
+      <a href="#" class="nav-link">
+        <i class="fas fa-shopping-cart"></i> Orders
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'reviews' ? 'active' : '' %>">
+      <a href="#" class="nav-link">
+        <i class="fas fa-star"></i> Reviews
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'offers' ? 'active' : '' %>">
+      <a href="#" class="nav-link">
+        <i class="fas fa-tag"></i> Offers
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'collections' ? 'active' : '' %>">
+      <a href="/admin/categories" class="nav-link">
+        <i class="fas fa-layer-group"></i> Collections
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'coupons' ? 'active' : '' %>">
+      <a href="#" class="nav-link">
+        <i class="fas fa-ticket-alt"></i> Coupons
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'returns' ? 'active' : '' %>">
+      <a href="#" class="nav-link">
+        <i class="fas fa-undo"></i> Returns
+      </a>
+    </li>
+    <li class="nav-item <%= typeof page !== 'undefined' && page === 'profile' ? 'active' : '' %>">
+      <a href="#" class="nav-link">
+        <i class="far fa-user"></i> Profile
+      </a>
+    </li>
+
+    <a href="#" class="logout-btn" onclick="confirmAdminLogout(event)">
+  <i class="ri-logout-box-r-line"></i>
+  Logout
+</a>
+  </ul>
+</aside>

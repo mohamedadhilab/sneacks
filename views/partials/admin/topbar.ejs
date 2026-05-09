@@ -1,0 +1,32 @@
+<header class="topbar">
+
+  <form action="/admin/users" method="GET" class="search-container">
+
+    <i class="fas fa-search"></i>
+
+    <input
+      type="text"
+      name="search"
+      class="search-input"
+      placeholder="<%= typeof searchPlaceholder !== 'undefined' ? searchPlaceholder : 'Search users...' %>"
+      value="<%= typeof search !== 'undefined' ? search : '' %>"
+    >
+
+  </form>
+
+  <div class="topbar-actions">
+
+    <div class="admin-profile">
+      <div class="admin-info">
+        <span class="admin-name">Admin User</span>
+        <span class="admin-role">SUPERUSER</span>
+      </div>
+
+      <div class="admin-avatar">
+        <i class="far fa-user"></i>
+      </div>
+    </div>
+
+  </div>
+
+</header>

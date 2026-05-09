@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Sneacks</title>
+  <link rel="stylesheet" href="/styles/user/global.css?v=2" />
+  <link rel="stylesheet" href="/styles/user/profile.css?v=6" />
+</head>
+
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav class="site-nav">
+    <a href="/home" class="nav-brand">Sneacks</a>
+    <ul class="nav-links">
+      <li><a href="/home">Home</a></li>
+      <li><a href="#">Store</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="nav-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="11" cy="11" r="7" />
+        <line x1="16.5" y1="16.5" x2="22" y2="22" />
+      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <path d="M16 10a4 4 0 0 1-8 0" />
+      </svg>
+    </div>
+  </nav>
+
+  <div class="account-layout">
+
+    <aside class="account-sidebar">
+      <h3 class="sidebar-title">MY ACCOUNT</h3>
+      <ul class="sidebar-menu">
+        <li><a href="/profile" class="active">PROFILE</a></li>
+        <li><a href="/orders">ORDERS</a></li>
+        <li><a href="/address">ADDRESS</a></li>
+        <li><a href="/wallet">WALLET</a></li>
+        <li class="logout-item">
+<a href="#" class="logout-link" onclick="confirmLogout()">    
+    <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+      <polyline points="16 17 21 12 16 7"></polyline>
+      <line x1="21" y1="12" x2="9" y2="12"></line>
+    </svg>
+
+    <span>LOGOUT</span>
+
+  </a>
+</li>
+      </ul>
+    </aside>
+
+    <main class="account-main">
+
+      <div class="account-header">
+        <span class="account-tag">PERSONAL WORKSPACE</span>
+        <h1 class="account-heading">Profile Details</h1>
+      </div>
+
+<!-- PROFILE IMAGE (MAIN PAGE) -->
+<div class="profile-photo-wrap">
+
+  <!-- PROFILE IMAGE -->
+  <img 
+    id="mainProfileImage"
+    src="<%= user.profileImage ? user.profileImage + '?t=' + Date.now() : '' %>"
+    class="<%= user.profileImage ? '' : 'hidden' %>"
+  >
+
+  <!-- DEFAULT AVATAR -->
+  <div 
+    id="mainDefaultAvatar"
+    class="avatar-letter <%= user.profileImage ? 'hidden' : '' %>"
+  >
+    <%= user.name.charAt(0).toUpperCase() %>
+  </div>
+
+</div>
+
+      <div class="profile-details-grid">
+        <div class="detail-item full-width">
+          <div class="detail-label">FULL NAME</div>
+          <div class="detail-value">
+            <%= user.name %>
+          </div>
+          <button class="btn-edit-icon" onclick="openModal('editProfileModal')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="detail-item full-width">
+          <div class="detail-label">EMAIL ADDRESS</div>
+          <div class="detail-value">
+            <%= user.email %>
+              <% if (user.isVerified) { %>
+                <span class="badge-verified">VERIFIED</span>
+                <% } %>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">PHONE NUMBER</div>
+          <div class="detail-value">
+            <%= user.phone %>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">DATE OF BIRTH</div>
+          <div class="detail-value">
+            <%= user.dob %>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIX 2: Security & Referral cards moved INSIDE <main> -->
+
+      <!-- Security Card -->
+      <div class="account-card security-card">
+        <div class="security-info">
+          <h3>Security</h3>
+          <p>Ensure your account remains protected with a strong password.</p>
+        </div>
+        <button class="btn-secondary" onclick="openModal('updatePasswordModal')">Update Password</button>
+      </div>
+
+      <!-- Referral Card -->
+      <div class="account-card referral-card">
+        <div class="referral-info">
+          <h3>Referral Program</h3>
+          <div class="detail-label">YOUR REFERRAL CODE</div>
+          <div class="referral-code-box">
+            <span class="code">ELARA10</span>
+            <button class="btn-copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="referral-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            Share this code with friends and earn rewards
+          </div>
+        </div>
+        <div class="referral-bg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <polyline points="20 12 20 22 4 22 4 12"></polyline>
+            <rect x="2" y="7" width="20" height="5"></rect>
+            <line x1="12" y1="22" x2="12" y2="7"></line>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+          </svg>
+        </div>
+      </div>
+
+    </main><!-- /account-main -->
+
+  </div><!-- /account-layout  FIX 3: Closed account-layout -->
+
+  <!-- ===== UPDATE PASSWORD MODAL ===== -->
+  <div class="modal-overlay" id="updatePasswordModal">
+    <div class="modal-content modal-md">
+
+      <div class="modal-header-centered">
+        <span class="modal-tag">ACCOUNT SETTINGS</span>
+        <h2>Update Password</h2>
+        <p>Update your password to keep your account secure.</p>
+      </div>
+
+      <div class="modal-body-card">
+
+        <!-- ✅ FORM INSIDE MODAL -->
+        <form action="/update-password" method="POST" class="edit-form">
+
+          <div class="form-group full-width">
+            <label class="form-label">CURRENT PASSWORD</label>
+            <div class="password-input-wrap">
+              <input type="password" name="currentPassword" class="form-input-box" required>
+              <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">NEW PASSWORD</label>
+            <div class="password-input-wrap">
+              <input type="password" name="newPassword" class="form-input-box" required>
+              <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">CONFIRM PASSWORD</label>
+            <div class="password-input-wrap">
+              <input type="password" name="confirmPassword" class="form-input-box" required>
+              <button type="button" class="btn-eye" onclick="togglePassword(this)">👁</button>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-text" onclick="closeModal('updatePasswordModal')">CANCEL</button>
+            <button type="submit" class="btn-primary-sm">UPDATE PASSWORD</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <!-- ===== EDIT PROFILE MODAL ===== -->
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal-content modal-md">
+
+      <div class="modal-header-centered">
+        <span class="modal-tag">ACCOUNT SETTINGS</span>
+        <h2>Edit Profile</h2>
+        <p>Manage your personal details and how we contact you.</p>
+      </div>
+
+      <div class="modal-body-card">
+        <form action="/update-profile" method="POST" enctype="multipart/form-data" class="edit-form grid-form">
+
+ <div class="modal-photo-edit">
+
+  <div class="photo-wrap" onclick="triggerUpload()" style="cursor:pointer; position:relative;">
+
+    <!-- IMAGE -->
+    <img 
+      id="currentProfileImage"
+      src="<%= user.profileImage ? user.profileImage + '?t=' + Date.now() : '' %>"
+      class="<%= user.profileImage ? '' : 'hidden' %>"
+    />
+
+    <!-- DEFAULT AVATAR -->
+    <div 
+      id="defaultAvatar" 
+      class="avatar-letter <%= user.profileImage ? 'hidden' : '' %>"
+    >
+      <%= user.name.charAt(0).toUpperCase() %>
+    </div>
+
+    <!-- REMOVE BUTTON -->
+    <button type="button" class="btn-remove-photo" onclick="removePhoto(event)">
+      ✕
+    </button>
+
+    <input type="file" id="profileUpload" name="profileImage" accept="image/*" hidden>
+    <input type="hidden" id="removeImageFlag" name="removeImage" value="false">
+
+  </div>
+
+  <div class="change-photo-text">CHANGE PHOTO</div>
+  <div class="user-name"><%= user.name %></div>
+
+</div>
+
+          <div class="form-group" id="field-name">
+            <label class="form-label">FULL NAME</label>
+            <input type="text" name="name" class="form-input-box" value="<%= user.name %>" required>
+          </div>
+
+          <div class="form-group" id="field-email">
+            <label class="form-label">EMAIL ADDRESS</label>
+            <input type="email" name="email" class="form-input-box" value="<%= user.email %>" required>
+          </div>
+
+          <div class="form-group" id="field-phone">
+            <label class="form-label">PHONE NUMBER</label>
+            <input type="text" name="phone" class="form-input-box" value="<%= user.phone || '' %>">
+          </div>
+
+          <div class="form-group" id="field-dob">
+            <label class="form-label">DATE OF BIRTH</label>
+            <input type="date" name="dob" class="form-input-box" value="<%= user.dob || '' %>">
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-text" onclick="closeModal('editProfileModal')">CANCEL</button>
+            <button type="submit" class="btn-primary-sm">SAVE CHANGES</button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SITE FOOTER ===== -->
+  <!-- FIX 4: Brand corrected to SNEACKS -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">SNEACKS</div>
+        <p class="footer-brand-desc">
+          A CURATED SPACE FOR THOSE WHO VALUE THE ART OF THE STEP. ARCHITECTURAL FOOTWEAR DESIGNED FOR THE MODERN
+          ICONOCLAST.
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">DISCOVER</div>
+        <ul class="footer-col-links">
+          <li><a href="#">COLLECTIONS</a></li>
+          <li><a href="#">LIMITED EDITS</a></li>
+          <li><a href="#">THE PROCESS</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">SERVICE</div>
+        <ul class="footer-col-links">
+          <li><a href="#">SHIPPING</a></li>
+          <li><a href="#">RETURNS</a></li>
+          <li><a href="#">CARE GUIDE</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" style="display:flex; justify-content:space-between; align-items:center;">
+      <span>© 2024 SNEACKS. CRAFTED FOR THE CURATED FOOT.</span>
+      <div style="display:flex; gap:20px;">
+        <a href="#">PRIVACY POLICY</a>
+        <a href="#">TERMS OF SERVICE</a>
+      </div>
+    </div>
+  </footer>
+
+<script>
+
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+  }
+
+  function triggerUpload() {
+    document.getElementById('profileUpload').click();
+  }
+
+  // Close modal on backdrop click
+  document.querySelectorAll('.modal-overlay').forEach((overlay) => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('active');
+    });
+  });
+
+  // ============================
+  // ✅ IMAGE PREVIEW (CLEAN)
+  // ============================
+  const uploadInput = document.getElementById('profileUpload');
+
+  if (uploadInput) {
+    uploadInput.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = function (event) {
+        const previewImg = document.getElementById('currentProfileImage');
+        const defaultAvatar = document.getElementById('defaultAvatar');
+
+        const mainImg = document.getElementById('mainProfileImage');
+        const mainDefault = document.getElementById('mainDefaultAvatar');
+
+        // Modal
+        previewImg.src = event.target.result;
+        previewImg.classList.remove('hidden');
+        defaultAvatar.classList.add('hidden');
+
+        // Main page
+        if (mainImg) {
+          mainImg.src = event.target.result;
+          mainImg.classList.remove('hidden');
+        }
+
+        if (mainDefault) {
+          mainDefault.classList.add('hidden');
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ============================
+  // ✅ REMOVE IMAGE (CLEAN)
+  // ============================
+  function removePhoto(event) {
+    event.stopPropagation();
+
+    const previewImg = document.getElementById('currentProfileImage');
+    const defaultAvatar = document.getElementById('defaultAvatar');
+
+    const mainImg = document.getElementById('mainProfileImage');
+    const mainDefault = document.getElementById('mainDefaultAvatar');
+
+    // Modal reset
+    previewImg.src = '';
+    previewImg.classList.add('hidden');
+    defaultAvatar.classList.remove('hidden');
+
+    // Main reset
+    if (mainImg) {
+      mainImg.src = '';
+      mainImg.classList.add('hidden');
+    }
+
+    if (mainDefault) {
+      mainDefault.classList.remove('hidden');
+    }
+
+    // Clear file input (IMPORTANT)
+    document.getElementById('profileUpload').value = '';
+
+    // Backend flag
+    document.getElementById('removeImageFlag').value = 'true';
+
+    event.currentTarget.style.display = 'none';
+  }
+
+  // ============================
+  // PASSWORD TOGGLE
+  // ============================
+  function togglePassword(btn) {
+    const input = btn.previousElementSibling;
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+  function confirmLogout() {
+
+  Swal.fire({
+
+    title: 'Logout?',
+
+    text: 'You will need to login again.',
+
+    icon: 'question',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#556B2F',
+
+    cancelButtonColor: '#A89F91',
+
+    confirmButtonText: 'Yes, Logout',
+
+    cancelButtonText: 'Stay Here',
+
+    reverseButtons: true,
+
+    background: '#F6F1E9',
+
+    color: '#2B2B2B'
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      window.location.href = '/logout';
+
+    }
+
+  });
+
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<%- include("../partials/toast") %>
+</body>
+
+</html>

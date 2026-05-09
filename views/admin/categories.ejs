@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories | Sneacks Admin</title>
+
+    <!-- FONTS & ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/admin/layout.css">
+    <link rel="stylesheet" href="/styles/admin/categories.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<%- include('../partials/admin/sidebar', { page: 'categories' }) %>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+    <!-- TOPBAR -->
+    <%- include('../partials/admin/topbar', { 
+        searchPlaceholder: 'Search categories...' 
+    }) %>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-container">
+
+        <!-- PAGE HEADER -->
+        <header class="page-header">
+
+            <div class="header-titles">
+                <h1 class="premium-title">COLLECTIONS</h1>
+                <p class="premium-subtitle">
+                    Manage your product ecosystems and category hierarchies.
+                </p>
+            </div>
+
+            <button class="btn-premium-glow" id="openAddModal">
+                <i class="fas fa-plus"></i>
+                ADD NEW CATEGORY
+            </button>
+
+        </header>
+
+        <!-- STATS -->
+        <section class="stats-grid">
+
+            <div class="card stat-card">
+                <div class="stat-info">
+                    <span class="stat-label">Total Collections</span>
+                    <h2 class="stat-number"><%= totalCategories %></h2>
+                </div>
+
+                <i class="fas fa-layer-group stat-icon"></i>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-info">
+                    <span class="stat-label">Active Categories</span>
+                    <h2 class="stat-number"><%= activeCategories %></h2>
+                </div>
+
+                <i class="fas fa-check-circle stat-icon text-cyan"></i>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-info">
+                    <span class="stat-label">Unlisted Categories</span>
+                    <h2 class="stat-number"><%= unlistedCategories %></h2>
+                </div>
+
+                <i class="fas fa-eye-slash stat-icon text-orange"></i>
+            </div>
+
+        </section>
+
+        <!-- TABLE -->
+        <section class="table-container card">
+
+            <div class="table-header">
+
+                <h3 class="table-title">Category Inventory</h3>
+
+                <div class="table-actions">
+
+                    <div class="search-wrapper">
+                        <i class="fas fa-search"></i>
+
+                        <input 
+                            type="text" 
+                            placeholder="Search collection..." 
+                            id="categorySearch"
+                        >
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+            <div class="responsive-table">
+
+                <table class="premium-table">
+
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Category Name</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="categoryTableBody">
+
+                        <% if(categories.length > 0){ %>
+
+                            <% categories.forEach(category => { %>
+
+                                <tr data-id="<%= category._id %>">
+
+                                    <!-- IMAGE -->
+                                    <td>
+
+                                        <div class="table-img-wrapper">
+
+                                            <img 
+                                                src="<%= category.image || '/images/default-category.png' %>" 
+                                                alt="<%= category.category_name %>"
+                                            >
+
+                                        </div>
+
+                                    </td>
+
+                                    <!-- NAME -->
+                                    <td class="font-bold">
+                                        <%= category.category_name %>
+                                    </td>
+
+                                    <!-- DESCRIPTION -->
+                                    <td class="text-muted">
+
+                                        <%= category.description 
+                                            ? category.description.substring(0, 50) 
+                                            : 'No description' 
+                                        %>
+
+                                    </td>
+
+                                    <!-- STATUS -->
+                                    <td>
+
+                                        <% if(category.is_active){ %>
+
+                                            <span class="badge badge-active">
+                                                ACTIVE
+                                            </span>
+
+                                        <% } else { %>
+
+                                            <span class="badge badge-unlisted">
+                                                UNLISTED
+                                            </span>
+
+                                        <% } %>
+
+                                    </td>
+
+                                    <!-- ACTIONS -->
+                                    <td>
+
+                                       <div class="action-group">
+
+                                            <!-- EDIT -->
+                                            <button 
+                                                class="btn-action edit-btn"
+                                                data-id="<%= category._id %>"
+                                                data-name="<%= category.category_name %>"
+                                                data-desc="<%= category.description %>"
+                                                data-status="<%= category.is_active %>"
+                                                data-image="<%= category.image %>"
+                                            >
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+
+                                            <!-- TOGGLE -->
+                                            <a 
+                                                href="/admin/toggle-category/<%= category._id %>"
+                                                class="btn-action"
+                                            >
+                                                <i class="fas <%= category.is_active ? 'fa-eye-slash' : 'fa-eye' %>"></i>
+                                            </a>
+
+                                            <!-- DELETE -->
+                                            <button 
+                                                class="btn-action delete-btn"
+                                                onclick="deleteCategory('<%= category._id %>')"
+                                            >
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            <% }) %>
+
+                        <% } else { %>
+
+                            <tr>
+
+                                <td colspan="5" class="empty-table">
+                                    No categories found
+                                </td>
+
+                            </tr>
+
+                        <% } %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+<!-- ADD CATEGORY MODAL -->
+<div class="modal-overlay" id="addCategoryModal">
+
+    <div class="modal-content card">
+
+        <div class="modal-header">
+
+            <h3>CREATE CATEGORY</h3>
+
+            <button class="close-modal">
+                &times;
+            </button>
+
+        </div>
+
+        <form 
+            id="addCategoryForm"
+            method="POST"
+            action="/admin/add-category"
+            enctype="multipart/form-data"
+        >
+
+            <div class="modal-body">
+
+                <div class="input-group">
+
+                    <label>Category Name</label>
+
+                    <input 
+                        type="text"
+                        name="category_name"
+                        placeholder="e.g. Lifestyle, Running"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Description</label>
+
+                    <textarea 
+                        name="description"
+                        rows="3"
+                        placeholder="Briefly describe the category..."
+                    ></textarea>
+
+                </div>
+
+                <div class="upload-section">
+
+                    <label>Category Visual</label>
+
+                    <div class="drop-zone" id="dropZoneAdd">
+
+                        <i class="fas fa-cloud-upload-alt"></i>
+
+                        <p>DROP IMAGE HERE</p>
+
+                        <span>JPG, PNG, WEBP (MAX 5MB)</span>
+
+                        <input 
+                            type="file"
+                            name="image"
+                            id="fileInputAdd"
+                            hidden
+                        >
+
+                        <img 
+                            id="previewAdd"
+                            class="img-preview"
+                            src=""
+                            alt=""
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="toggle-wrapper">
+
+                    <span>Active Status</span>
+
+                    <label class="switch">
+
+                        <input 
+                            type="checkbox"
+                            name="is_active"
+                            checked
+                        >
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button 
+                    type="button"
+                    class="btn-secondary close-modal"
+                >
+                    Discard
+                </button>
+
+                <button 
+                    type="submit"
+                    class="btn-premium-glow"
+                >
+                    CREATE CATEGORY
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editCategoryModal">
+
+    <div class="modal-content card">
+
+        <div class="modal-header">
+
+            <h3>EDIT CATEGORY</h3>
+
+            <button class="close-modal">
+                &times;
+            </button>
+
+        </div>
+
+        <form 
+            id="editCategoryForm"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <div class="modal-body">
+
+                <input 
+                    type="hidden"
+                    name="categoryId"
+                    id="editCategoryId"
+                >
+
+                <div class="input-group">
+
+                    <label>Category Name</label>
+
+                    <input 
+                        type="text"
+                        name="category_name"
+                        id="editCategoryName"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Description</label>
+
+                    <textarea 
+                        name="description"
+                        id="editCategoryDesc"
+                        rows="3"
+                    ></textarea>
+
+                </div>
+
+                <div class="upload-section">
+
+                    <label>Replace Visual</label>
+
+                    <div class="drop-zone" id="dropZoneEdit">
+
+                        <i class="fas fa-cloud-upload-alt"></i>
+
+                        <p>CLICK TO CHANGE</p>
+
+                        <input 
+                            type="file"
+                            name="image"
+                            id="fileInputEdit"
+                            hidden
+                        >
+
+                        <img 
+                            id="previewEdit"
+                            class="img-preview"
+                            src=""
+                            alt=""
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="toggle-wrapper">
+
+                    <span>Active Status</span>
+
+                    <label class="switch">
+
+                        <input 
+                            type="checkbox"
+                            name="is_active"
+                            id="editCategoryStatus"
+                        >
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button 
+                    type="button"
+                    class="btn-secondary close-modal"
+                >
+                    Discard
+                </button>
+
+                <button 
+                    type="submit"
+                    class="btn-premium-glow"
+                >
+                    SAVE CHANGES
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const addModal = document.getElementById('addCategoryModal');
+
+    const editModal = document.getElementById('editCategoryModal');
+
+    const openAddBtn = document.getElementById('openAddModal');
+
+    const closeBtns = document.querySelectorAll('.close-modal');
+
+    // OPEN ADD MODAL
+    openAddBtn.addEventListener('click', () => {
+
+        addModal.classList.add('active');
+
+    });
+
+    // CLOSE MODALS
+    closeBtns.forEach(btn => {
+
+        btn.addEventListener('click', () => {
+
+            addModal.classList.remove('active');
+
+            editModal.classList.remove('active');
+
+        });
+
+    });
+
+    // IMAGE PREVIEW
+    function setupImagePreview(dropZoneId, fileInputId, previewId){
+
+        const dropZone = document.getElementById(dropZoneId);
+
+        const fileInput = document.getElementById(fileInputId);
+
+        const preview = document.getElementById(previewId);
+
+        dropZone.addEventListener('click', () => {
+
+            fileInput.click();
+
+        });
+
+        fileInput.addEventListener('change', e => {
+
+            const file = e.target.files[0];
+
+            if(file){
+
+                const reader = new FileReader();
+
+                reader.onload = event => {
+
+                    preview.src = event.target.result;
+
+                    preview.classList.add('active');
+
+                };
+
+                reader.readAsDataURL(file);
+
+            }
+
+        });
+
+    }
+
+    setupImagePreview('dropZoneAdd', 'fileInputAdd', 'previewAdd');
+
+    setupImagePreview('dropZoneEdit', 'fileInputEdit', 'previewEdit');
+
+    // EDIT BUTTON
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+
+        btn.addEventListener('click', () => {
+
+            const data = btn.dataset;
+
+            document.getElementById('editCategoryId').value = data.id;
+
+            document.getElementById('editCategoryName').value = data.name;
+
+            document.getElementById('editCategoryDesc').value = data.desc;
+
+            document.getElementById('editCategoryStatus').checked = data.status === 'true';
+
+            document.getElementById('previewEdit').src = data.image;
+
+            document.getElementById('previewEdit').classList.add('active');
+
+            document.getElementById('editCategoryForm').action = `/admin/edit-category/${data.id}`;
+
+            editModal.classList.add('active');
+
+        });
+
+    });
+
+});
+function confirmAdminLogout() {
+
+  Swal.fire({
+
+    title: 'Logout Admin?',
+
+    text: 'Your admin session will end.',
+
+    icon: 'warning',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#111111',
+
+    cancelButtonColor: '#666666',
+
+    confirmButtonText: 'Yes, Logout',
+
+    cancelButtonText: 'Cancel',
+
+    reverseButtons: true
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      window.location.href = '/admin/logout';
+
+    }
+
+  });
+
+}
+function deleteCategory(id) {
+
+    Swal.fire({
+
+        title: 'Delete Category?',
+
+        text: 'This category will be deleted.',
+
+        icon: 'warning',
+
+        showCancelButton: true,
+
+        confirmButtonText: 'Delete',
+
+        cancelButtonText: 'Cancel',
+
+        confirmButtonColor: '#ff5b5b'
+
+    }).then((result) => {
+
+        if(result.isConfirmed){
+
+            window.location.href = `/admin/delete-category/${id}`;
+
+        }
+
+    });
+
+}
+
+
+</script>
+
+</body>
+</html>
