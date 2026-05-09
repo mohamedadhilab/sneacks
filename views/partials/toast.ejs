@@ -1,0 +1,47 @@
+<!-- Toastify CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<!-- Toastify JS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<script>
+    /**
+     * Reusable showToast function
+     * @param {string} text - Message content
+     * @param {string} type - "success" or "error"
+     */
+    function showToast(text, type) {
+        let backgroundColor;
+        
+        switch (type) {
+            case 'success':
+                backgroundColor = "linear-gradient(to right, #00b09b, #96c93d)";
+                break;
+            case 'error':
+                backgroundColor = "linear-gradient(to right, #ff5f6d, #ffc371)";
+                break;
+            default:
+                backgroundColor = "linear-gradient(to right, #2c3e50, #000000)";
+        }
+
+        Toastify({
+            text: text,
+            duration: 3000,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: backgroundColor,
+                borderRadius: "10px",
+                boxShadow: "0 4px 15px rgba(0,0,0,0.2)"
+            },
+            onClick: function(){} // Callback after click
+        }).showToast();
+    }
+
+    // Automatically trigger toast if message exists from res.locals.message
+    <% if (locals.message) { %>
+        showToast("<%= message.text %>", "<%= message.type %>");
+    <% } %>
+</script>

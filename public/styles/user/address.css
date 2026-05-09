@@ -1,0 +1,483 @@
+/* ============================================================
+   ACCOUNT & ADDRESS STYLES
+   ============================================================ */
+
+.account-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 48px;
+  min-height: calc(100vh - 200px);
+  gap: 80px;
+}
+
+.account-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-menu a {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text-light);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.sidebar-menu a:hover {
+  color: var(--text-dark);
+}
+
+.sidebar-menu a.active {
+  color: var(--text-dark);
+  font-weight: 600;
+  border-bottom: 1px solid var(--text-dark);
+  padding-bottom: 2px;
+  width: fit-content;
+}
+
+.account-main {
+  flex: 1;
+  max-width: 800px;
+}
+
+.account-header {
+  margin-bottom: 40px;
+}
+
+.account-tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-placeholder);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.account-heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: 2.8rem;
+  color: var(--text-dark);
+}
+
+.account-subheading {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  margin-top: 12px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.account-card {
+  background: var(--cream-card);
+  border-radius: 8px;
+  padding: 40px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+/* ADDRESS CARDS */
+.address-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.address-card {
+  background: var(--cream-card);
+  border: 1px solid rgba(216, 212, 200, 0.5);
+  border-radius: 2px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.address-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.badge-default {
+  background: #d8c494;
+  color: var(--text-dark);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+
+.address-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-placeholder);
+}
+
+.address-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.address-lines {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.address-phone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  margin-bottom: 24px;
+}
+
+.address-phone svg {
+  width: 14px;
+  height: 14px;
+}
+
+.address-actions {
+  display: flex;
+  gap: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(216, 212, 200, 0.5);
+}
+
+.btn-text-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.btn-text-action svg {
+  width: 14px;
+  height: 14px;
+}
+
+.text-danger {
+  color: #c06c6c;
+}
+
+.add-address-dash {
+  background: transparent;
+  border: 1px dashed var(--border-input);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-height: 300px;
+}
+
+.add-address-dash:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.add-address-dash svg {
+  width: 32px;
+  height: 32px;
+  color: var(--text-placeholder);
+  margin-bottom: 16px;
+}
+
+.add-address-dash span {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--text-placeholder);
+}
+
+.btn-primary-sm {
+  background: var(--olive-dark);
+  color: var(--white);
+  border: none;
+  padding: 12px 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* MODALS */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(240, 236, 228, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  overflow-y: auto;
+  padding: 40px 20px;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.modal-header-centered {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.modal-tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-placeholder);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.modal-header-centered h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.modal-header-centered p {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.modal-body-card {
+  background: var(--cream-card);
+  border-radius: 8px;
+  padding: 48px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 32px;
+}
+
+.grid-form .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.text-optional {
+  text-transform: lowercase;
+  color: var(--text-placeholder);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.select-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.checkbox-group {
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  cursor: pointer;
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border-input);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background: var(--olive-dark);
+  border-color: var(--olive-dark);
+}
+
+.custom-checkbox input:checked ~ .checkmark::after {
+  content: '';
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.modal-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.modal-actions.space-between {
+  justify-content: space-between;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-placeholder);
+  cursor: pointer;
+}
+
+.btn-text:hover {
+  color: var(--text-dark);
+}
+
+.btn-text-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-dark);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+/* ================= LOGOUT ================= */
+
+.logout-item {
+  margin-top: 42px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 24px;
+}
+
+.logout-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+
+  color: #8c4b4b;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 500;
+
+  transition: all 0.25s ease;
+}
+
+.logout-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.logout-link:hover {
+  color: #b64f4f;
+  transform: translateX(4px);
+}
+.delete-btn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.delete-btn:hover{
+  color:#556B2F;
+  transform:translateY(-1px);
+}

@@ -7,7 +7,7 @@
   <title>Sneacks — Verify Identity</title>
 
   <!-- ✅ FIXED CSS PATH -->
-  <link rel="stylesheet" href="/styles/global.css" />
+  <link rel="stylesheet" href="/styles/user/global.css" />
 
   <style>
     body {
@@ -135,9 +135,6 @@
         <p class="verify-sub">Enter the 6-digit code sent to your email.</p>
 
         <!-- 🔴 ERROR -->
-        <% if (error) { %>
-          <div class="error-text"><%= error %></div>
-        <% } %>
 
         <!-- ✅ FORM -->
         <form action="/verify-otp" method="POST">
@@ -176,6 +173,7 @@
 
   </div>
 
+<%- include("../partials/toast") %>
 </body>
 
 </html>

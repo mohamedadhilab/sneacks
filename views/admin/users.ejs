@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Directory | SNEACKS Admin</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/styles/admin/layout.css">
+  <link rel="stylesheet" href="/styles/admin/users.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<%- include('../partials/admin/sidebar', { page: 'users' }) %>
+
+<div class="main-content">
+
+  <!-- TOPBAR -->
+  <%- include('../partials/admin/topbar', { searchPlaceholder: 'Search customers...' }) %>
+
+  <div class="page-container">
+
+    <!-- HEADER -->
+    <div class="page-header">
+      <div class="page-title">
+        <h2>CUSTOMER <span class="highlight">DIRECTORY</span></h2>
+        <p class="page-subtitle">Manage your users</p>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="users-stats-grid">
+
+      <div class="card user-stat-card">
+        <div class="user-stat-title">Total Customers</div>
+        <div class="user-stat-value">
+          <%= typeof totalCustomers !== 'undefined' ? totalCustomers : totalUsers %>
+        </div>
+      </div>
+
+      <div class="card user-stat-card">
+        <div class="user-stat-title">Active Users</div>
+        <div class="user-stat-value">
+          <%= typeof activeUsers !== 'undefined' ? activeUsers : users.filter(u => !u.isBlocked).length %>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="users-table-container">
+
+      <div class="users-table-header">
+        <div class="users-table-title">Users</div>
+      </div>
+
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Join Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <% if (users.length > 0) { %>
+
+            <% users.forEach(user => { %>
+
+              <tr>
+
+                <!-- NAME -->
+                <td>
+                  <div class="user-profile-cell">
+
+                    <div class="user-avatar text-bg">
+                      <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+                    </div>
+
+                    <div class="user-info">
+                      <span class="user-name"><%= user.full_name %></span>
+                    </div>
+
+                  </div>
+                </td>
+
+                <!-- EMAIL -->
+                <td>
+                  <%= user.email %>
+                </td>
+
+                <!-- JOIN DATE -->
+                <td>
+                  <%= new Date(user.createdAt).toDateString() %>
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                  <% if (user.isBlocked) { %>
+                    <span class="badge badge-inactive">BLOCKED</span>
+                  <% } else { %>
+                    <span class="badge badge-active">ACTIVE</span>
+                  <% } %>
+                </td>
+
+                <!-- ACTIONS -->
+               <td class="actions-cell">
+
+                <!-- 🔵 VIEW BUTTON -->
+                <a href="/admin/user/<%= user._id %>" class="btn-action btn-view">
+                    <i class="far fa-eye"></i> View
+                </a>
+
+                <!-- 🔴 BLOCK / UNBLOCK -->
+                <% if (user.isBlocked) { %>
+
+                    <a href="/admin/unblock-user/<%= user._id %>" class="btn-action btn-unblock">
+                    <i class="fas fa-check"></i> Unblock
+                    </a>
+
+                <% } else { %>
+
+                    <a href="/admin/block-user/<%= user._id %>" class="btn-action btn-block">
+                    <i class="fas fa-ban"></i> Block
+                    </a>
+
+                <% } %>
+
+                </td>
+
+              </tr>
+
+            <% }) %>
+
+          <% } else { %>
+
+            <tr>
+              <td colspan="5" style="text-align:center; padding:20px;">
+                No users found
+              </td>
+            </tr>
+
+          <% } %>
+
+        </tbody>
+
+      </table>
+      <div class="pagination">
+
+  <% if(currentPage > 1){ %>
+
+    <a href="/admin/users?page=<%= currentPage - 1 %>">
+      Prev
+    </a>
+
+  <% } %>
+
+  <% for(let i = 1; i <= totalPages; i++){ %>
+
+    <a
+      href="/admin/users?page=<%= i %>"
+      class="<%= currentPage === i ? 'active-page' : '' %>"
+    >
+      <%= i %>
+    </a>
+
+  <% } %>
+
+  <% if(currentPage < totalPages){ %>
+
+    <a href="/admin/users?page=<%= currentPage + 1 %>">
+      Next
+    </a>
+
+  <% } %>
+
+</div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<%- include("../partials/toast") %>
+
+<script>
+function confirmAdminLogout() {
+
+  Swal.fire({
+
+    title: 'Logout Admin?',
+
+    text: 'Your admin session will end.',
+
+    icon: 'warning',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#111111',
+
+    cancelButtonColor: '#666666',
+
+    confirmButtonText: 'Yes, Logout',
+
+    cancelButtonText: 'Cancel',
+
+    reverseButtons: true
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      window.location.href = '/admin/logout';
+
+    }
+
+  });
+
+}
+</script>
+</body>
+
+</html>

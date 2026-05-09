@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Overview | SNEACKS Admin</title>
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/styles/admin/layout.css">
+    <link rel="stylesheet" href="/styles/admin/dashboard.css">
+</head>
+<body>
+
+    <!-- Sidebar Partial -->
+    <%- include('../partials/admin/sidebar', { page: 'dashboard' }) %>
+
+    <div class="main-content">
+        <!-- Topbar Partial -->
+        <%- include('../partials/admin/topbar', { searchPlaceholder: 'Search orders, SKU, or customers...' }) %>
+
+        <div class="page-container">
+            
+            <div class="time-filter">
+                <div class="filter-btn">TODAY</div>
+                <div class="filter-btn active">WEEK</div>
+                <div class="filter-btn">MONTH</div>
+                <div class="filter-btn">CUSTOM <i class="far fa-calendar"></i></div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="dashboard-grid">
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Total Sales (MTD)</span>
+                        <i class="fas fa-money-bill-wave stat-icon"></i>
+                    </div>
+                    <div class="stat-value">₹1.2M</div>
+                    <div class="stat-meta">
+                        <span class="stat-change positive">+12.5%</span>
+                        <span class="stat-subtext">vs last month</span>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">New Customers</span>
+                        <i class="fas fa-user-plus stat-icon"></i>
+                    </div>
+                    <div class="stat-value">8,432</div>
+                    <div class="stat-meta">
+                        <span class="stat-change positive">+5.2%</span>
+                        <span class="stat-subtext">active today</span>
+                    </div>
+                </div>
+
+                <div class="card stat-card alert-card">
+                    <div class="stat-header">
+                        <span class="stat-title text-orange">Inventory Alerts</span>
+                        <i class="fas fa-exclamation-triangle stat-icon"></i>
+                    </div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-meta">
+                        <span class="stat-change negative" style="background: var(--brand-orange); color: white;">12 Critical</span>
+                        <span class="stat-subtext">low stock items</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <div class="card chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">Sales Trajectory</div>
+                            <div class="chart-subtitle">Revenue growth over the last 30 days</div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item"><div class="legend-dot dot-cyan"></div> GROWTH</div>
+                            <div class="legend-item"><div class="legend-dot dot-orange"></div> TARGET</div>
+                        </div>
+                    </div>
+                    <div class="chart-placeholder">
+                        <!-- Chart implementation goes here -->
+                    </div>
+                </div>
+
+                <div class="card chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">Category Distribution</div>
+                            <div class="chart-subtitle">Revenue share by department</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; margin: 20px 0;">
+                        <!-- Placeholder for Donut Chart -->
+                        <div style="width: 140px; height: 140px; border-radius: 50%; border: 20px solid var(--accent-pink); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; font-weight: 700;">78%</div>
+                                <div style="font-size: 8px; color: var(--text-muted); text-transform: uppercase;">Top Tier</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-list">
+                        <div class="category-item">
+                            <div class="category-name"><div class="legend-dot dot-cyan"></div> Lifestyle</div>
+                            <div class="category-value">45%</div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-name"><div class="legend-dot dot-orange"></div> Running</div>
+                            <div class="category-value">30%</div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-name"><div class="legend-dot" style="background: var(--accent-pink)"></div> Training</div>
+                            <div class="category-value">15%</div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-name"><div class="legend-dot" style="background: var(--text-muted)"></div> Others</div>
+                            <div class="category-value">10%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="card">
+                <div class="table-header">
+                    <div class="table-title">Recent Orders</div>
+                    <div class="table-actions">
+                        <button class="btn btn-outline">Export CSV</button>
+                        <button class="btn btn-outline">Filter</button>
+                    </div>
+                </div>
+                
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Status</th>
+                            <th>Total Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ORD-2024-001</td>
+                            <td class="order-customer">Marcus Sterling</td>
+                            <td><span class="badge badge-active"><div class="legend-dot dot-cyan" style="width: 6px; height: 6px;"></div> SHIPPED</span></td>
+                            <td class="order-amount">$450.00</td>
+                            <td><i class="fas fa-ellipsis-h action-menu"></i></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-2024-002</td>
+                            <td class="order-customer">Elena Rodriguez</td>
+                            <td><span class="badge badge-inactive"><div class="legend-dot dot-orange" style="width: 6px; height: 6px;"></div> PROCESSING</span></td>
+                            <td class="order-amount">$1,280.00</td>
+                            <td><i class="fas fa-ellipsis-h action-menu"></i></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-2024-003</td>
+                            <td class="order-customer">Jackson Pierce</td>
+                            <td><span class="badge badge-active" style="color: #4CAF50; background: rgba(76, 175, 80, 0.1);"><div class="legend-dot" style="background: #4CAF50; width: 6px; height: 6px;"></div> DELIVERED</span></td>
+                            <td class="order-amount">$215.00</td>
+                            <td><i class="fas fa-ellipsis-h action-menu"></i></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-2024-004</td>
+                            <td class="order-customer">Sarah Jenkins</td>
+                            <td><span class="badge badge-restricted"><div class="legend-dot" style="background: var(--status-restricted-text); width: 6px; height: 6px;"></div> RETURNED</span></td>
+                            <td class="order-amount">$145.00</td>
+                            <td><i class="fas fa-ellipsis-h action-menu"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+<%- include("../partials/toast") %>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+function confirmAdminLogout() {
+
+  Swal.fire({
+
+    title: 'Logout Admin?',
+
+    text: 'Your admin session will end.',
+
+    icon: 'warning',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#111111',
+
+    cancelButtonColor: '#666666',
+
+    confirmButtonText: 'Yes, Logout',
+
+    cancelButtonText: 'Cancel',
+
+    reverseButtons: true
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      window.location.href = '/admin/logout';
+
+    }
+
+  });
+
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sneacks — Join the Atelier</title>
+
+  <link rel="stylesheet" href="/styles/user/global.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      background-color: var(--cream);
+    }
+
+    .left-panel {
+      width: 50%;
+      background: #1c1c1c;
+      overflow: hidden;
+    }
+
+    .left-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.88;
+    }
+
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 56px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    /* 🔥 PASSWORD FIX */
+ .password-input-wrap {
+  position: relative;
+}
+
+.password-input-wrap input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.btn-eye {
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-eye svg {
+  width: 18px;
+  height: 18px;
+  stroke: #8a8a8a;
+}
+
+.eye-close {
+  display: none;
+}
+
+.btn-eye.active .eye-open {
+  display: none;
+}
+
+.btn-eye.active .eye-close {
+  display: block;
+}
+  </style>
+</head>
+
+<body>
+
+  <div class="left-panel">
+    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800&q=80" />
+  </div>
+
+  <div class="right-panel">
+
+    <div class="logo">
+      <div class="logo-title">SNEACKS</div>
+      <div class="logo-sub">The Curated Atelier</div>
+    </div>
+
+    <div class="auth-card">
+      <h1 class="card-title">Join the Atelier</h1>
+      <p class="card-subtitle">Enter your details to create your digital membership</p>
+
+      <form action="/signup" method="POST">
+
+        <!-- NAME -->
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" name="name" class="form-input" placeholder="Julian Vane" />
+        </div>
+
+        <!-- EMAIL -->
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" class="form-input" placeholder="atelier@sneacks.com"  />
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+          <label class="form-label">Password</label>
+        <div class="password-input-wrap">
+          <input type="password" name="password" class="form-input" placeholder="••••••••" />
+
+          <button type="button" class="btn-eye" onclick="togglePassword(this)">
+            
+            <!-- EYE OPEN -->
+            <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8s11 8 11 8s-4 8-11 8s-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+
+            <!-- EYE CLOSED (CORRECT ICON) -->
+          <svg class="eye-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- eye shape -->
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+            
+            <!-- slash -->
+            <line x1="2" y1="2" x2="22" y2="22"/>
+          </svg>
+
+          </button>
+        </div>
+        </div>
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="form-group" style="margin-bottom: 28px;">
+          <label class="form-label">Confirm Password</label>
+
+          <div class="password-input-wrap">
+            <input type="password" name="confirmPassword" class="form-input"  />
+
+            <button type="button" class="btn-eye" onclick="togglePassword(this)">
+              
+              <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+
+             <svg class="eye-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <!-- eye shape -->
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+              
+              <!-- slash -->
+              <line x1="2" y1="2" x2="22" y2="22"/>
+            </svg>
+
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Create Account</button>
+
+      </form>
+
+      <div class="or-divider">or continue with</div>
+
+      <a href="/auth/google" class="btn-google">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="google-icon" />
+        Continue with Google
+      </a>
+
+      <div class="auth-footer" style="margin-top: 16px;">
+        Already have an account? <a href="/login">Log In</a>
+      </div>
+
+      <p class="legal-text">
+        By joining, you agree to our Terms of Service and Privacy Policy
+      </p>
+
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+    function togglePassword(btn) {
+      const input = btn.parentElement.querySelector('input');
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.classList.add('active');
+      } else {
+        input.type = 'password';
+        btn.classList.remove('active');
+      }
+    }
+  </script>
+
+<%- include("../partials/toast") %>
+</body>
+</html>
