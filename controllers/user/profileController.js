@@ -128,7 +128,7 @@ exports.updateProfile = async (req, res) => {
 
         const oldImagePath = path.join(
           __dirname,
-          '../../public/uploads',
+         '../../public/uploads/profiles',
           path.basename(user.profileImage)
         );
 
@@ -137,10 +137,12 @@ exports.updateProfile = async (req, res) => {
         }
       }
 
-      user.profileImage = '/uploads/' + req.file.filename;
+user.profileImage =
+  '/uploads/profiles/' + req.file.filename;
     }
 
     await user.save();
+    req.session.user.name = user.name;
 
     req.session.message = {
       type: 'success',

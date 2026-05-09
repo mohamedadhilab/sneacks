@@ -173,7 +173,31 @@ exports.getUsers = async (req, res) => {
 
     const skip = (page - 1) * limit;
 
-    const users = await User.find()
+    const search = req.query.search || '';
+
+    const searchQuery = {
+
+      $or: [
+
+        {
+          name: {
+            $regex: search,
+            $options: 'i'
+          }
+        },
+
+        {
+          email: {
+            $regex: search,
+            $options: 'i'
+          }
+        }
+
+      ]
+
+    };
+
+    const users = await User.find(searchQuery)
 
       .sort({ createdAt: -1 })
 
@@ -181,24 +205,39 @@ exports.getUsers = async (req, res) => {
 
       .limit(limit);
 
-    const totalUsers = await User.countDocuments();
+    const totalUsers = await User.countDocuments(searchQuery);
+
+    const activeUsers = await User.countDocuments({
+      ...searchQuery,
+      isBlocked: false
+    });
 
     const totalPages = Math.ceil(totalUsers / limit);
 
     res.render('admin/users', {
+
       users,
+      totalUsers,
+      activeUsers,
       currentPage: page,
-      totalPages
+      totalPages,
+      search
+
     });
 
   } catch (error) {
 
     console.log(error);
 
-req.session.message = {
-    type: 'error',
-    text: 'user page error'
-  };  }
+    req.session.message = {
+      type: 'error',
+      text: 'User page error'
+    };
+
+    res.redirect('/admin/dashboard');
+
+  }
+
 };
 exports.blockUser = async (req, res) => {
   try {

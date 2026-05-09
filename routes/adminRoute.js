@@ -8,7 +8,8 @@ const noCache = require('../middleware/noCache');
 const validate = require('../middleware/validateMiddleware');
 
 const adminValidation = require('../validations/adminValidation');
-
+const categoryController = require('../controllers/admin/categoryController');
+const categoryUpload = require('../middleware/upload');
 const {
   isAdminLoggedIn,
   isAdminLoggedOut
@@ -107,5 +108,34 @@ router.get(
   adminController.logout
 );
 
+router.get(
+  '/categories',
+  isAdminLoggedIn,
+  categoryController.getCategories
+);
+
+router.post(
+  '/add-category',
+  isAdminLoggedIn,
+  categoryUpload.single('image'),
+  categoryController.addCategory
+);
+router.post(
+  '/edit-category/:id',
+  isAdminLoggedIn,
+  categoryUpload.single('image'),
+  categoryController.editCategory
+);
+
+router.get(
+  '/toggle-category/:id',
+  isAdminLoggedIn,
+  categoryController.toggleCategoryStatus
+);
+router.get(
+  '/delete-category/:id',
+  isAdminLoggedIn,
+  categoryController.deleteCategory
+);
 
 module.exports = router;

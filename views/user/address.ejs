@@ -40,8 +40,7 @@
         <li><a href="/address" class="active">ADDRESS</a></li>
         <li><a href="/wallet">WALLET</a></li>
         <li class="logout-item">
-<a href="#" class="logout-link" onclick="confirmLogout()">    
-    <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+<a href="#" class="logout-link" onclick="event.preventDefault(); confirmLogout()">    <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
       <polyline points="16 17 21 12 16 7"></polyline>
       <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -179,8 +178,12 @@
       </div>
 
       <div class="modal-body-card">
-          <form action="/add-address" method="POST" class="edit-form grid-form">
-          <div class="form-group full-width">
+<form
+  id="addAddressForm"
+  action="/add-address"
+  method="POST"
+  class="edit-form grid-form"
+>          <div class="form-group full-width">
             <label class="form-label">FULL NAME</label>
             <input 
               type="text" 
@@ -357,6 +360,9 @@
       </div>
     </div>
   </footer>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <%- include("../partials/toast") %>
 
   <script>
     function openModal(id) {
@@ -381,9 +387,9 @@
       
       openModal('editAddressModal');
     }
-    function confirmDelete(id) {
+async function confirmDelete(id) {
 
-  Swal.fire({
+  const result = await Swal.fire({
 
     title: 'Delete Address?',
 
@@ -407,15 +413,33 @@
 
     color: '#2B2B2B'
 
-  }).then((result) => {
+  });
 
-    if (result.isConfirmed) {
+  if (result.isConfirmed) {
 
-      window.location.href = '/delete-address/' + id;
+    try {
+
+      const response = await axios.delete('/delete-address/' + id);
+
+      showToast(response.data.message, 'success');
+
+      setTimeout(() => {
+
+        window.location.reload();
+
+      }, 1000);
+
+    } catch (error) {
+
+      showToast(
+        error.response?.data?.message || 'Delete failed',
+        'error'
+      );
 
     }
 
-  });
+  }
+
 }
 
 
@@ -455,13 +479,122 @@
 
   });
 }
+// ================= ADD ADDRESS AJAX =================
 
+const addAddressForm = document.getElementById('addAddressForm');
 
+if (addAddressForm) {
 
+  addAddressForm.addEventListener('submit', async (e) => {
 
+    e.preventDefault();
+
+    try {
+
+      const formData = new FormData(addAddressForm);
+
+      const data = {
+        full_name: formData.get('full_name'),
+        address: formData.get('address'),
+        city: formData.get('city'),
+        state: formData.get('state'),
+        pincode: formData.get('pincode'),
+        phone_number: formData.get('phone_number'),
+        type: formData.get('type'),
+        is_default: formData.get('is_default') === 'true'
+      };
+
+      const response = await axios.post(
+        '/add-address',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+      showToast(response.data.message, 'success');
+
+      setTimeout(() => {
+
+        window.location.reload();
+
+      }, 1000);
+
+    } catch (error) {
+
+      console.log(error);
+
+      showToast(
+        error.response?.data?.message || 'Something went wrong',
+        'error'
+      );
+
+    }
+
+  });
+
+}
+// ================= EDIT ADDRESS AJAX =================
+
+const editAddressForm = document.getElementById('editAddressForm');
+
+if (editAddressForm) {
+
+  editAddressForm.addEventListener('submit', async (e) => {
+
+    e.preventDefault();
+
+    try {
+
+      const formData = new FormData(editAddressForm);
+
+      const data = {
+        full_name: formData.get('full_name'),
+        address: formData.get('address'),
+        city: formData.get('city'),
+        state: formData.get('state'),
+        pincode: formData.get('pincode'),
+        phone_number: formData.get('phone_number'),
+        type: formData.get('type'),
+        is_default: formData.get('is_default') === 'true'
+      };
+
+      const response = await axios.post(
+        editAddressForm.action,
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+      showToast(response.data.message, 'success');
+
+      setTimeout(() => {
+
+        window.location.reload();
+
+      }, 1000);
+
+    } catch (error) {
+
+      showToast(
+        error.response?.data?.message || 'Update failed',
+        'error'
+      );
+
+    }
+
+  });
+
+}
 
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<%- include("../partials/toast") %>
+  
 </body>
 </html>

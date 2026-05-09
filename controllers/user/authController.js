@@ -81,7 +81,7 @@ exports.login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) {
+    if (!isMatch) { 
       req.session.message = { type: 'error', text: 'Invalid password' };
       return res.redirect('/login');
     }

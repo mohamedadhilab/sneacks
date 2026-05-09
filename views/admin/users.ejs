@@ -39,7 +39,7 @@
       <div class="card user-stat-card">
         <div class="user-stat-title">Total Customers</div>
         <div class="user-stat-value">
-          <%= typeof totalCustomers !== 'undefined' ? totalCustomers : users.length %>
+          <%= typeof totalCustomers !== 'undefined' ? totalCustomers : totalUsers %>
         </div>
       </div>
 
@@ -83,7 +83,7 @@
                   <div class="user-profile-cell">
 
                     <div class="user-avatar text-bg">
-                      <%= user.full_name ? user.full_name.charAt(0).toUpperCase() : 'U' %>
+                      <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
                     </div>
 
                     <div class="user-info">
@@ -192,10 +192,8 @@
 </div>
 
 <%- include("../partials/toast") %>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-
 function confirmAdminLogout() {
 
   Swal.fire({
@@ -229,7 +227,7 @@ function confirmAdminLogout() {
   });
 
 }
-
 </script>
 </body>
+
 </html>

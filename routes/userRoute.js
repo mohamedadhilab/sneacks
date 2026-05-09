@@ -188,7 +188,7 @@ router.post(
   addressController.updateAddress
 );
 
-router.get(
+router.delete(
   '/delete-address/:id',
   isLoggedIn,
   addressController.deleteAddress

@@ -52,15 +52,17 @@ exports.addAddress = async (req, res) => {
       user_id: req.session.user.id
     });
 
-    req.session.message = { type: 'success', text: 'Address added successfully.' };
-    res.redirect('/address');
+return res.json({
+  success: true,
+  message: 'Address added successfully.'
+});  
 
   } catch (error) {
     console.log(error);
-req.session.message = {
-    type: 'error',
-    text: ' add address error '
-  };  }
+return res.status(500).json({
+  success: false,
+  message: 'Add address failed'
+}); }
 };
 
 
@@ -97,15 +99,17 @@ exports.updateAddress = async (req, res) => {
       }
     );
 
-    req.session.message = { type: 'success', text: 'Address updated successfully.' };
-    res.redirect('/address');
+  return res.json({
+  success: true,
+  message: 'Address updated successfully.'
+});
 
   } catch (error) {
     console.log(error);
-req.session.message = {
-    type: 'error',
-    text: 'update address error'
-  };  }
+return res.status(500).json({
+  success: false,
+  message: 'Update address failed'
+});  }
 };
 
 
@@ -133,13 +137,19 @@ exports.deleteAddress = async (req, res) => {
       }
     }
 
-    req.session.message = { type: 'success', text: 'Address deleted successfully.' };
-    res.redirect('/address');
+return res.json({
+  success: true,
+  message: 'Address deleted successfully.'
+});
 
-  } catch (error) {
-    console.log(error);
-req.session.message = {
-    type: 'error',
-    text: 'delete address error'
-  };  }
+  }catch (error) {
+
+  console.log(error);
+
+  return res.status(500).json({
+    success: false,
+    message: 'Delete address failed'
+  });
+
+ }
 };
