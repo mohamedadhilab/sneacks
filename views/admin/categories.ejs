@@ -20,11 +20,16 @@
 <!-- MAIN CONTENT -->
 <div class="main-content">
 
-    <!-- TOPBAR -->
-    <%- include('../partials/admin/topbar', { 
-        searchPlaceholder: 'Search categories...' 
-    }) %>
+<!-- TOPBAR -->
+<%- include('../partials/admin/topbar', {
 
+    searchPlaceholder: 'Search categories...',
+
+    searchAction: '/admin/categories',
+
+    search
+
+}) %>
     <!-- PAGE CONTENT -->
     <div class="page-container">
 
@@ -84,19 +89,6 @@
 
                 <h3 class="table-title">Category Inventory</h3>
 
-                <div class="table-actions">
-
-                    <div class="search-wrapper">
-                        <i class="fas fa-search"></i>
-
-                        <input 
-                            type="text" 
-                            placeholder="Search collection..." 
-                            id="categorySearch"
-                        >
-                    </div>
-
-                </div>
 
             </div>
 
@@ -226,6 +218,43 @@
                     </tbody>
 
                 </table>
+
+            </div>
+            <!-- PAGINATION -->
+            <div class="pagination">
+
+                <% if(currentPage > 1){ %>
+
+                    <a 
+                        href="/admin/categories?page=<%= currentPage - 1 %>&search=<%= search %>"
+                        class="page-btn"
+                    >
+                        Prev
+                    </a>
+
+                <% } %>
+
+                <% for(let i = 1; i <= totalPages; i++){ %>
+
+                    <a 
+                        href="/admin/categories?page=<%= i %>&search=<%= search %>"
+                        class="page-btn <%= currentPage === i ? 'active-page' : '' %>"
+                    >
+                        <%= i %>
+                    </a>
+
+                <% } %>
+
+                <% if(currentPage < totalPages){ %>
+
+                    <a 
+                        href="/admin/categories?page=<%= currentPage + 1 %>&search=<%= search %>"
+                        class="page-btn"
+                    >
+                        Next
+                    </a>
+
+                <% } %>
 
             </div>
 
@@ -485,6 +514,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<%- include('../partials/toast') %>
 
 <script>
 
@@ -651,6 +681,7 @@ function deleteCategory(id) {
     });
 
 }
+
 
 
 </script>

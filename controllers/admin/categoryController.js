@@ -75,11 +75,9 @@ exports.addCategory = async (req, res) => {
 
   try {
 
-    const {
-      category_name,
-      description
-    } = req.body;
+const category_name = req.body.category_name.trim();
 
+const description = req.body.description;
     const existingCategory = await Category.findOne({
 
       category_name: {
@@ -125,20 +123,30 @@ exports.addCategory = async (req, res) => {
 
     res.redirect('/admin/categories');
 
-  } catch (error) {
+ } catch (error) {
 
-    console.log(error);
+  console.log(error);
+
+  if (error.code === 11000) {
 
     req.session.message = {
       type: 'error',
-      text: 'Failed to add category'
+      text: 'Category already exists'
     };
 
-    res.redirect('/admin/categories');
-
+    return res.redirect('/admin/categories');
   }
 
-};
+  req.session.message = {
+    type: 'error',
+    text: 'Failed to add category'
+  };
+
+  res.redirect('/admin/categories');
+
+ }
+}
+
 
 exports.editCategory = async (req, res) => {
 

@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | Sneacks Admin</title>
+
+    <!-- FONTS & ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/admin/layout.css">
+    <link rel="stylesheet" href="/styles/admin/products.css">
+    <link rel="stylesheet" href="/styles/admin/product-modal.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<%- include('../partials/admin/sidebar', { page: 'products' }) %>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+    <!-- TOPBAR -->
+    <%- include('../partials/admin/topbar', {
+        searchPlaceholder: 'Search inventory...',
+        searchAction: '/admin/products',
+        search: locals.search || ''
+    }) %>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-container">
+
+        <!-- PAGE HEADER -->
+        <header class="page-header">
+            <div class="header-titles">
+                <h1 class="premium-title">PRODUCT <span class="text-orange">FLEET</span></h1>
+                <p class="premium-subtitle">
+                    Manage your high-performance inventory with precision. Real-time stock tracking and velocity metrics.
+                </p>
+            </div>
+
+            <div class="header-actions">
+                <div class="sort-dropdown">
+<select
+    class="premium-select"
+    onchange="handleSort(this.value)"
+    >
+<option
+    value="latest"
+    <%= sort === 'latest' ? 'selected' : '' %>
+>
+    SORT BY LATEST
+</option>
+
+<option
+    value="price-high"
+    <%= sort === 'price-high' ? 'selected' : '' %>
+>
+    PRICE: HIGH TO LOW
+</option>
+
+<option
+    value="price-low"
+    <%= sort === 'price-low' ? 'selected' : '' %>
+>
+    PRICE: LOW TO HIGH
+</option>
+
+<option
+    value="stock-low"
+    <%= sort === 'stock-low' ? 'selected' : '' %>
+>
+    STOCK: LOW TO HIGH
+</option>
+                    </select>
+                </div>
+<% if(!trash){ %>
+
+<button
+    class="btn-premium-glow"
+    onclick="openAddProductModal()"
+>
+    <i class="fas fa-plus"></i>
+    ADD PRODUCT
+</button>
+
+<% } %>               
+            </div>
+        </header>
+
+        <!-- CATEGORY FILTERS -->
+<!-- CATEGORY FILTERS -->
+
+<section class="filter-pills">
+
+    <span class="filter-label">
+        FILTER BY:
+    </span>
+
+    <!-- ACTIVE PRODUCTS -->
+
+    <a
+        href="/admin/products"
+        class="pill <%= !trash ? 'active' : '' %>"
+    >
+        ACTIVE
+    </a>
+
+    <!-- TRASH PRODUCTS -->
+
+    <a
+        href="/admin/products?trash=true"
+        class="pill <%= trash ? 'active' : '' %>"
+    >
+        TRASH
+    </a>
+
+</section>
+
+        <!-- TABLE SECTION -->
+        <section class="table-container card">
+            <div class="responsive-table">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                            <th>PRODUCT DETAILS</th>
+                            <th>SKU ID</th>
+                            <th>CATEGORY</th>
+                            <th>STOCK STATUS</th>
+                            <th>PRICE</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(products.length === 0){ %>
+
+<tr>
+
+    <td colspan="6">
+
+        <div class="empty-state">
+
+            <i class="fas fa-box-open"></i>
+
+            <h3>
+                <%= trash ? 'Trash is Empty' : 'No Products Found' %>
+            </h3>
+
+        </div>
+
+    </td>
+
+</tr>
+
+<% } %>
+
+<% products.forEach(product => { %>
+
+<tr>
+
+    <td>
+        <div class="product-cell">
+
+            <div class="table-img-wrapper">
+
+                <img 
+                    src="<%= product.productImage?.length 
+                    ? '/uploads/products/' + product.productImage[0] 
+                    : '/images/placeholder-shoe.png' %>"
+                >
+
+            </div>
+
+            <div class="product-info">
+
+                <span class="product-name">
+                    <%= product.product_name %>
+                </span>
+
+                <span class="product-variant">
+                    <%= product.brand %>
+                </span>
+
+            </div>
+
+        </div>
+    </td>
+
+    <td class="sku-cell">
+        <%= product.sku || 'SKU-N/A' %>
+    </td>
+
+    <td>
+
+        <span class="badge-outline badge-cyan">
+        <%= product.category?.category_name || 'No Category' %>
+        </span>
+
+    </td>
+
+    <td>
+        <% 
+            const totalStock = product.variants ? product.variants.reduce((acc, v) => acc + (v.stock || 0), 0) : 0;
+            const stockStatus = totalStock > 0 ? 'In Stock' : 'Out of Stock';
+            const statusClass = totalStock > 0 ? 'in-stock' : 'out-of-stock';
+            const progressColor = totalStock > 10 ? 'fill-green' : (totalStock > 0 ? 'fill-orange' : 'fill-red');
+            const progressWidth = Math.min(100, (totalStock / 50) * 100);
+        %>
+        <div class="stock-status">
+            <div class="status-indicator <%= statusClass %>">
+                <span class="dot"></span>
+                <%= stockStatus %>
+            </div>
+            <div class="progress-bar-bg">
+                <div 
+                    class="progress-bar <%= progressColor %>"
+                    style="width: <%= progressWidth %>"
+                ></div>
+            </div>
+            <span class="stock-count">
+<% if(totalStock <= 5 && totalStock > 0){ %>
+
+    <span class="low-stock-warning">
+        LOW STOCK
+    </span>
+
+<% } %>            </span>
+        </div>
+    </td>
+
+    <td class="price-cell font-bold">
+
+        $<%= product.price %>
+
+    </td>
+
+    <td>
+
+       <div class="action-group">
+
+    <% if(!trash){ %>
+
+        <!-- VIEW -->
+
+        <a
+            href="/admin/product-details/<%= product._id %>"
+            class="btn-action view-btn"
+        >
+            <i class="fas fa-eye"></i>
+        </a>
+
+        <!-- EDIT -->
+
+        <button
+            class="btn-action edit-btn"
+                onclick='openEditModal(
+                    "<%= product._id %>",
+                    `<%= product.product_name %>`,
+                    "<%= product.price %>",
+                    "<%= product.category?._id %>",
+                    "<%= !product.is_blocked %>",
+                    `<%- JSON.stringify(product.productImage || []) %>`,
+                    `<%- JSON.stringify(product.variants || []) %>`
+                )'
+     >
+
+            <i class="fas fa-edit"></i>
+
+        </button>
+
+        <!-- TOGGLE -->
+
+        <a
+            href="/admin/toggle-product/<%= product._id %>"
+            class="btn-action toggle-btn"
+        >
+
+            <% if(product.is_blocked){ %>
+
+                <i class="fas fa-eye-slash"></i>
+
+            <% } else { %>
+
+                <i class="fas fa-eye"></i>
+
+            <% } %>
+
+        </a>
+
+        <!-- SOFT DELETE -->
+
+        <a
+            onclick="return confirm('Move product to trash?')"
+            class="btn-action delete-btn"
+        >
+            <i class="fas fa-trash"></i>
+        </a>
+
+    <% } else { %>
+
+        <!-- RESTORE -->
+
+        <a
+            onclick="return confirm('Restore this product?')"
+            class="btn-action view-btn"
+        >
+            <i class="fas fa-rotate-left"></i>
+        </a>
+
+        <!-- PERMANENT DELETE -->
+
+        <a
+            onclick="return confirm('Delete permanently?')"
+            class="btn-action delete-btn"
+        >
+            <i class="fas fa-trash"></i>
+        </a>
+
+    <% } %>
+
+</div>
+
+    </td>
+
+</tr>
+
+<% }) %>
+
+</tbody>
+                </table>
+            </div>
+
+<!-- PAGINATION -->
+
+<div class="pagination-footer">
+
+    <span class="showing-text">
+
+        SHOWING
+
+        <strong>
+            <%= skip + 1 %> -
+            <%= Math.min(skip + limit, totalProducts) %>
+        </strong>
+
+        OF
+
+        <strong>
+            <%= totalProducts %>
+        </strong>
+
+        ITEMS
+
+    </span>
+
+    <div class="pagination">
+
+        <!-- PREVIOUS -->
+
+        <% if(page > 1){ %>
+
+            <a
+                href="/admin/products?page=<%= i %>&sort=<%= sort %><%= trash ? '&trash=true' : '' %>"                class="page-btn"
+            >
+                <i class="fas fa-chevron-left"></i>
+            </a>
+
+        <% } %>
+
+        <!-- PAGE NUMBERS -->
+
+        <% for(let i = 1; i <= totalPages; i++){ %>
+
+            <a
+                href="/admin/products?page=<%= i %>&sort=<%= sort %><%= trash ? '&trash=true' : '' %>"                class="page-btn <%= page === i ? 'active-page' : '' %>"
+            >
+                <%= i %>
+            </a>
+
+        <% } %>
+
+        <!-- NEXT -->
+
+        <% if(page < totalPages){ %>
+
+            <a
+                href="/admin/products?page=<%= i %>&sort=<%= sort %><%= trash ? '&trash=true' : '' %>"                class="page-btn"
+            >
+                <i class="fas fa-chevron-right"></i>
+            </a>
+
+        <% } %>
+
+    </div>
+
+</div>
+        </section>
+
+        <!-- STATS GRID -->
+        <section class="stats-grid premium-stats">
+            <div class="card stat-card glow-hover">
+                <span class="stat-label">TOP SELLER</span>
+                <h2 class="stat-title">NEON VELOCITY</h2>
+                <span class="stat-growth text-orange">+12% Growth</span>
+            </div>
+            <div class="card stat-card glow-hover">
+                <span class="stat-label">TOTAL SKU COUNT</span>
+                <h2 class="stat-number">1,248</h2>
+            </div>
+            <div class="card stat-card alert-card">
+                <span class="stat-label">ALERTS</span>
+                <h2 class="stat-title text-dark">8 SKU Requiring<br>Restock</h2>
+                <i class="fas fa-exclamation-triangle alert-bg-icon"></i>
+            </div>
+        </section>
+
+    </div>
+</div>
+<!-- ================================================== -->
+<!-- ADD PRODUCT MODAL (CORRECTED) -->
+<!-- ================================================== -->
+
+<div class="modal-overlay" id="addProductModal">
+    <div class="modal-content card add-product-modal-card">
+
+        <div class="modal-header">
+            <div class="header-titles">
+                <h3 class="premium-title-sm">
+                    ADD <span class="text-orange">NEW PRODUCT</span>
+                </h3>
+
+                <p class="premium-subtitle-sm">
+                    Define the next generation of performance footwear.
+                </p>
+            </div>
+
+            <button 
+                type="button"
+                class="close-modal"
+                onclick="closeAddProductModal()"
+            >
+                &times;
+            </button>
+        </div>
+
+        <!-- ========================= -->
+        <!-- FORM START -->
+        <!-- ========================= -->
+
+        <form 
+            id="addProductForm"
+            class="add-product-form"
+            method="POST"
+            action="/admin/add-product"
+            enctype="multipart/form-data"
+        >
+
+            <div class="modal-body scrollable-body">
+
+                <div class="form-grid-modal">
+
+                    <!-- LEFT -->
+                    <div class="form-left">
+
+                        <!-- BASIC INFO -->
+                        <section class="form-section-modal">
+
+                            <div class="section-indicator bg-orange"></div>
+
+                            <div class="form-row">
+
+                                <div class="form-group flex-2">
+                                    <label>PRODUCT NAME</label>
+
+                                    <input 
+                                        type="text"
+                                        name="product_name"
+                                        class="premium-input"
+                                        placeholder="e.g. PHANTOM NITRO V2"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group flex-1">
+
+                                    <label>PRICE </label>
+
+                                    <div class="input-with-icon">
+
+                                        <i class="fas fa-dollar-sign"></i>
+
+                                        <input 
+                                            type="number"
+                                            name="price"
+                                            class="premium-input pl-4"
+                                            placeholder="240.00"
+                                            step="1"
+                                            required
+                                        >
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+
+                                <div class="form-group half">
+
+                                    <label>BRAND</label>
+
+                                    <select 
+                                        name="brand"
+                                        class="premium-select-input"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select Brand
+                                        </option>
+
+                                        <% brands.forEach(brand => { %>
+
+                                            <option value="<%= brand %>">
+
+                                                <%= brand %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group half">
+
+                                    <label>CATEGORY</label>
+
+                                    <select 
+                                        name="category"
+                                        class="premium-select-input"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select Category
+                                        </option>
+
+                                        <% categories.forEach(category => { %>
+
+                                            <option value="<%= category._id %>">
+
+                                                <%= category.category_name %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>DESCRIPTION</label>
+
+                                <textarea 
+                                    name="description"
+                                    class="premium-textarea"
+                                    rows="3"
+                                ></textarea>
+
+                            </div>
+
+                        </section>
+
+                        <!-- IMAGE UPLOAD -->
+                        <section class="form-section-modal mt-4">
+
+                            <div class="section-indicator bg-cyan"></div>
+
+                            <label class="mb-2 d-block">
+                                PRODUCT ASSETS
+                            </label>
+
+                            <div class="image-upload-grid-sm">
+
+                                <!-- IMAGE 1 -->
+
+                                <div 
+                                    class="upload-slot-sm hero-slot-sm empty"
+                                    id="add-slot-1"
+                                    onclick="triggerAddFileInput(1)"
+                                >
+
+                                    <div class="slot-content">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <span>HERO</span>
+                                    </div>
+
+                                    <img src="" class="preview-img">
+
+                                    <div class="slot-actions">
+
+                                        <button 
+                                            type="button"
+                                            class="mini-btn"
+                                            onclick="event.stopPropagation(); openCropper(1, 'add')"
+                                        >
+                                            <i class="fas fa-crop"></i>
+                                        </button>
+
+                                        <button 
+                                            type="button"
+                                            class="mini-btn remove"
+                                            onclick="event.stopPropagation(); removeAddImage(1)"
+                                        >
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+
+                                    </div>
+
+                                    <input 
+                                        type="file"
+                                        name="productImage"
+                                        id="add-file-1"
+                                        hidden
+                                        accept="image/*"
+                                        onchange="handleAddFile(event, 1)"
+                                    >
+                                </div>
+
+                                <!-- IMAGE 2 -->
+
+                                <div 
+                                    class="upload-slot-sm empty"
+                                    id="add-slot-2"
+                                    onclick="triggerAddFileInput(2)"
+                                >
+
+                                    <div class="slot-content">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+
+                                    <img src="" class="preview-img">
+
+                                    <div class="slot-actions">
+
+                                        <button 
+                                            type="button"
+                                            class="mini-btn remove"
+                                            onclick="event.stopPropagation(); removeAddImage(2)"
+                                        >
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+
+                                    </div>
+
+                                    <input 
+                                        type="file"
+                                        name="productImage"
+                                        id="add-file-2"
+                                        hidden
+                                        accept="image/*"
+                                        onchange="handleAddFile(event, 2)"
+                                    >
+                                </div>
+
+                                <!-- IMAGE 3 -->
+
+                                <div 
+                                    class="upload-slot-sm empty"
+                                    id="add-slot-3"
+                                    onclick="triggerAddFileInput(3)"
+                                >
+
+                                    <div class="slot-content">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+
+                                    <img src="" class="preview-img">
+
+                                    <div class="slot-actions">
+
+                                        <button 
+                                            type="button"
+                                            class="mini-btn remove"
+                                            onclick="event.stopPropagation(); removeAddImage(3)"
+                                        >
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+
+                                    </div>
+
+                                    <input 
+                                        type="file"
+                                        name="productImage"
+                                        id="add-file-3"
+                                        hidden
+                                        accept="image/*"
+                                        onchange="handleAddFile(event, 3)"
+                                    >
+                                </div>
+
+                                <!-- IMAGE 4 -->
+
+                                <div 
+                                    class="upload-slot-sm empty"
+                                    id="add-slot-4"
+                                    onclick="triggerAddFileInput(4)"
+                                >
+
+                                    <div class="slot-content">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+
+                                    <img src="" class="preview-img">
+
+                                    <div class="slot-actions">
+
+                                        <button 
+                                            type="button"
+                                            class="mini-btn remove"
+                                            onclick="event.stopPropagation(); removeAddImage(4)"
+                                        >
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+
+                                    </div>
+
+                                    <input 
+                                        type="file"
+                                        name="productImage"
+                                        id="add-file-4"
+                                        hidden
+                                        accept="image/*"
+                                        onchange="handleAddFile(event, 4)"
+                                    >
+                                </div>
+
+                                <!-- IMAGE 5 -->
+
+                                <div 
+                                    class="upload-slot-sm empty"
+                                    id="add-slot-5"
+                                    onclick="triggerAddFileInput(5)"
+                                >
+
+                                    <div class="slot-content">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+
+                                    <img src="" class="preview-img">
+
+                                    <div class="slot-actions">
+
+                                        <button 
+                                            type="button"
+                                            class="mini-btn remove"
+                                            onclick="event.stopPropagation(); removeAddImage(5)"
+                                        >
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+
+                                    </div>
+
+                                    <input 
+                                        type="file"
+                                        name="productImage"
+                                        id="add-file-5"
+                                        hidden
+                                        accept="image/*"
+                                        onchange="handleAddFile(event, 5)"
+                                    >
+                                </div>
+
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- RIGHT -->
+                    <div class="form-right">
+                        <section class="form-section-modal">
+                            <div class="section-indicator bg-purple"></div>
+                            <label class="mb-2 d-block">SIZE VARIANTS & STOCK</label>
+                            
+                            <div id="addVariantContainer" class="variants-list-sm">
+                                <!-- Default Row -->
+                                <div class="variant-row-sm mb-3">
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <div class="flex-1">
+                                            <label class="mini-label">SIZE (US)</label>
+                                            <input type="text" name="sizes" class="premium-input" placeholder="e.g. 10" required>
+                                        </div>
+                                        <div class="flex-1">
+                                            <label class="mini-label">STOCK</label>
+                                            <input type="number" name="stocks" class="premium-input" placeholder="0" min="0" required>
+                                        </div>
+                                        <button type="button" class="btn-remove-variant" onclick="removeVariantRow(this)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-outline-dashed-sm w-100 mt-2" onclick="addVariantRow('addVariantContainer')">
+                                <i class="fas fa-plus"></i> ADD SIZE VARIANT
+                            </button>
+                        </section>
+
+                        <!-- ACTIVE -->
+                        <section class="form-section-modal mt-3">
+                            <div class="toggle-wrapper-sm">
+                                <span>Active on Storefront</span>
+                                <label class="switch-sm">
+                                    <input type="checkbox" name="is_active" value="true" checked>
+                                    <span class="slider-sm"></span>
+                                </label>
+                            </div>
+                        </section>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+                <span class="auto-save-sm">
+                    <span class="dot pulse"></span>
+                    SYNC READY
+                </span>
+
+                <button 
+                    type="button"
+                    class="btn-secondary"
+                    onclick="closeAddProductModal()"
+                >
+                    Discard
+                </button>
+
+                <button 
+                    type="submit"
+                    class="btn-premium-glow"
+                >
+                    <i class="fas fa-rocket"></i>
+                    PUBLISH PRODUCT
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- EDIT PRODUCT MODAL -->
+<!-- ================================================== -->
+
+<div class="modal-overlay" id="productEditModal">
+
+    <div class="modal-content card edit-product-card">
+
+        <div class="modal-header">
+
+            <h3>QUICK EDIT PRODUCT</h3>
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeEditModal()"
+            >
+                &times;
+            </button>
+
+        </div>
+
+        <form
+            id="quickEditForm"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <div class="modal-body edit-body">
+
+                <!-- PRODUCT NAME + PRICE -->
+
+                <div class="edit-row">
+
+                    <div class="form-group half">
+
+                        <label>PRODUCT NAME</label>
+
+                        <input
+                            type="text"
+                            name="product_name"
+                            id="editProductName"
+                            class="premium-input"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group half">
+
+                        <label>PRICE (USD)</label>
+
+                        <div class="input-with-icon">
+
+                            <i class="fas fa-dollar-sign"></i>
+
+                            <input
+                                type="number"
+                                name="price"
+                                id="editProductPrice"
+                                class="premium-input pl-4"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- CATEGORY + STATUS -->
+
+                <div class="edit-row">
+
+                    <div class="form-group half">
+
+                        <label>CATEGORY</label>
+
+                        <select
+                            name="category"
+                            id="editProductCategory"
+                            class="premium-select-input"
+                        >
+
+                            <% categories.forEach(category => { %>
+
+                                <option value="<%= category._id %>">
+
+                                    <%= category.category_name %>
+
+                                </option>
+
+                            <% }) %>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group half">
+
+                        <label>STATUS</label>
+
+                        <select
+                            name="is_active"
+                            id="editProductStatus"
+                            class="premium-select-input"
+                        >
+
+                            <option value="true">
+                                Active
+                            </option>
+
+                            <option value="false">
+                                Blocked
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- PRODUCT IMAGES -->
+                <div class="form-group mt-3">
+                    <label>PRODUCT IMAGES</label>
+                    <div class="edit-images-row" id="editImagesContainer"></div>
+                </div>
+
+                <!-- DYNAMIC VARIANTS FOR EDIT -->
+                <div class="form-group mt-4">
+                    <label>SIZE VARIANTS & STOCK</label>
+                    <div id="editVariantContainer" class="variants-list-sm mt-2"></div>
+                    <button type="button" class="btn-outline-dashed-sm w-100 mt-3" onclick="addVariantRow('editVariantContainer')">
+                        <i class="fas fa-plus"></i> ADD SIZE VARIANT
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="closeEditModal()"
+                >
+                    Discard
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-premium-glow"
+                >
+                    SAVE CHANGES
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script src="/js/admin/products.js"></script>
+
+<%- include('../partials/toast') %>
+
+</body>
+</html>

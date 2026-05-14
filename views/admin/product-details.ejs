@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | Sneacks Admin</title>
+
+    <!-- FONTS & ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/admin/layout.css">
+    <link rel="stylesheet" href="/styles/admin/product-details.css">
+    <link rel="stylesheet" href="/styles/admin/product-modal.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<%- include('../partials/admin/sidebar', { page: 'products' }) %>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+    <!-- TOPBAR -->
+    <%- include('../partials/admin/topbar', {
+        searchPlaceholder: 'Search inventory...',
+        searchAction: '/admin/products',
+        search: ''
+    }) %>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-container">
+        
+        <!-- BREADCRUMBS -->
+        <div class="breadcrumbs">
+            <a href="/admin/products">INVENTORY</a>
+            <i class="fas fa-chevron-right separator"></i>
+            <a href="/admin/products">PRODUCTS</a>
+            <i class="fas fa-chevron-right separator"></i>
+            <span class="current text-cyan"><%= product.product_name.toUpperCase() %></span>
+        </div>
+
+        <!-- PAGE HEADER (HERO) -->
+        <header class="product-hero-header">
+            <div class="header-titles">
+                <h1 class="premium-title"><%= product.product_name.split(' ')[0] %><br><span class="text-orange"><%= product.product_name.split(' ').slice(1).join(' ') %></span></h1>
+                <p class="premium-subtitle mt-3">
+                    <%= product.description %>
+                </p>
+            </div>
+            
+            <div class="floating-actions">
+                <button type="button" class="btn-premium-glow" onclick="window.location.href='/admin/products'">
+                    <i class="fas fa-arrow-left"></i> BACK TO FLEET
+                </button>
+            </div>
+        </header>
+
+        <!-- DASHBOARD GRID -->
+        <div class="dashboard-grid">
+            <div class="left-column">
+                <div class="card analytics-card glow-card">
+                    <div class="card-header">
+                        <div>
+                            <span class="card-subtitle">STOCK VALUE ANALYSIS</span>
+                            <div class="d-flex align-items-center gap-3">
+                                <h2 class="stat-main">$<%= (product.price * product.variants.reduce((acc, v) => acc + v.stock, 0)).toLocaleString() %></h2>
+                                <span class="trend-up"><i class="fas fa-chart-line"></i> Total Inventory Value</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <svg viewBox="0 0 500 150" class="dummy-chart" preserveAspectRatio="none">
+                            <defs><linearGradient id="cyanGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(0, 229, 255, 0.3)" /><stop offset="100%" stop-color="rgba(0, 229, 255, 0)" /></linearGradient></defs>
+                            <path class="chart-line-bg" d="M0,120 Q50,110 100,100 T200,80 T300,50 T400,40 T500,30 L500,150 L0,150 Z" fill="url(#cyanGlow)" />
+                            <path class="chart-line cyan-line" d="M0,120 Q50,110 100,100 T200,80 T300,50 T400,40 T500,30" fill="none" stroke="#00E5FF" stroke-width="2" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="card table-card mt-4">
+                    <div class="responsive-table mt-3">
+                        <table class="premium-table variant-table">
+                            <thead><tr><th>SIZE (US)</th><th>STOCK LEVEL</th><th>STATUS</th></tr></thead>
+                            <tbody>
+                                <% product.variants.forEach(variant => { %>
+                                    <tr>
+                                        <td class="font-bold text-white"><%= variant.size %></td>
+                                        <td class="font-bold"><%= variant.stock %> Units</td>
+                                        <td>
+                                            <% if(variant.stock > 10) { %>
+                                                <span class="badge badge-green">HEALTHY</span>
+                                            <% } else if(variant.stock > 0) { %>
+                                                <span class="badge badge-orange">LOW STOCK</span>
+                                            <% } else { %>
+                                                <span class="badge badge-red">OUT OF STOCK</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="right-column">
+                <div class="card gallery-card">
+                    <div class="gallery-main-img">
+                        <img src="<%= product.productImage && product.productImage.length > 0 ? '/uploads/products/' + product.productImage[0] : '/images/placeholder-shoe.png' %>">
+                        <span class="badge badge-purple floating-badge"><%= product.brand.toUpperCase() %></span>
+                    </div>
+                </div>
+                <div class="quick-stats-grid mt-4">
+                    <div class="quick-stat-box"><span class="box-label">Base Price</span><span class="box-val text-white">$<%= product.price %></span></div>
+                    <div class="quick-stat-box"><span class="box-label">Total Stock</span><span class="box-val text-white"><%= product.variants.reduce((acc, v) => acc + v.stock, 0) %></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- EDIT PRODUCT MODAL (INLINED) -->
+<!-- ================================================== -->
+<div class="modal-overlay" id="productEditModal">
+    <div class="modal-content card edit-product-card">
+        <div class="modal-header"><h3>QUICK EDIT PRODUCT</h3><button type="button" class="close-modal" onclick="closeEditModal()">&times;</button></div>
+        <form id="quickEditForm">
+            <div class="modal-body edit-body">
+                <div class="edit-row">
+                    <div class="form-group half"><label>PRODUCT NAME</label><input type="text" class="premium-input" value="VORTEX RUNNER X1" required></div>
+                    <div class="form-group half"><label>PRICE (USD)</label><div class="input-with-icon"><i class="fas fa-dollar-sign"></i><input type="number" class="premium-input pl-4" value="185.00" step="0.01" required></div></div>
+                </div>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn-secondary" onclick="closeEditModal()">Discard</button><button type="button" class="btn-premium-glow">SAVE CHANGES</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- IMAGE CROPPER MODAL (INLINED) -->
+<!-- ================================================== -->
+<div class="modal-overlay" id="cropModal">
+    <div class="modal-content card crop-modal-card">
+        <div class="modal-header"><h3>EDIT ASSET</h3><button type="button" class="close-modal" onclick="closeCropperModal()">&times;</button></div>
+        <div class="modal-body crop-body">
+            <div class="crop-container"><img id="cropperImage" src=""></div>
+        </div>
+        <div class="modal-footer"><button type="button" class="btn-secondary" onclick="closeCropperModal()">Discard</button><button type="button" class="btn-premium-glow" onclick="saveCrop()">APPLY CROP</button></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<script>
+// INLINED PRODUCT DETAILS LOGIC
+function openEditModal(id) { document.getElementById('productEditModal').classList.add('active'); }
+function closeEditModal() { document.getElementById('productEditModal').classList.remove('active'); }
+
+let cropper = null;
+let currentCropSlotId = null;
+let currentCropTarget = 'edit';
+function closeCropperModal() {
+    document.getElementById('cropModal').classList.remove('active');
+    if (cropper) { setTimeout(() => { cropper.destroy(); cropper = null; }, 300); }
+}
+function saveCrop() { closeCropperModal(); }
+</script>
+
+<%- include('../partials/toast') %>
+
+</body>
+</html>

@@ -40,8 +40,8 @@ phone: {
   default: ''
 },
 dob: {
-  type: String,
-  default: ''
+  type: Date,
+  default: null
 }
 
 }, { timestamps: true });

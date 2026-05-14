@@ -10,6 +10,11 @@ const validate = require('../middleware/validateMiddleware');
 const adminValidation = require('../validations/adminValidation');
 const categoryController = require('../controllers/admin/categoryController');
 const categoryUpload = require('../middleware/upload');
+const productController =
+require('../controllers/admin/productController');
+
+const productUpload =
+require('../middleware/productUpload');
 const {
   isAdminLoggedIn,
   isAdminLoggedOut
@@ -136,6 +141,52 @@ router.get(
   '/delete-category/:id',
   isAdminLoggedIn,
   categoryController.deleteCategory
+);
+
+router.get(
+  '/products',
+  isAdminLoggedIn,
+  productController.getProducts
+);
+
+router.post(
+  '/add-product',
+  isAdminLoggedIn,
+  productUpload.array('productImage', 5),
+  productController.addProduct
+);
+
+router.post(
+  '/edit-product/:id',
+  isAdminLoggedIn,
+  productUpload.array('productImage', 5),
+  productController.editProduct
+);
+
+router.get(
+  '/delete-product/:id',
+  isAdminLoggedIn,
+  productController.deleteProduct
+);
+
+router.get(
+  '/product-details/:id',
+  isAdminLoggedIn,
+  productController.getProductDetails
+);
+router.get(
+    '/toggle-product/:id',
+    productController.toggleProduct
+);
+
+router.get(
+    '/restore-product/:id',
+    productController.restoreProduct
+);
+
+router.get(
+    '/permanent-delete-product/:id',
+    productController.permanentDeleteProduct
 );
 
 module.exports = router;

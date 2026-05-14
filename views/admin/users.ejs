@@ -21,8 +21,15 @@
 <div class="main-content">
 
   <!-- TOPBAR -->
-  <%- include('../partials/admin/topbar', { searchPlaceholder: 'Search customers...' }) %>
+<%- include('../partials/admin/topbar', {
 
+    searchPlaceholder: 'Search customers...',
+
+    searchAction: '/admin/users',
+
+    search
+
+}) %>
   <div class="page-container">
 
     <!-- HEADER -->

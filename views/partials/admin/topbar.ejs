@@ -1,30 +1,59 @@
 <header class="topbar">
 
-  <form action="/admin/users" method="GET" class="search-container">
+  <form 
+  action="<%= typeof searchAction !== 'undefined' 
+    ? searchAction 
+    : '/admin/users' %>" 
+  method="GET" 
+  class="search-container"
+>
 
-    <i class="fas fa-search"></i>
+<i class="fas fa-search search-icon"></i>
+  <input
+    type="text"
+    name="search"
+    class="search-input"
+    placeholder="<%= typeof searchPlaceholder !== 'undefined' 
+      ? searchPlaceholder 
+      : 'Search...' %>"
+    value="<%= typeof search !== 'undefined' 
+      ? search 
+      : '' %>"
+  >
 
-    <input
-      type="text"
-      name="search"
-      class="search-input"
-      placeholder="<%= typeof searchPlaceholder !== 'undefined' ? searchPlaceholder : 'Search users...' %>"
-      value="<%= typeof search !== 'undefined' ? search : '' %>"
+  <% if(typeof search !== 'undefined' && search){ %>
+
+    <a 
+      href="<%= searchAction %>"
+      class="clear-search"
     >
+      <i class="fas fa-times"></i>
+    </a>
 
-  </form>
+  <% } %>
+
+</form>
 
   <div class="topbar-actions">
 
     <div class="admin-profile">
+
       <div class="admin-info">
-        <span class="admin-name">Admin User</span>
-        <span class="admin-role">SUPERUSER</span>
+
+        <span class="admin-name">
+          Admin User
+        </span>
+
+        <span class="admin-role">
+          SUPERUSER
+        </span>
+
       </div>
 
       <div class="admin-avatar">
         <i class="far fa-user"></i>
       </div>
+
     </div>
 
   </div>
