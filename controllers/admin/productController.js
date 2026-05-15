@@ -2,6 +2,12 @@
 const Product =require('../../models/productModel');
 
 const Category =require('../../models/categoryModel');
+const sharp = require('sharp');
+
+const fs = require('fs');
+
+const path = require('path');
+
 
 exports.getProducts = async (req, res) => {
 
@@ -176,8 +182,37 @@ exports.addProduct = async (req, res) => {
             return res.redirect('/admin/products');
         }
 
-        const images = req.files.map(file => file.filename);
+const images = [];
 
+for(const file of req.files){
+
+    const filename =
+    `product-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpg`;
+
+    await sharp(file.path)
+
+        .resize(800, 800)
+
+        .jpeg({
+
+            quality: 90
+
+        })
+
+        .toFile(
+
+            path.join(
+                'public/uploads/products',
+                filename
+            )
+
+        );
+
+    fs.unlinkSync(file.path);
+
+    images.push(filename);
+
+}
         const product = new Product({
             product_name,
             description,
@@ -311,11 +346,43 @@ exports.editProduct = async (req, res) => {
       variants
     };
 
-    // IF NEW IMAGES UPLOADED
     if(req.files && req.files.length > 0){
-      const images = req.files.map(file => file.filename);
-      updateData.productImage = images;
+
+    const images = [];
+
+    for(const file of req.files){
+
+        const filename =
+        `product-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpg`;
+
+        await sharp(file.path)
+
+            .resize(800, 800)
+
+            .jpeg({
+
+                quality: 90
+
+            })
+
+            .toFile(
+
+                path.join(
+                    'public/uploads/products',
+                    filename
+                )
+
+            );
+
+        fs.unlinkSync(file.path);
+
+        images.push(filename);
+
     }
+
+    updateData.productImage = images;
+
+}
 
     await Product.findByIdAndUpdate(
       id,
@@ -421,7 +488,7 @@ exports.restoreProduct = async (req, res) => {
     } catch (error) {
 
         console.log(error);
-
+ 
     }
 
 };

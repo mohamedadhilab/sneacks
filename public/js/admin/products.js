@@ -120,7 +120,9 @@ function openEditModal(
     document.getElementById('editProductCategory').value = category;
     document.getElementById('editProductStatus').value = status;
 
-    // LOAD IMAGES
+    images = JSON.parse(images || '[]');
+
+variants = JSON.parse(variants || '[]');
 // LOAD IMAGES
 
 const container =
@@ -134,24 +136,34 @@ if(images && images.length > 0){
 
         container.innerHTML += `
 
-            <div class="edit-img-slot has-image">
-
+<div
+    class="edit-img-slot has-image"
+    id="edit-slot-${index}"
+>
                 <img
                     src="/uploads/products/${image}"
                     class="preview-img"
                 >
 
-                <div class="edit-img-actions">
+<div class="edit-img-actions">
 
-                    <button
-                        type="button"
-                        class="mini-btn"
-                        onclick="document.getElementById('edit-file-${index}').click()"
-                    >
-                        <i class="fas fa-pen"></i>
-                    </button>
+    <button
+        type="button"
+        class="mini-btn"
+        onclick="openCropper(${index}, 'edit')"
+    >
+        <i class="fas fa-crop"></i>
+    </button>
 
-                </div>
+    <button
+        type="button"
+        class="mini-btn"
+        onclick="document.getElementById('edit-file-${index}').click()"
+    >
+        <i class="fas fa-pen"></i>
+    </button>
+
+</div>
 
                 <input
                     type="file"
@@ -170,6 +182,25 @@ if(images && images.length > 0){
 
 }
 
+
+    // LOAD VARIANTS
+    const varContainer = document.getElementById('editVariantContainer');
+    varContainer.innerHTML = '';
+    if (variants && variants.length > 0) {
+        variants.forEach(v => {
+            appendVariantRow('editVariantContainer', v.size, v.stock);
+        });
+    } else {
+        appendVariantRow('editVariantContainer', '', '');
+    }
+}
+function closeEditModal() {
+
+    document
+    .getElementById('productEditModal')
+    .classList.remove('active');
+
+}
 function handleEditImage(event, input) {
 
     const file = event.target.files[0];
@@ -191,24 +222,6 @@ function handleEditImage(event, input) {
         reader.readAsDataURL(file);
 
     }
-
-}
-    // LOAD VARIANTS
-    const varContainer = document.getElementById('editVariantContainer');
-    varContainer.innerHTML = '';
-    if (variants && variants.length > 0) {
-        variants.forEach(v => {
-            appendVariantRow('editVariantContainer', v.size, v.stock);
-        });
-    } else {
-        appendVariantRow('editVariantContainer', '', '');
-    }
-}
-function closeEditModal() {
-
-    document
-    .getElementById('productEditModal')
-    .classList.remove('active');
 
 }
 
@@ -311,34 +324,91 @@ function setAspectRatio(ratio, e) {
 // SAVE CROPPED IMAGE
 // ==================================================
 
-function saveCrop() {
+function saveCrop(){
 
-    if (!cropper || !currentCropSlotId) return;
+    if(!cropper || currentCropSlotId === null) return;
 
     const canvas = cropper.getCroppedCanvas({
 
         width: 800,
 
-        height: 800
+        height: 800,
+
+        imageSmoothingEnabled: true,
+
+        imageSmoothingQuality: 'high'
 
     });
 
-    const dataUrl =
-    canvas.toDataURL('image/jpeg', 0.9);
+    canvas.toBlob((blob) => {
 
-    const slot =
-    document.getElementById(
-        `${currentCropTarget}-slot-${currentCropSlotId}`
-    );
+        const croppedFile = new File(
 
-    if (slot) {
+            [blob],
+
+            `cropped-${Date.now()}.jpg`,
+
+            {
+
+                type: 'image/jpeg',
+
+                lastModified: Date.now()
+
+            }
+
+        );
+
+        const dataTransfer = new DataTransfer();
+
+        dataTransfer.items.add(croppedFile);
+
+        let input;
+
+        if(currentCropTarget === 'add'){
+
+            input =
+            document.getElementById(
+                `add-file-${currentCropSlotId}`
+            );
+
+        } else {
+
+            input =
+            document.getElementById(
+                `edit-file-${currentCropSlotId}`
+            );
+
+        }
+
+        input.files = dataTransfer.files;
+
+        const dataUrl =
+        canvas.toDataURL('image/jpeg', 0.9);
+
+        let slot;
+
+        if(currentCropTarget === 'add'){
+
+            slot =
+            document.getElementById(
+                `add-slot-${currentCropSlotId}`
+            );
+
+        } else {
+
+            slot =
+            document.getElementById(
+                `edit-slot-${currentCropSlotId}`
+            );
+
+        }
 
         slot.querySelector('.preview-img').src =
         dataUrl;
 
-    }
+        closeCropperModal();
 
-    closeCropperModal();
+    }, 'image/jpeg', 0.9);
 
 }
 
@@ -450,5 +520,112 @@ function handleSort(value){
     url.searchParams.set('sort', value);
 
     window.location.href = url.toString();
+
+}
+// ==========================================
+// SWEET ALERT DELETE
+// ==========================================
+
+function confirmDelete(event, url){
+
+    event.preventDefault();
+
+    Swal.fire({
+
+        title: 'Move product to trash?',
+
+        text: 'You can restore it later from trash.',
+
+        icon: 'warning',
+
+        showCancelButton: true,
+
+        confirmButtonColor: '#ff6b3d',
+
+        cancelButtonColor: '#2a2a2a',
+
+        confirmButtonText: 'Yes, Move',
+
+        background: '#161616',
+
+        color: '#ffffff'
+
+    }).then((result) => {
+
+        if(result.isConfirmed){
+
+            window.location.href = url;
+
+        }
+
+    });
+
+}
+function confirmRestore(event, url){
+
+    event.preventDefault();
+
+    Swal.fire({
+
+        title: 'Restore product?',
+
+        icon: 'question',
+
+        showCancelButton: true,
+
+        confirmButtonColor: '#ff6b3d',
+
+        cancelButtonColor: '#2a2a2a',
+
+        confirmButtonText: 'Restore',
+
+        background: '#161616',
+
+        color: '#ffffff'
+
+    }).then((result) => {
+
+        if(result.isConfirmed){
+
+            window.location.href = url;
+
+        }
+
+    });
+
+}
+function confirmPermanentDelete(event, url){
+
+    event.preventDefault();
+
+    Swal.fire({
+
+        title: 'Delete permanently?',
+
+        text: 'This action cannot be undone.',
+
+        icon: 'error',
+
+        showCancelButton: true,
+
+        confirmButtonColor: '#ff3b30',
+
+        cancelButtonColor: '#2a2a2a',
+
+        confirmButtonText: 'Delete Forever',
+
+        background: '#161616',
+
+        color: '#ffffff'
+
+    }).then((result) => {
+
+        if(result.isConfirmed){
+
+            window.location.href = url;
+
+        }
+
+    });
 
 }

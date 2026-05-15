@@ -6,17 +6,26 @@ const storage = multer.diskStorage({
 
   destination: (req, file, cb) => {
 
-    let uploadPath = 'public/uploads';
+    let uploadPath = 'public/temp';
 
+    // CATEGORY IMAGE
     if (file.fieldname === 'image') {
 
       uploadPath = 'public/uploads/categories';
 
     }
 
+    // PROFILE IMAGE
     if (file.fieldname === 'profileImage') {
 
       uploadPath = 'public/uploads/profiles';
+
+    }
+
+    // PRODUCT IMAGE
+    if (file.fieldname === 'productImage') {
+
+      uploadPath = 'public/temp';
 
     }
 
