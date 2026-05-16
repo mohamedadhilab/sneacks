@@ -323,7 +323,7 @@
 
                                 <% if(page> 1){ %>
 
-                                    <a href="/admin/productpage=<%= page - 1 %>s?&sort=<%= sort %><%= trash ? '&trash=true' : '' %>"
+                                   <a href="/admin/products?page=<%= page - 1 %>&sort=<%= sort %><%= trash ? '&trash=true' : '' %>"
                                         class="page-btn">
                                         <i class="fas fa-chevron-left"></i>
                                     </a>
@@ -738,7 +738,17 @@
                 </div>
 
                 <form id="quickEditForm" method="POST" enctype="multipart/form-data">
-
+                    <input
+    type="hidden"
+    name="existingImages"
+    id="existingImagesInput"
+>
+<input
+    type="hidden"
+    name="replacedIndexes"
+    id="replacedIndexesInput"
+    value="[]"
+>
                     <div class="modal-body edit-body">
 
                         <!-- PRODUCT NAME + PRICE -->

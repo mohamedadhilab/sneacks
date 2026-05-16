@@ -317,7 +317,8 @@ exports.editProduct = async (req, res) => {
       price,
       sku,
       sizes,
-      stocks
+      stocks,
+    replacedIndexes
     } = req.body;
 
     // VARIANTS LOGIC
@@ -346,9 +347,23 @@ exports.editProduct = async (req, res) => {
       variants
     };
 
-    if(req.files && req.files.length > 0){
 
-    const images = [];
+// =========================
+// EXISTING IMAGES
+// =========================
+
+let existingImages =
+JSON.parse(req.body.existingImages || '[]');
+const oldProduct =
+await Product.findById(id);
+
+// =========================
+// NEW IMAGES
+// =========================
+
+const newImages = [];
+
+if(req.files && req.files.length > 0){
 
     for(const file of req.files){
 
@@ -360,30 +375,156 @@ exports.editProduct = async (req, res) => {
             .resize(800, 800)
 
             .jpeg({
-
                 quality: 90
-
             })
 
             .toFile(
-
                 path.join(
                     'public/uploads/products',
                     filename
                 )
-
             );
 
         fs.unlinkSync(file.path);
 
-        images.push(filename);
+        newImages.push(filename);
 
     }
 
-    updateData.productImage = images;
+}
+
+// =========================
+// FINAL IMAGE ARRAY
+// =========================
+
+const finalImages = [...existingImages];
+// =========================
+// DELETE REMOVED IMAGES
+// =========================
+
+for(let i = 0; i < oldProduct.productImage.length; i++){
+
+    const oldImage =
+    oldProduct.productImage[i];
+
+    if(
+        oldImage &&
+        !existingImages.includes(oldImage)
+    ){
+
+        const oldPath = path.join(
+            'public/uploads/products',
+            oldImage
+        );
+
+        if(fs.existsSync(oldPath)){
+
+            fs.unlinkSync(oldPath);
+
+        }
+
+    }
+
+}
+let replaced = [];
+
+if(replacedIndexes){
+
+    replaced =
+    JSON.parse(replacedIndexes);
 
 }
 
+let newIndex = 0;
+
+// =========================
+// REPLACE EDITED IMAGES
+// =========================
+
+for(const index of replaced){
+
+    if(newImages[newIndex]){
+
+        // OLD IMAGE NAME
+        const oldImage =
+        finalImages[index];
+
+        // DELETE OLD FILE
+        if(oldImage){
+
+            const oldPath = path.join(
+                'public/uploads/products',
+                oldImage
+            );
+
+            if(fs.existsSync(oldPath)){
+
+                fs.unlinkSync(oldPath);
+
+            }
+
+        }
+
+        // REPLACE WITH NEW IMAGE
+        finalImages[index] =
+        newImages[newIndex];
+
+        newIndex++;
+
+    }
+
+}
+
+// =========================
+// ADD NEW IMAGES TO EMPTY SLOTS
+// =========================
+
+for(let i = 0; i < 5; i++){
+
+    if(
+        !finalImages[i] &&
+        newImages[newIndex]
+    ){
+
+        finalImages[i] =
+        newImages[newIndex];
+
+        newIndex++;
+
+    }
+
+}
+
+// =========================
+// VALIDATION
+// =========================
+
+const validImages =
+finalImages.filter(img => img);
+
+if(validImages.length < 3){
+
+    req.session.message = {
+
+        type: 'error',
+
+        text: 'Minimum 3 images required'
+
+    };
+
+    return res.redirect('/admin/products');
+
+}
+
+// =========================
+// SAVE
+// =========================
+
+updateData.productImage = validImages;
+// SAVE FINAL IMAGES
+
+updateData.productImage =
+cleanedImages.filter(img => img);
     await Product.findByIdAndUpdate(
       id,
       updateData,
@@ -495,12 +636,31 @@ exports.restoreProduct = async (req, res) => {
 exports.permanentDeleteProduct = async (req, res) => {
 
     try {
+const product =
+await Product.findById(req.params.id);
 
-        await Product.findByIdAndDelete(
+if(product){
 
-            req.params.id
+    for(const image of product.productImage){
 
+        const imagePath = path.join(
+            'public/uploads/products',
+            image
         );
+
+        if(fs.existsSync(imagePath)){
+
+            fs.unlinkSync(imagePath);
+
+        }
+
+    }
+
+}
+
+await Product.findByIdAndDelete(
+    req.params.id
+);
 
         req.session.message = {
 

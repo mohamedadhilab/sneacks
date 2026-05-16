@@ -1,5 +1,3 @@
-// middleware/productUpload.js
-
 const multer = require('multer');
 
 const path = require('path');
@@ -8,7 +6,7 @@ const storage = multer.diskStorage({
 
   destination: (req, file, cb) => {
 
-    cb(null, 'public/uploads/products');
+    cb(null, 'public/uploads/temp');
 
   },
 

@@ -44,6 +44,8 @@ function handleAddFile(e, id) {
 
             slot.querySelector('.preview-img').src =
             ev.target.result;
+            slot.querySelector('.preview-img').style.display =
+            'block';
 
             slot.classList.remove('empty');
 
@@ -69,6 +71,8 @@ function removeAddImage(id) {
     document.getElementById(`add-slot-${id}`);
 
     slot.querySelector('.preview-img').src = '';
+    slot.querySelector('.preview-img').style.display =
+   'none';
 
     document.getElementById(`add-file-${id}`).value = '';
 
@@ -113,86 +117,174 @@ function openEditModal(
     images,
     variants
 ) {
-    document.getElementById('productEditModal').classList.add('active');
-    document.getElementById('quickEditForm').action = `/admin/edit-product/${id}`;
-    document.getElementById('editProductName').value = name;
-    document.getElementById('editProductPrice').value = price;
-    document.getElementById('editProductCategory').value = category;
-    document.getElementById('editProductStatus').value = status;
 
-    images = JSON.parse(images || '[]');
+    document
+    .getElementById('productEditModal')
+    .classList.add('active');
 
-variants = JSON.parse(variants || '[]');
-// LOAD IMAGES
+    document
+    .getElementById('quickEditForm')
+    .action = `/admin/edit-product/${id}`;
 
-const container =
-document.getElementById('editImagesContainer');
+    document
+    .getElementById('editProductName')
+    .value = name;
 
-container.innerHTML = '';
+    document
+    .getElementById('editProductPrice')
+    .value = price;
 
-if(images && images.length > 0){
+    document
+    .getElementById('editProductCategory')
+    .value = category;
 
-    images.forEach((image, index) => {
+    document
+    .getElementById('editProductStatus')
+    .value = status;
 
+
+    // =========================
+    // SAFE PARSE DATA
+    // =========================
+
+    if(typeof images === 'string'){
+
+        images = JSON.parse(images || '[]');
+
+    }
+    document.getElementById(
+    'existingImagesInput'
+).value = JSON.stringify(images);
+document.getElementById(
+    'replacedIndexesInput'
+).value = '[]';
+
+    if(typeof variants === 'string'){
+
+        variants = JSON.parse(variants || '[]');
+
+    }
+
+    // =========================
+    // LOAD IMAGES
+    // =========================
+
+    const container =
+    document.getElementById(
+        'editImagesContainer'
+    );
+
+    container.innerHTML = '';
+
+    // ALWAYS SHOW 5 SLOTS
+
+    for(let i = 0; i < 5; i++){
+
+       const image =
+        images[i] ? images[i] : null;
         container.innerHTML += `
 
-<div
-    class="edit-img-slot has-image"
-    id="edit-slot-${index}"
->
-                <img
-                    src="/uploads/products/${image}"
-                    class="preview-img"
-                >
+        <div
+            class="edit-img-slot ${image ? 'has-image' : 'empty'}"
+            id="edit-slot-${i}"
+            onclick="document.getElementById('edit-file-${i}').click()"
+        >
 
-<div class="edit-img-actions">
+     ${
+    image
+    ?
 
-    <button
-        type="button"
-        class="mini-btn"
-        onclick="openCropper(${index}, 'edit')"
+    `<img
+        src="/uploads/products/${image}"
+        class="preview-img"
+    >`
+
+    :
+
+    `
+    <img
+        class="preview-img"
+        style="display:none;"
     >
-        <i class="fas fa-crop"></i>
-    </button>
 
-    <button
-        type="button"
-        class="mini-btn"
-        onclick="document.getElementById('edit-file-${index}').click()"
-    >
-        <i class="fas fa-pen"></i>
-    </button>
+    <div class="slot-content">
 
-</div>
+        <i class="fas fa-plus"></i>
 
-                <input
-                    type="file"
-                    name="productImage"
-                    id="edit-file-${index}"
-                    hidden
-                    accept="image/*"
-                    onchange="handleEditImage(event, this)"
+    </div>
+    `
+}
+
+            <div class="edit-img-actions">
+
+                <button
+                    type="button"
+                    class="mini-btn"
+onclick="event.stopPropagation(); openCropper(${i}, 'edit')"
+data-slot="${i}"                >
+                    <i class="fas fa-crop"></i>
+                </button>
+
+                <button
+                    type="button"
+                    class="mini-btn remove"
+                    onclick="event.stopPropagation(); removeEditImage(${i})"
                 >
+                    <i class="fas fa-trash"></i>
+                </button>
 
             </div>
 
+            <input
+                type="file"
+                name="productImage"
+                id="edit-file-${i}"
+                hidden
+                accept="image/*"
+                onchange="handleEditImage(event, ${i})"
+            >
+
+        </div>
+
         `;
 
-    });
-
-}
-
-
-    // LOAD VARIANTS
-    const varContainer = document.getElementById('editVariantContainer');
-    varContainer.innerHTML = '';
-    if (variants && variants.length > 0) {
-        variants.forEach(v => {
-            appendVariantRow('editVariantContainer', v.size, v.stock);
-        });
-    } else {
-        appendVariantRow('editVariantContainer', '', '');
     }
+
+    // =========================
+    // LOAD VARIANTS
+    // =========================
+
+    const varContainer =
+    document.getElementById(
+        'editVariantContainer'
+    );
+
+    varContainer.innerHTML = '';
+
+    if(variants && variants.length > 0){
+
+        variants.forEach(v => {
+
+            appendVariantRow(
+                'editVariantContainer',
+                v.size,
+                v.stock
+            );
+
+        });
+
+    }
+
+    else {
+
+        appendVariantRow(
+            'editVariantContainer',
+            '',
+            ''
+        );
+
+    }
+
 }
 function closeEditModal() {
 
@@ -201,29 +293,158 @@ function closeEditModal() {
     .classList.remove('active');
 
 }
-function handleEditImage(event, input) {
+function handleEditImage(event, index){
 
     const file = event.target.files[0];
+    let replacedIndexes = JSON.parse(
+    document.getElementById(
+        'replacedIndexesInput'
+    ).value || '[]'
+);
 
-    if(file && file.type.startsWith('image/')) {
+
+if(!replacedIndexes.includes(index)){
+
+    replacedIndexes.push(index);
+
+}
+
+document.getElementById(
+    'replacedIndexesInput'
+).value =
+JSON.stringify(replacedIndexes);
+
+    if(file && file.type.startsWith('image/')){
 
         const reader = new FileReader();
+  
 
-        reader.onload = function(e) {
+
+
+        reader.onload = function(e){
 
             const slot =
-            input.closest('.edit-img-slot');
+            document.getElementById(
+                `edit-slot-${index}`
+            );
 
-            slot.querySelector('img').src =
-            e.target.result;
+            
+
+const previewImg =
+slot.querySelector('.preview-img');
+
+previewImg.src = e.target.result;
+
+previewImg.style.display = 'block';
+
+const slotContent =
+slot.querySelector('.slot-content');
+
+if(slotContent){
+
+    slotContent.remove();
+
+}
+
+            slot.classList.remove('empty');
+
+            slot.classList.add('has-image');
 
         };
 
         reader.readAsDataURL(file);
 
     }
+}
+   function removeEditImage(index){
+
+    const slot =
+    document.getElementById(
+        `edit-slot-${index}`
+    );
+
+    // REMOVE FILE INPUT VALUE
+
+    const input =
+    document.getElementById(
+        `edit-file-${index}`
+    );
+
+    if(input){
+
+        input.value = '';
+
+    }
+
+    // REMOVE FROM HIDDEN ARRAY
+
+    let existingImages = JSON.parse(
+
+        document.getElementById(
+            'existingImagesInput'
+        ).value || '[]'
+
+    );
+
+    existingImages[index] = null;
+
+    document.getElementById(
+        'existingImagesInput'
+    ).value =
+    JSON.stringify(existingImages);
+
+    // RESET SLOT
+
+    slot.classList.remove('has-image');
+
+    slot.classList.add('empty');
+
+    slot.innerHTML = `
+
+        <img
+    class="preview-img"
+    style="display:none;"
+>
+
+<div class="slot-content">
+
+    <i class="fas fa-plus"></i>
+
+</div>
+
+<div class="edit-img-actions">
+
+    <button
+        type="button"
+        class="mini-btn"
+        onclick="event.stopPropagation(); openCropper(${index}, 'edit')"
+    >
+        <i class="fas fa-crop"></i>
+    </button>
+
+    <button
+        type="button"
+        class="mini-btn remove"
+        onclick="event.stopPropagation(); removeEditImage(${index})"
+    >
+        <i class="fas fa-trash"></i>
+    </button>
+
+</div>
+
+<input
+    type="file"
+    name="productImage"
+    id="edit-file-${index}"
+    hidden
+    accept="image/*"
+    onchange="handleEditImage(event, ${index})"
+>
+
+    `;
 
 }
+
 
 // ==================================================
 // CROPPER LOGIC
@@ -403,8 +624,14 @@ function saveCrop(){
 
         }
 
-        slot.querySelector('.preview-img').src =
-        dataUrl;
+        const previewImage =
+slot.querySelector('.preview-img');
+
+if(previewImage){
+
+    previewImage.src = dataUrl;
+
+}
 
         closeCropperModal();
 
