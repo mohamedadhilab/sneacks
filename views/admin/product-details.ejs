@@ -14,14 +14,10 @@
         Product Details | Sneacks Admin
     </title>
 
-    <!-- ICONS -->
-
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     >
-
-    <!-- CSS -->
 
     <link
         rel="stylesheet"
@@ -37,19 +33,20 @@
 
 <body>
 
-<!-- ===================================================== -->
-<!-- SIDEBAR -->
-<!-- ===================================================== -->
+<%
+const totalStock =
+product.variants.reduce(
+(acc, v) => acc + v.stock,
+0
+);
+
+const inventoryValue =
+product.price * totalStock;
+%>
 
 <%- include('../partials/admin/sidebar', { page: 'products' }) %>
 
-<!-- ===================================================== -->
-<!-- MAIN CONTENT -->
-<!-- ===================================================== -->
-
 <div class="main-content">
-
-    <!-- TOPBAR -->
 
     <%- include('../partials/admin/topbar', {
         searchPlaceholder: 'Search inventory...',
@@ -57,13 +54,9 @@
         search: ''
     }) %>
 
-    <!-- PAGE -->
-
     <div class="page-container">
 
-        <!-- ===================================================== -->
         <!-- BREADCRUMBS -->
-        <!-- ===================================================== -->
 
         <div class="breadcrumbs">
 
@@ -81,18 +74,15 @@
 
         </div>
 
-        <!-- ===================================================== -->
-        <!-- PAGE HEADER -->
-        <!-- ===================================================== -->
+        <!-- HEADER -->
 
         <header class="page-header">
 
-            <div class="header-titles">
+            <div>
 
                 <h1 class="premium-title">
 
                     PRODUCT
-
                     <span class="text-orange">
                         DETAILS
                     </span>
@@ -108,46 +98,71 @@
 
             </div>
 
-            <div class="header-actions">
-
-                <a
-                    href="/admin/products"
-                    class="btn-secondary"
-                >
-                    <i class="fas fa-arrow-left"></i>
-
-                    BACK
-                </a>
-
-            </div>
+            <a
+                href="/admin/products"
+                class="btn-secondary"
+            >
+                <i class="fas fa-arrow-left"></i>
+                BACK
+            </a>
 
         </header>
 
-        <!-- ===================================================== -->
+        <!-- LOW STOCK ALERT -->
+
+        <% if(totalStock <= 10){ %>
+
+            <div class="low-stock-alert">
+
+                <i class="fas fa-triangle-exclamation"></i>
+
+                LOW INVENTORY WARNING —
+                ONLY <%= totalStock %> ITEMS LEFT
+
+            </div>
+
+        <% } %>
+
         <!-- MAIN GRID -->
-        <!-- ===================================================== -->
 
         <div class="product-details-grid">
 
-            <!-- ===================================================== -->
-            <!-- LEFT COLUMN -->
-            <!-- ===================================================== -->
+            <!-- LEFT -->
 
             <div class="product-left-column">
 
-                <!-- ===================================================== -->
-                <!-- GALLERY CARD -->
-                <!-- ===================================================== -->
+                <!-- IMAGE CARD -->
 
                 <div class="card product-hero-card">
 
-                    <!-- MAIN IMAGE -->
-
                     <div class="main-preview-wrapper">
+
+                        <!-- BRAND -->
 
                         <span class="floating-brand">
 
                             <%= product.brand %>
+
+                        </span>
+
+                        <!-- STATUS -->
+
+                        <span class="floating-status <%= product.is_blocked ? 'status-blocked' : 'status-active' %>">
+
+                            <%= product.is_blocked
+                                ? 'BLOCKED'
+                                : 'ACTIVE'
+                            %>
+
+                        </span>
+
+                        <!-- IMAGE COUNT -->
+
+                        <span class="image-count-badge">
+
+                            <i class="fas fa-images"></i>
+
+                            <%= product.productImage?.length || 0 %>
 
                         </span>
 
@@ -165,8 +180,7 @@
 
                     <div class="thumbnail-gallery">
 
-                        <% if(product.productImage &&
-                            product.productImage.length > 0){ %>
+                        <% if(product.productImage?.length){ %>
 
                             <% product.productImage.forEach((img, index) => { %>
 
@@ -189,9 +203,7 @@
 
                 </div>
 
-                <!-- ===================================================== -->
                 <!-- STOCK CARD -->
-                <!-- ===================================================== -->
 
                 <div class="card stock-card">
 
@@ -205,18 +217,21 @@
 
                             </h3>
 
+                            <p class="stock-subtitle">
+
+                                Real-time stock distribution
+
+                            </p>
+
                         </div>
 
                         <div class="stock-total">
 
-                            <%= product.variants.reduce((acc, v) =>
-                                acc + v.stock, 0) %>
+                            <%= totalStock %>
 
                         </div>
 
                     </div>
-
-                    <!-- TABLE -->
 
                     <table class="variant-table">
 
@@ -243,9 +258,7 @@
                                     <td>
 
                                         <strong>
-
                                             US <%= variant.size %>
-
                                         </strong>
 
                                     </td>
@@ -298,15 +311,11 @@
 
             </div>
 
-            <!-- ===================================================== -->
-            <!-- RIGHT COLUMN -->
-            <!-- ===================================================== -->
+            <!-- RIGHT -->
 
             <div class="product-right-column">
 
-                <!-- ===================================================== -->
                 <!-- PRODUCT INFO -->
-                <!-- ===================================================== -->
 
                 <div class="card product-info-card">
 
@@ -341,15 +350,11 @@
                         <div class="meta-box">
 
                             <div class="meta-label">
-
                                 BRAND
-
                             </div>
 
                             <div class="meta-value">
-
                                 <%= product.brand %>
-
                             </div>
 
                         </div>
@@ -357,15 +362,11 @@
                         <div class="meta-box">
 
                             <div class="meta-label">
-
                                 SKU
-
                             </div>
 
                             <div class="meta-value">
-
                                 <%= product.sku || 'N/A' %>
-
                             </div>
 
                         </div>
@@ -373,16 +374,11 @@
                         <div class="meta-box">
 
                             <div class="meta-label">
-
                                 TOTAL STOCK
-
                             </div>
 
                             <div class="meta-value">
-
-                                <%= product.variants.reduce((acc, v) =>
-                                    acc + v.stock, 0) %>
-
+                                <%= totalStock %>
                             </div>
 
                         </div>
@@ -390,18 +386,11 @@
                         <div class="meta-box">
 
                             <div class="meta-label">
-
-                                STATUS
-
+                                VARIANTS
                             </div>
 
                             <div class="meta-value">
-
-                                <%= product.is_blocked
-                                    ? 'BLOCKED'
-                                    : 'ACTIVE'
-                                %>
-
+                                <%= product.variants.length %>
                             </div>
 
                         </div>
@@ -416,6 +405,7 @@
                             href="/admin/products"
                             class="btn-secondary"
                         >
+                            <i class="fas fa-arrow-left"></i>
                             BACK
                         </a>
 
@@ -426,10 +416,12 @@
 
                             <% if(product.is_blocked){ %>
 
+                                <i class="fas fa-eye"></i>
                                 LIST PRODUCT
 
                             <% } else { %>
 
+                                <i class="fas fa-eye-slash"></i>
                                 UNLIST PRODUCT
 
                             <% } %>
@@ -440,27 +432,19 @@
 
                 </div>
 
-                <!-- ===================================================== -->
                 <!-- QUICK STATS -->
-                <!-- ===================================================== -->
 
                 <div class="quick-stats-grid">
 
                     <div class="quick-stat-card">
 
                         <div class="quick-stat-label">
-
                             INVENTORY VALUE
-
                         </div>
 
                         <div class="quick-stat-value">
 
-                            ₹<%= (
-                                product.price *
-                                product.variants.reduce((acc, v) =>
-                                    acc + v.stock, 0)
-                            ).toLocaleString() %>
+                            ₹<%= inventoryValue.toLocaleString() %>
 
                         </div>
 
@@ -469,9 +453,7 @@
                     <div class="quick-stat-card">
 
                         <div class="quick-stat-label">
-
                             TOTAL IMAGES
-
                         </div>
 
                         <div class="quick-stat-value">
@@ -484,46 +466,32 @@
 
                 </div>
 
-                <!-- ===================================================== -->
-                <!-- META INFO -->
-                <!-- ===================================================== -->
+                <!-- SYSTEM INFO -->
 
                 <div class="card meta-info-card">
 
-                    <div class="section-header">
+                    <div class="section-subtitle">
 
-                        <div>
-
-                            <div class="section-subtitle">
-
-                                PRODUCT METADATA
-
-                            </div>
-
-                            <h3 class="section-title">
-
-                                SYSTEM INFO
-
-                            </h3>
-
-                        </div>
+                        PRODUCT METADATA
 
                     </div>
+
+                    <h3 class="section-title">
+
+                        SYSTEM INFO
+
+                    </h3>
 
                     <div class="meta-info-list">
 
                         <div class="meta-info-row">
 
                             <div class="meta-info-key">
-
                                 PRODUCT ID
-
                             </div>
 
                             <div class="meta-info-value">
-
                                 <%= product._id %>
-
                             </div>
 
                         </div>
@@ -531,15 +499,13 @@
                         <div class="meta-info-row">
 
                             <div class="meta-info-key">
-
                                 CREATED
-
                             </div>
 
                             <div class="meta-info-value">
 
                                 <%= new Date(product.createdAt)
-                                    .toLocaleDateString() %>
+                                .toLocaleString() %>
 
                             </div>
 
@@ -548,31 +514,13 @@
                         <div class="meta-info-row">
 
                             <div class="meta-info-key">
-
                                 UPDATED
-
                             </div>
 
                             <div class="meta-info-value">
 
                                 <%= new Date(product.updatedAt)
-                                    .toLocaleDateString() %>
-
-                            </div>
-
-                        </div>
-
-                        <div class="meta-info-row">
-
-                            <div class="meta-info-key">
-
-                                IMAGE COUNT
-
-                            </div>
-
-                            <div class="meta-info-value">
-
-                                <%= product.productImage?.length || 0 %>
+                                .toLocaleString() %>
 
                             </div>
 
@@ -589,10 +537,6 @@
     </div>
 
 </div>
-
-<!-- ===================================================== -->
-<!-- IMAGE SWITCH SCRIPT -->
-<!-- ===================================================== -->
 
 <script>
 

@@ -1,0 +1,14 @@
+<div class="empty-state animate-fade-up">
+    <div class="empty-state-icon">
+        <i class="<%= iconClass || 'fas fa-box-open' %>"></i>
+    </div>
+    <h2 class="empty-state-title"><%= title || 'Nothing here yet' %></h2>
+    <p class="mb-3 text-muted" style="max-width: 400px; margin-left: auto; margin-right: auto;">
+        <%= message || 'Looks like you haven\'t added anything to this section. Explore our collection to find something you love.' %>
+    </p>
+    <% if (actionLink && actionText) { %>
+        <a href="<%= actionLink %>" class="btn btn-primary"><%= actionText %></a>
+    <% } else { %>
+        <a href="/shop" class="btn btn-primary">Discover Collection</a>
+    <% } %>
+</div>

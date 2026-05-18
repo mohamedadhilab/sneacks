@@ -1,0 +1,93 @@
+/* ============================================================
+   SNEACKS - ANIMATIONS
+   ============================================================ */
+
+/* Keyframes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animation Utilities */
+.animate-fade-in {
+    animation: fadeIn var(--transition-slow) forwards;
+}
+
+.animate-fade-up {
+    animation: fadeUp var(--transition-slow) forwards;
+    opacity: 0; /* starts hidden */
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+
+/* Image Hover Zoom (For Product Cards) */
+.hover-zoom-wrapper {
+    overflow: hidden;
+    position: relative;
+    background: var(--color-bg-secondary);
+}
+
+.hover-zoom-img {
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hover-zoom-wrapper:hover .hover-zoom-img {
+    transform: scale(1.05);
+}
+
+/* Product Card Fade Actions */
+.product-actions-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+    background: linear-gradient(to top, rgba(253,252,248,0.9), transparent);
+}
+
+.product-card:hover .product-actions-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Soft Image Load */
+.img-lazy {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.img-lazy.loaded {
+    opacity: 1;
+}

@@ -1,0 +1,53 @@
+<nav class="navbar">
+    <div class="container navbar-container">
+        
+        <!-- Mobile Hamburger -->
+        <div class="hamburger" id="navbarHamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- Logo -->
+        <a href="/" class="nav-logo">SNEACKS</a>
+
+        <!-- Desktop Links -->
+        <div class="nav-links" id="navLinks">
+            <a href="/" class="nav-link <%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>">Home</a>
+            <a href="/shop" class="nav-link <%= typeof page !== 'undefined' && page === 'shop' ? 'active' : '' %>">Store</a>
+            <a href="/about" class="nav-link <%= typeof page !== 'undefined' && page === 'about' ? 'active' : '' %>">About</a>
+            <a href="/contact" class="nav-link <%= typeof page !== 'undefined' && page === 'contact' ? 'active' : '' %>">Contact</a>
+        </div>
+
+        <!-- Icons -->
+        <div class="nav-icons">
+            <a href="/shop?search=open" class="nav-icon">
+                <i class="fas fa-search"></i>
+            </a>
+            <a href="/wishlist" class="nav-icon">
+                <i class="far fa-heart"></i>
+            </a>
+            <a href="/profile" class="nav-icon">
+                <i class="far fa-user"></i>
+            </a>
+            <a href="/cart" class="nav-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-badge">0</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hamburger = document.getElementById('navbarHamburger');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+        }
+    });
+</script>

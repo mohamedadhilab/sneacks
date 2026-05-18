@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist | SNEACKS</title>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/user/base.css">
+    <link rel="stylesheet" href="/styles/user/layout.css">
+    <link rel="stylesheet" href="/styles/user/components.css">
+    <link rel="stylesheet" href="/styles/user/animations.css">
+    <link rel="stylesheet" href="/styles/user/wishlist.css">
+    <link rel="stylesheet" href="/styles/user/responsive.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <%- include('../partials/user/navbar', { page: 'wishlist' }) %>
+
+    <main class="page-wrapper">
+        
+        <div class="container section">
+            
+            <div class="text-center mb-4 animate-fade-up">
+                <h1 class="m-0">Wishlist</h1>
+                <p class="text-muted mt-2">Your curated selection of SNEACKS essentials.</p>
+            </div>
+
+            <% if(typeof wishlist !== 'undefined' && wishlist.products && wishlist.products.length > 0) { %>
+                <div class="wishlist-grid grid grid-4 animate-fade-in delay-100">
+                    <% wishlist.products.forEach(item => { %>
+                        <div class="wishlist-item-wrapper relative" data-id="<%= item.product._id %>">
+                            <%- include('../partials/user/product-card', { product: item.product, inWishlist: true }) %>
+                            <!-- Remove from wishlist overlay button (optional, or rely on heart toggle) -->
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <%- include('../partials/user/empty-state', {
+                    iconClass: 'far fa-heart',
+                    title: 'Your wishlist is empty',
+                    message: 'Save items you love here to easily find them later.',
+                    actionText: 'Discover Collection',
+                    actionLink: '/shop'
+                }) %>
+            <% } %>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('../partials/user/footer') %>
+
+    <!-- JS -->
+    <script src="/js/user/wishlist.js"></script>
+
+</body>
+</html>

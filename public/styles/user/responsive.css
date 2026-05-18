@@ -1,0 +1,101 @@
+/* ============================================================
+   SNEACKS - RESPONSIVE STYLES
+   ============================================================ */
+
+/* Tablet Landscape and Below (max-width: 1200px) */
+@media (max-width: 1200px) {
+    .container {
+        padding: 0 4%;
+    }
+}
+
+/* Tablet Portrait and Below (max-width: 992px) */
+@media (max-width: 992px) {
+    .grid-4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-xl) var(--space-md);
+    }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+    :root {
+        --space-xl: 4rem;
+        --space-lg: 3rem;
+        --space-md: 1.5rem;
+    }
+
+    .grid-3, .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Navbar Mobile */
+    .nav-links {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background: var(--color-bg-primary);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-lg);
+        transition: left 0.4s ease;
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .nav-link {
+        font-size: 1.2rem;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+    
+    /* Footer Mobile */
+    .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-sm);
+        text-align: center;
+    }
+}
+
+/* Small Mobile (max-width: 576px) */
+@media (max-width: 576px) {
+    .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+    
+    .section-lg {
+        padding: var(--space-lg) 0;
+    }
+}

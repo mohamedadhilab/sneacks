@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof product !== 'undefined' ? product.product_name : 'Product Details' %> | SNEACKS</title>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/user/base.css">
+    <link rel="stylesheet" href="/styles/user/layout.css">
+    <link rel="stylesheet" href="/styles/user/components.css">
+    <link rel="stylesheet" href="/styles/user/animations.css">
+    <link rel="stylesheet" href="/styles/user/product-details.css">
+    <link rel="stylesheet" href="/styles/user/responsive.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <%- include('../partials/user/navbar', { page: 'shop' }) %>
+
+    <main class="page-wrapper">
+        
+        <div class="container section">
+            
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs mb-3 animate-fade-in">
+                <a href="/">Home</a> / <a href="/shop">Shop</a> / <span class="text-muted"><%= typeof product !== 'undefined' ? product.product_name : 'Details' %></span>
+            </div>
+
+            <% if(typeof product !== 'undefined') { %>
+            <div class="product-details-grid">
+                
+                <!-- LEFT: Image Gallery -->
+                <div class="product-gallery animate-fade-up">
+                    <div class="main-image-wrapper hover-zoom-wrapper" id="mainImageWrapper">
+                        <img 
+                            src="<%= product.productImage && product.productImage.length > 0 ? '/uploads/products/' + product.productImage[0] : '/images/placeholder-shoe.png' %>" 
+                            alt="<%= product.product_name %>" 
+                            class="main-image"
+                            id="mainImage"
+                        >
+                    </div>
+                    
+                    <% if(product.productImage && product.productImage.length > 1) { %>
+                    <div class="thumbnail-gallery">
+                        <% product.productImage.forEach((img, index) => { %>
+                            <div class="thumbnail <%= index === 0 ? 'active' : '' %>" data-src="/uploads/products/<%= img %>">
+                                <img src="/uploads/products/<%= img %>" alt="Thumbnail">
+                            </div>
+                        <% }) %>
+                    </div>
+                    <% } %>
+                </div>
+
+                <!-- RIGHT: Product Info -->
+                <div class="product-info-column animate-fade-up delay-200">
+                    <span class="uppercase-label text-muted mb-1 block"><%= product.brand %></span>
+                    <h1 class="product-title"><%= product.product_name %></h1>
+                    <div class="product-price-large mb-3">₹<%= product.price.toLocaleString() %></div>
+
+                    <% if(totalStock <= 0){ %>
+
+    <div class="out-stock-banner">
+        Out of Stock
+    </div>
+
+<% } %>
+                    <p class="product-desc mb-4">
+                        <%= product.description || 'Premium minimal footwear designed for everyday luxury.' %>
+                    </p>
+
+                    <!-- Variants / Size Selector -->
+                    <% if(product.variants && product.variants.length > 0) { %>
+                        <div class="size-selector-group mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="uppercase-label">Select Size (US)</span>
+                                <a href="#" class="text-muted" style="font-size: 0.75rem; text-decoration: underline;">Size Guide</a>
+                            </div>
+                            <div class="size-grid">
+                                <% product.variants.forEach(variant => { %>
+                                    <button 
+                                        class="size-btn <%= variant.stock <= 0 ? 'out-of-stock' : '' %>" 
+                                        data-size="<%= variant.size %>"
+                                        data-stock="<%= variant.stock %>"
+                                        <%= variant.stock <= 0 ? 'disabled' : '' %>
+                                    >
+                                        <%= variant.size %>
+                                    </button>
+                                <% }) %>
+                            </div>
+                            <div class="stock-status mt-2 text-sm text-muted" id="stockStatus">
+                                <!-- Stock message will be injected here via JS -->
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Add to Cart Form -->
+                    <form id="addToCartForm" class="add-to-cart-form mb-4">
+                        <input type="hidden" name="productId" value="<%= product._id %>">
+                        <input type="hidden" name="selectedSize" id="selectedSizeInput" value="">
+                        
+                        <div class="flex gap-sm">
+                            <div class="quantity-selector">
+                                <button type="button" class="qty-btn minus">-</button>
+                                <input type="number" class="qty-input" name="quantity" value="1" min="1" max="5" id="qtyInput" readonly>
+                                <button type="button" class="qty-btn plus">+</button>
+                            </div>
+                            
+                            <button
+                                type="submit"
+                                class="btn btn-primary flex-1"
+                                id="addToCartBtn"
+                                <%= totalStock <= 0 ? 'disabled' : '' %>
+                            >
+
+                                <%= totalStock <= 0
+                                    ? 'Out of Stock'
+                                    : 'Select a Size'
+                                %>
+
+                            </button>
+                            
+                            <button type="button" class="btn-icon wishlist-btn" data-id="<%= product._id %>">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Product Details Accordion/List -->
+                    <div class="product-highlights border-top pt-4 mt-4">
+                        <div class="highlight-item mb-3">
+                            <span class="uppercase-label block mb-1">Materials</span>
+                            <p class="text-sm text-muted m-0">Premium full-grain leather upper, soft calfskin lining, custom rubber outsole.</p>
+                        </div>
+                        <div class="highlight-item mb-3">
+                            <span class="uppercase-label block mb-1">Shipping</span>
+                            <p class="text-sm text-muted m-0">Free express shipping on all orders. Returns accepted within 14 days.</p>
+                        </div>
+                        <div class="highlight-item">
+                            <span class="uppercase-label block mb-1">SKU</span>
+                            <p class="text-sm text-muted m-0"><%= product.sku || 'N/A' %></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <% } else { %>
+                <%- include('../partials/user/empty-state', {
+                    iconClass: 'fas fa-exclamation-circle',
+                    title: 'Product Not Found',
+                    message: 'The product you are looking for does not exist or has been removed.',
+                    actionText: 'Back to Shop',
+                    actionLink: '/shop'
+                }) %>
+            <% } %>
+
+        </div>
+
+        <!-- RELATED PRODUCTS -->
+        <% if(typeof relatedProducts !== 'undefined' && relatedProducts.length > 0) { %>
+        <section class="section bg-beige border-top">
+            <div class="container">
+                <h2 class="text-center mb-4 font-serif">You May Also Like</h2>
+                <div class="grid grid-4">
+                    <% relatedProducts.slice(0, 4).forEach(relProduct => { %>
+                        <%- include('../partials/user/product-card', { product: relProduct }) %>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+        <% } %>
+
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('../partials/user/footer') %>
+
+    <!-- JS -->
+    <script src="/js/user/product-details.js"></script>
+
+</body>
+</html>

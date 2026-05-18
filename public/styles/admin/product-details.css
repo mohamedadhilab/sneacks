@@ -786,3 +786,164 @@
   }
 
 }
+/* =========================================================
+   LOW STOCK ALERT
+========================================================= */
+
+.low-stock-alert {
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 28px;
+
+  padding: 18px 22px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,166,0,0.15),
+      rgba(255,106,61,0.08)
+    );
+
+  border:
+    1px solid rgba(255,166,0,0.2);
+
+  color: #ffb347;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   FLOATING STATUS
+========================================================= */
+
+.floating-status {
+
+  position: absolute;
+
+  bottom: 18px;
+  right: 18px;
+
+  padding: 10px 16px;
+
+  border-radius: 14px;
+
+  backdrop-filter: blur(14px);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  z-index: 10;
+}
+
+.status-active {
+
+  background:
+    rgba(0,255,153,0.14);
+
+  color: #00ff99;
+
+  border:
+    1px solid rgba(0,255,153,0.2);
+}
+
+.status-blocked {
+
+  background:
+    rgba(255,59,48,0.14);
+
+  color: #ff5c5c;
+
+  border:
+    1px solid rgba(255,59,48,0.2);
+}
+
+/* =========================================================
+   STOCK SUBTITLE
+========================================================= */
+
+.stock-subtitle {
+
+  margin-top: 6px;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   HOVER EFFECTS
+========================================================= */
+
+.meta-box,
+.quick-stat-card {
+
+  transition:
+    0.3s ease;
+}
+
+.meta-box:hover,
+.quick-stat-card:hover {
+
+  transform:
+    translateY(-4px);
+
+  border-color:
+    rgba(255,255,255,0.08);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.05),
+      rgba(255,255,255,0.02)
+    );
+}
+
+/* =========================================================
+   BUTTON ICON SPACING
+========================================================= */
+
+.btn-secondary i,
+.btn-premium-glow i {
+
+  margin-right: 8px;
+}
+
+/* =========================================================
+   IMAGE FADE
+========================================================= */
+
+#mainProductImage {
+
+  animation:
+    imageFade 0.35s ease;
+}
+
+@keyframes imageFade {
+
+  from {
+
+    opacity: 0.5;
+    transform: scale(0.98);
+
+  }
+
+  to {
+
+    opacity: 1;
+    transform: scale(1);
+
+  }
+
+}

@@ -1,0 +1,37 @@
+<div class="product-card animate-fade-up">
+    <div class="product-card-img hover-zoom-wrapper">
+        <a href="/product/<%= product._id %>">
+            <img 
+                src="<%= product.productImage && product.productImage.length > 0 ? '/uploads/products/' + product.productImage[0] : '/images/placeholder-shoe.png' %>" 
+                alt="<%= product.product_name %>" 
+                class="hover-zoom-img img-lazy loaded"
+            >
+        </a>
+        
+        <!-- Wishlist Icon Toggle -->
+        <button 
+            class="wishlist-toggle-btn <%= typeof inWishlist !== 'undefined' && inWishlist ? 'active' : '' %>" 
+            data-id="<%= product._id %>"
+            aria-label="Toggle Wishlist"
+        >
+            <i class="<%= typeof inWishlist !== 'undefined' && inWishlist ? 'fas text-error' : 'far' %> fa-heart"></i>
+        </button>
+
+        <!-- Hover Actions Overlay -->
+        <div class="product-actions-overlay">
+            <button class="btn btn-primary btn-full quick-add-btn" data-id="<%= product._id %>">
+                Quick Add
+            </button>
+        </div>
+    </div>
+
+    <div class="product-card-info">
+        <div class="flex justify-between items-center mb-1">
+            <span class="uppercase-label text-muted"><%= product.brand %></span>
+            <span class="product-price">₹<%= product.price.toLocaleString() %></span>
+        </div>
+        <a href="/product/<%= product._id %>" class="product-card-title">
+            <%= product.product_name %>
+        </a>
+    </div>
+</div>

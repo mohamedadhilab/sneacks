@@ -7,7 +7,8 @@ const upload = require('../middleware/upload');
 const authController = require('../controllers/user/authController');
 const profileController = require('../controllers/user/profileController');
 const addressController = require('../controllers/user/addressController');
-
+const shopController=require('../controllers/user/shopController')
+const productController =require('../controllers/user/productController');
 const {
   isLoggedIn,
   isLoggedOut
@@ -194,5 +195,11 @@ router.delete(
   addressController.deleteAddress
 );
 
+
+router.get('/shop', shopController.loadShopPage);
+router.get(
+    '/product/:id',
+    productController.loadProductDetails
+);
 
 module.exports = router;
