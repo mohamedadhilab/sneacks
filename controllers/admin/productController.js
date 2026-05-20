@@ -3,6 +3,11 @@ const Product =require('../../models/productModel');
 
 const Category =require('../../models/categoryModel');
 const sharp = require('sharp');
+const {
+    addProductSchema,
+
+    editProductSchema
+} = require('../../validations/adminValidation');
 
 const fs = require('fs');
 
@@ -37,7 +42,8 @@ else if(sort === 'price-low'){
 
 else if(sort === 'stock-low'){
 
-sortOption = { createdAt: -1 };
+    sortOption = { 'variants.stock': 1 };
+
 }
 
     const products = await Product.find({
@@ -123,8 +129,11 @@ const totalPages = Math.ceil(totalProducts / limit);
 };
 
 exports.addProduct = async (req, res) => {
+
     try {
+
         const {
+
             product_name,
             description,
             brand,
@@ -134,113 +143,286 @@ exports.addProduct = async (req, res) => {
             is_active,
             sizes,
             stocks
+
         } = req.body;
 
-        // =========================
-        // VALIDATIONS
-        // =========================
-        if (!product_name || !brand || !category || !price || !sizes || !stocks) {
+        // =====================================================
+        // JOI VALIDATION
+        // =====================================================
+
+        const { error } =
+            addProductSchema.validate(req.body);
+
+        if (error) {
+
             req.session.message = {
+
                 type: 'error',
-                text: 'Please fill all required fields'
+
+                text: error.details[0].message
+
             };
+
             return res.redirect('/admin/products');
+
         }
 
-        // =========================
+        // =====================================================
         // IMAGE VALIDATION
-        // =========================
+        // =====================================================
+
         if (!req.files || req.files.length < 3) {
+
             req.session.message = {
+
                 type: 'error',
+
                 text: 'Minimum 3 images required'
+
             };
+
             return res.redirect('/admin/products');
+
         }
 
-        // =========================
-        // VARIANTS LOGIC
-        // =========================
+        // =====================================================
+        // DUPLICATE SIZE VALIDATION
+        // =====================================================
+
+        const sizeArray =
+            Array.isArray(sizes)
+                ? sizes
+                : [sizes];
+
+        const stockArray =
+            Array.isArray(stocks)
+                ? stocks
+                : [stocks];
+
+        const uniqueSizes =
+            new Set(sizeArray);
+
+        if (uniqueSizes.size !== sizeArray.length) {
+
+            req.session.message = {
+
+                type: 'error',
+
+                text: 'Duplicate sizes are not allowed'
+
+            };
+
+            return res.redirect('/admin/products');
+
+        }
+
+        // =====================================================
+        // SKU VALIDATION
+        // =====================================================
+
+        if (sku && sku.trim() !== '') {
+
+            const existingSku =
+                await Product.findOne({
+
+                    sku: sku.trim()
+
+                });
+
+            if (existingSku) {
+
+                req.session.message = {
+
+                    type: 'error',
+
+                    text: 'SKU already exists'
+
+                };
+
+                return res.redirect('/admin/products');
+
+            }
+
+        }
+
+        // =====================================================
+        // VARIANTS
+        // =====================================================
+
         const variants = [];
-        const sizeArray = Array.isArray(sizes) ? sizes : [sizes];
-        const stockArray = Array.isArray(stocks) ? stocks : [stocks];
 
         for (let i = 0; i < sizeArray.length; i++) {
-            if (sizeArray[i] && stockArray[i] >= 0) {
-                variants.push({
-                    size: sizeArray[i],
-                    stock: Number(stockArray[i])
-                });
+
+            const stockValue =
+                Number(stockArray[i]);
+
+            if (!sizeArray[i]) {
+                continue;
             }
+
+            // NEGATIVE STOCK
+            if (stockValue < 0) {
+
+                req.session.message = {
+
+                    type: 'error',
+
+                    text: 'Stock cannot be negative'
+
+                };
+
+                return res.redirect('/admin/products');
+
+            }
+
+            variants.push({
+
+                size: sizeArray[i],
+
+                stock: stockValue
+
+            });
+
         }
+
+        // =====================================================
+        // MINIMUM VARIANT
+        // =====================================================
 
         if (variants.length === 0) {
+
             req.session.message = {
+
                 type: 'error',
+
                 text: 'Minimum 1 variant required'
+
             };
+
             return res.redirect('/admin/products');
+
         }
 
-const images = [];
+        // =====================================================
+        // IMAGE PROCESSING
+        // =====================================================
 
-for(const file of req.files){
+        const images = [];
 
-    const filename =
-    `product-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpg`;
+        for (const file of req.files) {
 
-    await sharp(file.path)
+            const filename =
 
-        .resize(800, 800)
+                `product-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpg`;
 
-        .jpeg({
+            await sharp(file.path)
 
-            quality: 90
+                .resize(800, 800)
 
-        })
+                .jpeg({
 
-        .toFile(
+                    quality: 90
 
-            path.join(
-                'public/uploads/products',
-                filename
-            )
+                })
 
-        );
+                .toFile(
 
-    fs.unlinkSync(file.path);
+                    path.join(
 
-    images.push(filename);
+                        'public/uploads/products',
 
-}
+                        filename
+
+                    )
+
+                );
+
+            // DELETE TEMP FILE
+
+            fs.unlinkSync(file.path);
+
+            images.push(filename);
+
+        }
+
+        // =====================================================
+        // CREATE PRODUCT
+        // =====================================================
+
         const product = new Product({
-            product_name,
-            description,
-            brand,
+
+            product_name: product_name.trim(),
+
+            description: description.trim(),
+
+            brand: brand.trim(),
+
             category,
-            price,
+
+            price: Number(price),
+
             variants,
-            sku: sku || `SKU-${Date.now()}`,
-            is_active: is_active === 'true',
+
+            sku:
+
+                sku && sku.trim() !== ''
+
+                    ? sku.trim()
+
+                    : `SKU-${Date.now()}`,
+
+            is_active:
+
+                is_active === 'true',
+
             productImage: images
+
         });
+
+        // =====================================================
+        // SAVE
+        // =====================================================
 
         await product.save();
 
+        // =====================================================
+        // SUCCESS
+        // =====================================================
+
         req.session.message = {
+
             type: 'success',
+
             text: 'Product added successfully'
+
         };
+
         res.redirect('/admin/products');
 
-    } catch (error) {
-        console.log(error);
-        req.session.message = {
-            type: 'error',
-            text: 'Something went wrong'
-        };
-        res.redirect('/admin/products');
     }
+
+    catch (error) {
+
+        console.log(
+
+            'ADD PRODUCT ERROR:',
+
+            error
+
+        );
+
+        req.session.message = {
+
+            type: 'error',
+
+            text: 'Something went wrong'
+
+        };
+
+        res.redirect('/admin/products');
+
+    }
+
 };
 
 
@@ -305,243 +487,442 @@ exports.getProductDetails = async (req, res) => {
 
 exports.editProduct = async (req, res) => {
 
-  try {
+    try {
 
-    const id = req.params.id;
+        const id = req.params.id;
 
-    const {
-      product_name,
-      description,
-      brand,
-      category,
-      price,
-      sku,
-      sizes,
-      stocks,
-    replacedIndexes
-    } = req.body;
+        const {
 
-    // VARIANTS LOGIC
-    const variants = [];
-    if (sizes && stocks) {
-      const sizeArray = Array.isArray(sizes) ? sizes : [sizes];
-      const stockArray = Array.isArray(stocks) ? stocks : [stocks];
+            product_name,
+            description,
+            brand,
+            category,
+            price,
+            sku,
+            sizes,
+            stocks,
+            replacedIndexes
 
-      for (let i = 0; i < sizeArray.length; i++) {
-        if (sizeArray[i]) {
-          variants.push({
-            size: sizeArray[i],
-            stock: Number(stockArray[i]) || 0
-          });
-        }
-      }
-    }
+        } = req.body;
 
-    const updateData = {
-      product_name,
-      description,
-      brand,
-      category,
-      price,
-      sku,
-      variants
-    };
+        // =====================================================
+        // JOI VALIDATION
+        // =====================================================
 
+        const { error } =
+            editProductSchema.validate(req.body);
 
-// =========================
-// EXISTING IMAGES
-// =========================
+        if (error) {
 
-let existingImages =
-JSON.parse(req.body.existingImages || '[]');
-const oldProduct =
-await Product.findById(id);
+            req.session.message = {
 
-// =========================
-// NEW IMAGES
-// =========================
+                type: 'error',
 
-const newImages = [];
+                text: error.details[0].message
 
-if(req.files && req.files.length > 0){
+            };
 
-    for(const file of req.files){
-
-        const filename =
-        `product-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpg`;
-
-        await sharp(file.path)
-
-            .resize(800, 800)
-
-            .jpeg({
-                quality: 90
-            })
-
-            .toFile(
-                path.join(
-                    'public/uploads/products',
-                    filename
-                )
-            );
-
-        fs.unlinkSync(file.path);
-
-        newImages.push(filename);
-
-    }
-
-}
-
-// =========================
-// FINAL IMAGE ARRAY
-// =========================
-
-const finalImages = [...existingImages];
-// =========================
-// DELETE REMOVED IMAGES
-// =========================
-
-for(let i = 0; i < oldProduct.productImage.length; i++){
-
-    const oldImage =
-    oldProduct.productImage[i];
-
-    if(
-        oldImage &&
-        !existingImages.includes(oldImage)
-    ){
-
-        const oldPath = path.join(
-            'public/uploads/products',
-            oldImage
-        );
-
-        if(fs.existsSync(oldPath)){
-
-            fs.unlinkSync(oldPath);
+            return res.redirect('/admin/products');
 
         }
 
-    }
+        // =====================================================
+        // SIZE ARRAY
+        // =====================================================
 
-}
-let replaced = [];
+        const sizeArray =
+            Array.isArray(sizes)
+                ? sizes
+                : [sizes];
 
-if(replacedIndexes){
+        const stockArray =
+            Array.isArray(stocks)
+                ? stocks
+                : [stocks];
 
-    replaced =
-    JSON.parse(replacedIndexes);
+        // =====================================================
+        // DUPLICATE SIZE VALIDATION
+        // =====================================================
 
-}
+        const uniqueSizes =
+            new Set(sizeArray);
 
-let newIndex = 0;
+        if (uniqueSizes.size !== sizeArray.length) {
 
-// =========================
-// REPLACE EDITED IMAGES
-// =========================
+            req.session.message = {
 
-for(const index of replaced){
+                type: 'error',
 
-    if(newImages[newIndex]){
+                text: 'Duplicate sizes are not allowed'
 
-        // OLD IMAGE NAME
-        const oldImage =
-        finalImages[index];
+            };
 
-        // DELETE OLD FILE
-        if(oldImage){
+            return res.redirect('/admin/products');
 
-            const oldPath = path.join(
-                'public/uploads/products',
-                oldImage
-            );
+        }
 
-            if(fs.existsSync(oldPath)){
+        // =====================================================
+        // SKU VALIDATION
+        // =====================================================
 
-                fs.unlinkSync(oldPath);
+        if (sku && sku.trim() !== '') {
+
+            const existingSku =
+                await Product.findOne({
+
+                    sku: sku.trim(),
+
+                    _id: { $ne: id }
+
+                });
+
+            if (existingSku) {
+
+                req.session.message = {
+
+                    type: 'error',
+
+                    text: 'SKU already exists'
+
+                };
+
+                return res.redirect('/admin/products');
 
             }
 
         }
 
-        // REPLACE WITH NEW IMAGE
-        finalImages[index] =
-        newImages[newIndex];
+        // =====================================================
+        // VARIANTS
+        // =====================================================
 
-        newIndex++;
+        const variants = [];
+
+        for (let i = 0; i < sizeArray.length; i++) {
+
+            const stockValue =
+                Number(stockArray[i]);
+
+            if (!sizeArray[i]) {
+                continue;
+            }
+
+            if (stockValue < 0) {
+
+                req.session.message = {
+
+                    type: 'error',
+
+                    text: 'Stock cannot be negative'
+
+                };
+
+                return res.redirect('/admin/products');
+
+            }
+
+            variants.push({
+
+                size: sizeArray[i],
+
+                stock: stockValue
+
+            });
+
+        }
+
+        // =====================================================
+        // EXISTING IMAGES
+        // =====================================================
+
+        let existingImages =
+            JSON.parse(
+                req.body.existingImages || '[]'
+            );
+
+        const oldProduct =
+            await Product.findById(id);
+
+        // =====================================================
+        // NEW IMAGES
+        // =====================================================
+
+        const newImages = [];
+
+        if (req.files && req.files.length > 0) {
+
+            for (const file of req.files) {
+
+                const filename =
+
+                    `product-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpg`;
+
+                await sharp(file.path)
+
+                    .resize(800, 800)
+
+                    .jpeg({
+
+                        quality: 90
+
+                    })
+
+                    .toFile(
+
+                        path.join(
+
+                            'public/uploads/products',
+
+                            filename
+
+                        )
+
+                    );
+
+                fs.unlinkSync(file.path);
+
+                newImages.push(filename);
+
+            }
+
+        }
+
+        // =====================================================
+        // FINAL IMAGE ARRAY
+        // =====================================================
+
+        const finalImages =
+            [...existingImages];
+
+        // =====================================================
+        // DELETE REMOVED IMAGES
+        // =====================================================
+
+        for (
+
+            let i = 0;
+
+            i < oldProduct.productImage.length;
+
+            i++
+
+        ) {
+
+            const oldImage =
+                oldProduct.productImage[i];
+
+            if (
+
+                oldImage &&
+
+                !existingImages.includes(oldImage)
+
+            ) {
+
+                const oldPath =
+                    path.join(
+
+                        'public/uploads/products',
+
+                        oldImage
+
+                    );
+
+                if (fs.existsSync(oldPath)) {
+
+                    fs.unlinkSync(oldPath);
+
+                }
+
+            }
+
+        }
+
+        // =====================================================
+        // REPLACED IMAGES
+        // =====================================================
+
+        let replaced = [];
+
+        if (replacedIndexes) {
+
+            replaced =
+                JSON.parse(replacedIndexes);
+
+        }
+
+        let newIndex = 0;
+
+        // =====================================================
+        // REPLACE IMAGES
+        // =====================================================
+
+        for (const index of replaced) {
+
+            if (newImages[newIndex]) {
+
+                const oldImage =
+                    finalImages[index];
+
+                if (oldImage) {
+
+                    const oldPath =
+                        path.join(
+
+                            'public/uploads/products',
+
+                            oldImage
+
+                        );
+
+                    if (fs.existsSync(oldPath)) {
+
+                        fs.unlinkSync(oldPath);
+
+                    }
+
+                }
+
+                finalImages[index] =
+                    newImages[newIndex];
+
+                newIndex++;
+
+            }
+
+        }
+
+        // =====================================================
+        // ADD NEW IMAGES
+        // =====================================================
+
+        for (let i = 0; i < 5; i++) {
+
+            if (
+
+                !finalImages[i] &&
+
+                newImages[newIndex]
+
+            ) {
+
+                finalImages[i] =
+                    newImages[newIndex];
+
+                newIndex++;
+
+            }
+
+        }
+
+        // =====================================================
+        // IMAGE VALIDATION
+        // =====================================================
+
+        const validImages =
+            finalImages.filter(img => img);
+
+        if (validImages.length < 3) {
+
+            req.session.message = {
+
+                type: 'error',
+
+                text: 'Minimum 3 images required'
+
+            };
+
+            return res.redirect('/admin/products');
+
+        }
+
+        // =====================================================
+        // UPDATE DATA
+        // =====================================================
+
+        const updateData = {
+
+            product_name:
+                product_name.trim(),
+
+            description:
+                description.trim(),
+
+            brand:
+                brand.trim(),
+
+            category,
+
+            price:
+                Number(price),
+
+            sku:
+
+                sku && sku.trim() !== ''
+
+                    ? sku.trim()
+
+                    : `SKU-${Date.now()}`,
+
+            variants,
+
+            productImage:
+                validImages
+
+        };
+
+        // =====================================================
+        // UPDATE PRODUCT
+        // =====================================================
+
+        await Product.findByIdAndUpdate(
+
+            id,
+
+            updateData,
+
+            { new: true }
+
+        );
+
+        // =====================================================
+        // SUCCESS
+        // =====================================================
+
+        req.session.message = {
+
+            type: 'success',
+
+            text: 'Product updated successfully'
+
+        };
+
+        res.redirect('/admin/products');
 
     }
 
-}
+    catch (error) {
 
-// =========================
-// ADD NEW IMAGES TO EMPTY SLOTS
-// =========================
+        console.log(
 
-for(let i = 0; i < 5; i++){
+            'EDIT PRODUCT ERROR:',
 
-    if(
-        !finalImages[i] &&
-        newImages[newIndex]
-    ){
+            error
 
-        finalImages[i] =
-        newImages[newIndex];
+        );
 
-        newIndex++;
+        req.session.message = {
+
+            type: 'error',
+
+            text: 'Something went wrong'
+
+        };
+
+        res.redirect('/admin/products');
 
     }
 
-}
-
-// =========================
-// VALIDATION
-// =========================
-
-const validImages =
-finalImages.filter(img => img);
-
-if(validImages.length < 3){
-
-    req.session.message = {
-
-        type: 'error',
-
-        text: 'Minimum 3 images required'
-
-    };
-
-    return res.redirect('/admin/products');
-
-}
-
-// =========================
-// SAVE
-// =========================
-
-updateData.productImage = validImages;
-// SAVE FINAL IMAGES
-
-updateData.productImage =
-cleanedImages.filter(img => img);
-    await Product.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true }
-    );
-
-    req.session.message = {
-      type: 'success',
-      text: 'Product updated successfully'
-    };
-
-    res.redirect('/admin/products');
-
-  } catch (error) {
-    console.log(error);
-    res.redirect('/admin/products');
-  }
 };
 
 exports.loadProducts = async (req, res) => {

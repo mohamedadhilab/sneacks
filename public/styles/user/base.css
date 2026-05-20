@@ -9,14 +9,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 :root {
-    /* Color Palette */
-    --color-bg-primary: #FDFCF8; /* Warm Ivory */
-    --color-bg-secondary: #F4F1EB; /* Soft Beige */
-    --color-text-primary: #1A1A1A; /* Near Black */
-    --color-text-secondary: #737373; /* Muted Gray */
-    --color-accent: #6B705C; /* Olive Green */
-    --color-accent-hover: #505445;
-    --color-border: #E8E5DF; /* Soft Border */
+    /* Color Palette (Matched to global.css) */
+    --color-bg-primary: #f0ece4;
+    --color-bg-secondary: #f5f2ec;
+    --color-text-primary: #2c2c1e;
+    --color-text-secondary: #4a4a38;
+    --color-accent: #6b7a45;
+    --color-accent-hover: #4a5530;
+    --color-border: #d8d4c8;
     --color-white: #FFFFFF;
     --color-error: #D9534F;
     --color-success: #5CB85C;

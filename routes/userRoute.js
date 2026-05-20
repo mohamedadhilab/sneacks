@@ -9,6 +9,10 @@ const profileController = require('../controllers/user/profileController');
 const addressController = require('../controllers/user/addressController');
 const shopController=require('../controllers/user/shopController')
 const productController =require('../controllers/user/productController');
+const cartController =require('../controllers/user/cartController');
+const wishlistController =require('../controllers/user/wishlistController');
+const checkoutController =require('../controllers/user/checkoutController');
+const homeController =require('../controllers/user/homeController');
 const {
   isLoggedIn,
   isLoggedOut
@@ -21,10 +25,15 @@ const validate = require('../middleware/validateMiddleware');
 const userValidation = require('../validations/userValidation');
 
 
-router.get('/', (req, res) => {
-  res.redirect('/home');
-});
+router.get(
 
+    '/home',
+
+    noCache,
+
+    homeController.loadHome
+
+);
 
 router.get(
   '/login',
@@ -201,5 +210,71 @@ router.get(
     '/product/:id',
     productController.loadProductDetails
 );
+router.post(
 
+    '/add-to-cart',
+
+    isLoggedIn,
+
+    cartController.addToCart
+
+);
+router.get(
+    '/cart',
+    isLoggedIn,
+    cartController.loadCart
+);
+router.patch(
+    '/update-cart-quantity',
+    isLoggedIn,
+    cartController.updateCartQuantity
+);
+
+router.delete(
+    '/remove-cart-item',
+    isLoggedIn,
+    cartController.removeCartItem
+);
+// ======================================================
+// WISHLIST ROUTES
+// ======================================================
+
+router.post(
+
+    '/add-to-wishlist',
+
+    isLoggedIn,
+
+    wishlistController.addToWishlist
+
+);
+
+router.get(
+
+    '/wishlist',
+
+    isLoggedIn,
+
+    wishlistController.loadWishlist
+
+);
+
+router.delete(
+
+    '/remove-wishlist-item',
+
+    isLoggedIn,
+
+    wishlistController.removeWishlistItem
+
+);
+router.get(
+
+    '/checkout',
+
+    isLoggedIn,
+
+    checkoutController.loadCheckout
+
+);
 module.exports = router;

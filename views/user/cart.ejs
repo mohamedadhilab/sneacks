@@ -39,18 +39,20 @@
                     </div>
 
                     <div class="cart-items-list">
-                        <% cart.items.forEach(item => { %>
-                            <div class="cart-item" data-id="<%= item.product._id %>" data-size="<%= item.size %>">
+                    <% cart.items.forEach(item => { %>
+
+                    <% if(item.productId){ %>                           
+     <div class="cart-item" data-id="<%= item.productId._id %>" data-size="<%= item.size %>">
                                 
                                 <div class="item-product-info">
                                     <div class="item-img">
-                                        <img src="<%= item.product.productImage && item.product.productImage.length > 0 ? '/uploads/products/' + item.product.productImage[0] : '/images/placeholder-shoe.png' %>" alt="<%= item.product.product_name %>">
+                                        <img src="<%= item.productId.productImage && item.productId.productImage.length > 0 ? '/uploads/products/' + item.productId.productImage[0] : '/images/placeholder-shoe.png' %>" alt="<%= item.productId.product_name %>">
                                     </div>
                                     <div class="item-details">
-                                        <span class="uppercase-label text-muted block mb-1"><%= item.product.brand %></span>
-                                        <a href="/product/<%= item.product._id %>" class="item-name"><%= item.product.product_name %></a>
+                                        <span class="uppercase-label text-muted block mb-1"><%= item.productId.brand %></span>
+                                        <a href="/product/<%= item.productId._id %>" class="item-name"><%= item.productId.product_name %></a>
                                         <p class="item-variant">Size: US <%= item.size %></p>
-                                        <p class="item-price-mobile desktop-hide">₹<%= item.product.price.toLocaleString() %></p>
+                                        <p class="item-price-mobile desktop-hide">₹<%= item.productId.price.toLocaleString() %></p>
                                         <button class="btn-remove remove-item-btn" data-item-id="<%= item._id %>">Remove</button>
                                     </div>
                                 </div>
@@ -64,10 +66,11 @@
                                 </div>
 
                                 <div class="item-total">
-                                    ₹<span class="item-total-price"><%= (item.product.price * item.quantity).toLocaleString() %></span>
+                                    ₹<span class="item-total-price"><%= (item.productId.price * item.quantity).toLocaleString() %></span>
                                 </div>
 
                             </div>
+                            <% } %>
                         <% }) %>
                     </div>
                 </div>

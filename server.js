@@ -45,6 +45,7 @@ app.use(passport.session());
 
 
 app.use('/admin', adminRoute);   
+app.use('/', userRoutes);
 
 
 
@@ -53,7 +54,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', userRoutes);
 
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');

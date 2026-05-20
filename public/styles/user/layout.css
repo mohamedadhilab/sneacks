@@ -53,10 +53,8 @@
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(253, 252, 248, 0.85); /* Ivory with opacity */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(232, 229, 223, 0.5);
+    background: #f0ece4;
+    border-bottom: 1px solid #d8d4c8;
     transition: all var(--transition-normal);
 }
 
@@ -64,7 +62,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 80px;
+    height: 52px;
 }
 
 .nav-links {
@@ -152,8 +150,8 @@
 
 /* Page Wrapper for sticky nav offset */
 .page-wrapper {
-    padding-top: 80px; /* matches navbar height */
-    min-height: calc(100vh - 80px);
+    padding-top: 52px; /* matches navbar height */
+    min-height: calc(100vh - 52px);
     display: flex;
     flex-direction: column;
 }

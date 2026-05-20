@@ -1,46 +1,158 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const wishlistToggles = document.querySelectorAll('.wishlist-toggle-btn');
+    // =========================================
+    // REMOVE BUTTONS
+    // =========================================
 
-    if (wishlistToggles.length > 0) {
-        wishlistToggles.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const productId = this.getAttribute('data-id');
-                const icon = this.querySelector('i');
-                const isCurrentlyActive = this.classList.contains('active');
-                
-                // Toggle UI state immediately for responsiveness
-                if (isCurrentlyActive) {
-                    this.classList.remove('active');
-                    icon.className = 'far fa-heart';
-                    
-                    // If on wishlist page, fade out and remove the item
-                    const wrapper = this.closest('.wishlist-item-wrapper');
-                    if(wrapper) {
-                        wrapper.style.opacity = '0';
-                        wrapper.style.transform = 'scale(0.95)';
-                        setTimeout(() => {
-                            wrapper.remove();
-                            // Check if empty
-                            const remaining = document.querySelectorAll('.wishlist-item-wrapper');
-                            if(remaining.length === 0) {
-                                location.reload(); // Reload to show empty state
-                            }
-                        }, 300);
+    const removeButtons =
+        document.querySelectorAll(
+            '.wishlist-remove-btn'
+        );
+
+    removeButtons.forEach(button => {
+
+        button.addEventListener(
+            'click',
+            async () => {
+
+                try {
+
+                    const productId =
+                        button.dataset.productId;
+
+                    // =========================
+                    // API CALL
+                    // =========================
+
+                    const response = await fetch(
+
+                        '/remove-wishlist-item',
+
+                        {
+
+                            method: 'DELETE',
+
+                            headers: {
+
+                                'Content-Type':
+                                    'application/json'
+
+                            },
+
+                            body: JSON.stringify({
+
+                                productId
+
+                            })
+
+                        }
+
+                    );
+
+                    const data =
+                        await response.json();
+
+                    // =========================
+                    // FAILED
+                    // =========================
+
+                    if (!data.success) {
+
+                        Swal.fire({
+
+                            icon: 'error',
+
+                            title: 'Oops',
+
+                            text: data.message,
+
+                            confirmButtonColor:
+                                '#111'
+
+                        });
+
+                        return;
+
                     }
 
-                } else {
-                    this.classList.add('active');
-                    icon.className = 'fas fa-heart text-error';
+                    // =========================
+                    // REMOVE CARD
+                    // =========================
+
+                    const card =
+                        button.closest(
+                            '.wishlist-item-wrapper'
+                        );
+
+                    card.style.opacity = '0';
+
+                    setTimeout(() => {
+
+                        card.remove();
+
+                        // =====================
+                        // EMPTY CHECK
+                        // =====================
+
+                        const remainingItems =
+                            document.querySelectorAll(
+                                '.wishlist-item-wrapper'
+                            );
+
+                        if (
+                            remainingItems.length === 0
+                        ) {
+
+                            location.reload();
+
+                        }
+
+                    }, 300);
+
+                    // =========================
+                    // SUCCESS
+                    // =========================
+
+                    Swal.fire({
+
+                        icon: 'success',
+
+                        title: 'Removed',
+
+                        text: data.message,
+
+                        timer: 1200,
+
+                        showConfirmButton: false
+
+                    });
+
                 }
 
-                // In a real app, make an AJAX call to add/remove from wishlist backend here
-                // fetch(`/wishlist/toggle/${productId}`, { method: 'POST' }) ...
-            });
-        });
-    }
+                catch (error) {
+
+                    console.log(error);
+
+                    Swal.fire({
+
+                        icon: 'error',
+
+                        title: 'Error',
+
+                        text:
+                            'Something went wrong',
+
+                        confirmButtonColor:
+                            '#111'
+
+                    });
+
+                }
+
+            }
+
+        );
+
+    });
 
 });

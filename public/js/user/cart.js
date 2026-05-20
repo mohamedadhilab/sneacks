@@ -1,86 +1,353 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const cartItemsList = document.querySelector('.cart-items-list');
+    const minusBtns =
+        document.querySelectorAll('.qty-btn.minus');
 
-    if (cartItemsList) {
-        
-        // Quantity Increment / Decrement
-        cartItemsList.addEventListener('click', (e) => {
-            if (e.target.classList.contains('qty-btn')) {
-                const btn = e.target;
-                const isPlus = btn.classList.contains('plus');
-                const container = btn.closest('.quantity-selector');
-                const input = container.querySelector('.qty-input');
-                const itemId = btn.getAttribute('data-item-id');
-                
-                let val = parseInt(input.value, 10);
-                const max = parseInt(input.max, 10) || 5;
+    const plusBtns =
+        document.querySelectorAll('.qty-btn.plus');
 
-                if (isPlus && val < max) {
-                    val++;
-                } else if (!isPlus && val > 1) {
-                    val--;
-                } else {
-                    return; // No change
-                }
+    minusBtns.forEach(button => {
 
-                input.value = val;
-                
-                // In a real app, you would make an AJAX call here to update the cart in the database.
-                // For this UI implementation, we'll simulate the update visually.
-                updateCartTotals();
-            }
+        button.addEventListener('click', () => {
 
-            // Remove Item
-            if (e.target.classList.contains('remove-item-btn')) {
-                const btn = e.target;
-                const itemRow = btn.closest('.cart-item');
-                const itemId = btn.getAttribute('data-item-id');
+            const itemId =
+                button.dataset.itemId;
 
-                // Fade out animation
-                itemRow.style.opacity = '0';
-                setTimeout(() => {
-                    itemRow.remove();
-                    updateCartTotals();
+            updateQuantity(
+                itemId,
+                'decrease'
+            );
 
-                    // Check if empty
-                    const remainingItems = document.querySelectorAll('.cart-item');
-                    if(remainingItems.length === 0) {
-                        location.reload(); // Reload to show empty state from backend
-                    }
-                }, 300);
-            }
         });
 
-    }
+    });
 
-    function updateCartTotals() {
-        const items = document.querySelectorAll('.cart-item');
-        let newTotal = 0;
+    plusBtns.forEach(button => {
 
-        items.forEach(item => {
-            // Get base price from the mobile price element (assuming it's formatted as ₹X,XXX)
-            // A more robust way is to store price in a data attribute
-            const priceText = item.querySelector('.item-price-mobile').textContent.replace(/[^\d]/g, '');
-            const basePrice = parseInt(priceText, 10);
-            const qty = parseInt(item.querySelector('.qty-input').value, 10);
-            
-            const itemTotal = basePrice * qty;
-            newTotal += itemTotal;
+        button.addEventListener('click', () => {
 
-            // Update item total display
-            const itemTotalDisplay = item.querySelector('.item-total-price');
-            if(itemTotalDisplay) {
-                itemTotalDisplay.textContent = itemTotal.toLocaleString();
-            }
+            const itemId =
+                button.dataset.itemId;
+
+            updateQuantity(
+                itemId,
+                'increase'
+            );
+
         });
 
-        // Update summary displays
-        const subtotalEl = document.getElementById('cartSubtotal');
-        const totalEl = document.getElementById('cartTotal');
+    });
+    // =====================================================
+// REMOVE BUTTONS
+// =====================================================
 
-        if(subtotalEl) subtotalEl.textContent = '₹' + newTotal.toLocaleString();
-        if(totalEl) totalEl.textContent = '₹' + newTotal.toLocaleString();
-    }
+const removeBtns =
+    document.querySelectorAll(
+        '.remove-item-btn'
+    );
+
+removeBtns.forEach(button => {
+
+    button.addEventListener('click', () => {
+
+        const itemId =
+            button.dataset.itemId;
+
+        removeCartItem(itemId);
+
+    });
 
 });
+
+});
+
+// =====================================================
+// UPDATE QUANTITY
+// =====================================================
+
+async function updateQuantity(
+    itemId,
+    action
+) {
+
+    try {
+
+        const response = await fetch(
+
+            '/update-cart-quantity',
+
+            {
+
+                method: 'PATCH',
+
+                headers: {
+
+                    'Content-Type':
+                        'application/json'
+
+                },
+
+                body: JSON.stringify({
+
+                    itemId,
+                    action
+
+                })
+
+            }
+
+        );
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+
+            Swal.fire({
+
+                icon: 'warning',
+
+                title: 'Oops',
+
+                text: data.message,
+
+                confirmButtonColor: '#111'
+
+            });
+
+            return;
+
+        }
+
+        // =================================================
+        // ELEMENTS
+        // =================================================
+
+        const minusBtn =
+            document.querySelector(
+                `.qty-btn.minus[data-item-id="${itemId}"]`
+            );
+
+        const cartItem =
+            minusBtn.closest('.cart-item');
+
+        const qtyInput =
+            cartItem.querySelector('.qty-input');
+
+        const totalPrice =
+            cartItem.querySelector(
+                '.item-total-price'
+            );
+
+        // =================================================
+        // UPDATE UI
+        // =================================================
+
+        qtyInput.value =
+            data.quantity;
+
+        totalPrice.innerText =
+            data.itemTotal.toLocaleString();
+
+        document.getElementById(
+            'cartSubtotal'
+        ).innerText =
+            `₹${data.cartTotal.toLocaleString()}`;
+
+        document.getElementById(
+            'cartTotal'
+        ).innerText =
+            `₹${data.cartTotal.toLocaleString()}`;
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+        Swal.fire({
+
+            icon: 'error',
+
+            title: 'Error',
+
+            text: 'Something went wrong',
+
+            confirmButtonColor: '#111'
+
+        });
+
+    }
+
+}
+// =====================================================
+// REMOVE CART ITEM
+// =====================================================
+
+async function removeCartItem(itemId) {
+
+    try {
+
+        const response = await fetch(
+
+            '/remove-cart-item',
+
+            {
+
+                method: 'DELETE',
+
+                headers: {
+
+                    'Content-Type':
+                        'application/json'
+
+                },
+
+                body: JSON.stringify({
+
+                    itemId
+
+                })
+
+            }
+
+        );
+
+        const data =
+            await response.json();
+
+        // =============================================
+        // FAILED
+        // =============================================
+
+        if (!data.success) {
+
+            Swal.fire({
+
+                icon: 'error',
+
+                title: 'Oops',
+
+                text: data.message,
+
+                confirmButtonColor: '#111'
+
+            });
+
+            return;
+
+        }
+
+        // =============================================
+        // REMOVE UI
+        // =============================================
+
+        const removeBtn =
+            document.querySelector(
+                `.remove-item-btn[data-item-id="${itemId}"]`
+            );
+
+        const cartItem =
+            removeBtn.closest('.cart-item');
+
+        cartItem.style.opacity = '0';
+
+     setTimeout(() => {
+
+    cartItem.remove();
+
+    // =========================================
+    // RECALCULATE TOTAL
+    // =========================================
+
+    let newTotal = 0;
+
+    document
+        .querySelectorAll('.cart-item')
+        .forEach(item => {
+
+            const itemTotal =
+                Number(
+
+                    item.querySelector(
+                        '.item-total-price'
+                    )
+                    .innerText
+                    .replace(/,/g, '')
+
+                );
+
+            newTotal += itemTotal;
+
+        });
+
+    // =========================================
+    // UPDATE TOTAL UI
+    // =========================================
+
+    document.getElementById(
+        'cartSubtotal'
+    ).innerText =
+        `₹${newTotal.toLocaleString()}`;
+
+    document.getElementById(
+        'cartTotal'
+    ).innerText =
+        `₹${newTotal.toLocaleString()}`;
+
+    // =========================================
+    // EMPTY CART
+    // =========================================
+
+    const remainingItems =
+        document.querySelectorAll(
+            '.cart-item'
+        );
+
+    if (remainingItems.length === 0) {
+
+        location.reload();
+
+    }
+
+}, 300);
+
+        // =============================================
+        // SUCCESS
+        // =============================================
+
+        Swal.fire({
+
+            icon: 'success',
+
+            title: 'Removed',
+
+            text: data.message,
+
+            timer: 1200,
+
+            showConfirmButton: false
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+        Swal.fire({
+
+            icon: 'error',
+
+            title: 'Error',
+
+            text: 'Something went wrong',
+
+            confirmButtonColor: '#111'
+
+        });
+
+    }
+
+}

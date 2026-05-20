@@ -1,37 +1,209 @@
 /* ============================================================
-   SNEACKS - WISHLIST STYLES
-   ============================================================ */
+   SNEACKS - WISHLIST PAGE
+============================================================ */
+
+/* ============================================================
+   PAGE
+============================================================ */
+
+.page-wrapper {
+
+    background: #f6f3ed;
+
+    min-height: 100vh;
+
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.wishlist-header {
+
+    text-align: center;
+
+    margin-bottom: 5rem;
+
+}
+
+.wishlist-header h1 {
+
+    font-size: 5rem;
+
+    font-weight: 400;
+
+    color: #111;
+
+    margin-bottom: 1rem;
+
+    letter-spacing: -2px;
+
+}
+
+.wishlist-header p {
+
+    color: #8a8478;
+
+    font-size: 1.05rem;
+
+    font-weight: 400;
+
+}
+
+/* ============================================================
+   GRID
+============================================================ */
 
 .wishlist-grid {
-    margin-top: var(--space-md);
+
+    margin-top: 2rem;
+
+    gap: 2rem;
+
 }
+
+/* ============================================================
+   PRODUCT CARD WRAPPER
+============================================================ */
 
 .wishlist-item-wrapper {
-    transition: opacity 0.3s ease, transform 0.3s ease;
+
+    position: relative;
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+
 }
 
-/* Custom styling for wishlist toggle button */
-.wishlist-toggle-btn {
+.wishlist-item-wrapper:hover {
+
+    transform: translateY(-6px);
+
+}
+
+/* ============================================================
+   REMOVE BUTTON
+============================================================ */
+
+.wishlist-remove-btn {
+
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 36px;
-    height: 36px;
+
+    top: 14px;
+
+    right: 14px;
+
+    width: 38px;
+
+    height: 38px;
+
     border-radius: 50%;
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
+
+    background: rgba(255,255,255,0.95);
+
+    border: 1px solid #e5dfd3;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     cursor: pointer;
-    z-index: 10;
-    transition: all var(--transition-fast);
+
+    z-index: 20;
+
+    transition: all 0.25s ease;
+
 }
 
-.wishlist-toggle-btn:hover {
-    transform: scale(1.1);
+.wishlist-remove-btn i {
+
+    font-size: 0.9rem;
+
 }
 
-.text-error {
-    color: var(--color-error);
+.wishlist-remove-btn:hover {
+
+    background: #111;
+
+    color: white;
+
+    border-color: #111;
+
+    transform: scale(1.08);
+
+}
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.empty-state {
+
+    padding: 7rem 0;
+
+}
+
+.empty-state i {
+
+    color: #d7d1c7;
+
+}
+
+.empty-state h2 {
+
+    color: #111;
+
+    margin-top: 1rem;
+
+}
+
+.empty-state p {
+
+    color: #8a8478;
+
+}
+
+/* ============================================================
+   BUTTON
+============================================================ */
+
+.empty-state .btn {
+
+    background: #111;
+
+    border: none;
+
+    color: white;
+
+    padding: 1rem 2.5rem;
+
+    letter-spacing: 2px;
+
+    font-size: 0.82rem;
+
+    transition: all 0.3s ease;
+
+}
+
+.empty-state .btn:hover {
+
+    background: #2a2a2a;
+
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 768px) {
+
+    .wishlist-header h1 {
+
+        font-size: 3rem;
+
+    }
+
 }

@@ -35,14 +35,20 @@
                 
                 <!-- LEFT: Image Gallery -->
                 <div class="product-gallery animate-fade-up">
-                    <div class="main-image-wrapper hover-zoom-wrapper" id="mainImageWrapper">
-                        <img 
+<div
+    class="main-image-wrapper zoom-container"
+    id="mainImageWrapper"
+>                        <img 
                             src="<%= product.productImage && product.productImage.length > 0 ? '/uploads/products/' + product.productImage[0] : '/images/placeholder-shoe.png' %>" 
                             alt="<%= product.product_name %>" 
-                            class="main-image"
+                            class="main-image zoom-image"
                             id="mainImage"
                         >
+                        <!-- Zoom Lens & Result Pane -->
+                        <div class="zoom-lens" id="zoomLens"></div>
                     </div>
+                    
+                    <div class="zoom-result" id="zoomResult"></div>
                     
                     <% if(product.productImage && product.productImage.length > 1) { %>
                     <div class="thumbnail-gallery">
@@ -59,6 +65,29 @@
                 <div class="product-info-column animate-fade-up delay-200">
                     <span class="uppercase-label text-muted mb-1 block"><%= product.brand %></span>
                     <h1 class="product-title"><%= product.product_name %></h1>
+                    <!-- PRODUCT RATING -->
+
+<div class="product-rating-row">
+
+    <div class="rating-stars">
+
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+
+    </div>
+
+    <span class="rating-value">
+        4.5
+    </span>
+
+    <span class="review-count">
+        (128 Reviews)
+    </span>
+
+</div>
                     <div class="product-price-large mb-3">₹<%= product.price.toLocaleString() %></div>
 
                     <% if(totalStock <= 0){ %>
@@ -110,21 +139,25 @@
                             </div>
                             
                             <button
-                                type="submit"
-                                class="btn btn-primary flex-1"
-                                id="addToCartBtn"
-                                <%= totalStock <= 0 ? 'disabled' : '' %>
-                            >
+                        type="submit"
+                        class="btn btn-primary flex-1"
+                        id="addToCartBtn"
+                        <%= totalStock <= 0 ? 'disabled' : '' %>
+                    >
 
-                                <%= totalStock <= 0
-                                    ? 'Out of Stock'
-                                    : 'Select a Size'
-                                %>
+                        <%= totalStock <= 0
+                            ? 'Out of Stock'
+                            : 'Select a Size'
+                        %>
 
-                            </button>
+                    </button>
                             
-                            <button type="button" class="btn-icon wishlist-btn" data-id="<%= product._id %>">
-                                <i class="far fa-heart"></i>
+<button
+    type="button"
+    class="btn-icon wishlist-btn"
+    id="wishlistBtn"
+    data-product-id="<%= product._id %>"
+>                                <i class="far fa-heart"></i>
                             </button>
                         </div>
                     </form>
@@ -158,11 +191,147 @@
             <% } %>
 
         </div>
+        <!-- ===================================================== -->
+<!-- REVIEWS SECTION -->
+<!-- ===================================================== -->
+
+<section class="reviews-section">
+
+    <div class="container">
+
+        <!-- REVIEWS HEADER -->
+
+        <div class="reviews-header">
+
+            <div>
+
+                <span class="reviews-label">
+                    CUSTOMER FEEDBACK
+                </span>
+
+                <h2 class="reviews-title">
+                    Reviews & Ratings
+                </h2>
+
+            </div>
+
+            <div class="reviews-summary">
+
+                <div class="summary-rating">
+                    4.5
+                </div>
+
+                <div class="summary-stars">
+
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+
+                </div>
+
+                <div class="summary-text">
+                    Based on 128 reviews
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- REVIEW LIST -->
+
+        <div class="review-list">
+
+            <!-- REVIEW CARD -->
+
+            <div class="review-card">
+
+                <div class="review-top">
+
+                    <div>
+
+                        <div class="review-user">
+                            Mohammed Adhil
+                        </div>
+
+                        <div class="review-stars">
+
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="review-date">
+                        2 days ago
+                    </div>
+
+                </div>
+
+                <p class="review-text">
+
+                    Extremely premium quality and very
+                    comfortable for everyday wear.
+                    The finishing and cushioning feel
+                    luxurious.
+
+                </p>
+
+            </div>
+
+            <!-- REVIEW CARD -->
+
+            <div class="review-card">
+
+                <div class="review-top">
+
+                    <div>
+
+                        <div class="review-user">
+                            Arjun Nair
+                        </div>
+
+                        <div class="review-stars">
+
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="review-date">
+                        1 week ago
+                    </div>
+
+                </div>
+
+                <p class="review-text">
+
+                    Minimal design and premium feel.
+                    Delivery was fast and packaging
+                    looked amazing.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
         <!-- RELATED PRODUCTS -->
         <% if(typeof relatedProducts !== 'undefined' && relatedProducts.length > 0) { %>
-        <section class="section bg-beige border-top">
-            <div class="container">
+<section class="section bg-beige border-top related-products-section">            <div class="container">
                 <h2 class="text-center mb-4 font-serif">You May Also Like</h2>
                 <div class="grid grid-4">
                     <% relatedProducts.slice(0, 4).forEach(relProduct => { %>
@@ -179,6 +348,7 @@
     <%- include('../partials/user/footer') %>
 
     <!-- JS -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/user/product-details.js"></script>
 
 </body>

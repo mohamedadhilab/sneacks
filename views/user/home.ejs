@@ -1,86 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>SNEACKS | Luxury Footwear</title>
-    
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
+    <!-- ICONS -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
     <!-- CSS -->
+
     <link rel="stylesheet" href="/styles/user/base.css">
+
     <link rel="stylesheet" href="/styles/user/layout.css">
+
     <link rel="stylesheet" href="/styles/user/components.css">
+
     <link rel="stylesheet" href="/styles/user/animations.css">
+
     <link rel="stylesheet" href="/styles/user/home.css">
+
     <link rel="stylesheet" href="/styles/user/responsive.css">
+
 </head>
+
 <body>
 
     <!-- NAVBAR -->
-    <%- include('../partials/user/navbar', { page: 'home' }) %>
+
+    <%- include(
+        '../partials/user/navbar',
+        {
+            page: 'home'
+        }
+    ) %>
 
     <main class="page-wrapper">
-        
+
+        <!-- ===================================================== -->
         <!-- HERO SECTION -->
+        <!-- ===================================================== -->
+
         <section class="hero-section">
-            <div class="hero-content animate-fade-up">
-                <h1 class="hero-title">Elevate Your<br>Everyday Step</h1>
-                <p class="hero-subtitle">Discover the new standard in luxury minimal footwear. Crafted for those who appreciate the essential.</p>
-                <a href="/shop" class="btn btn-primary mt-4">Explore Collection</a>
+
+            <div class="container hero-grid">
+
+                <!-- LEFT -->
+
+                <div class="hero-content animate-fade-up">
+
+                    <span class="hero-tag">
+                        PREMIUM FOOTWEAR
+                    </span>
+
+                    <h1 class="hero-title">
+
+                        Elevate Your
+                        Everyday Step
+
+                    </h1>
+
+                    <p class="hero-subtitle">
+
+                        Discover the new standard in
+                        luxury minimal footwear.
+                        Crafted for those who
+                        appreciate timeless design.
+
+                    </p>
+
+                    <a
+                        href="/shop"
+                        class="btn btn-primary hero-btn"
+                    >
+
+                        Explore Collection
+
+                    </a>
+
+                </div>
+
+                <!-- RIGHT -->
+
+                <div
+                    class="hero-image-wrapper animate-fade-in"
+                >
+
+                    <img
+
+                        src="/images/hero-sneaker.jpg"
+
+                        alt="Luxury Sneaker"
+
+                        class="hero-image"
+                    >
+
+                </div>
+
             </div>
-            <div class="hero-image-wrapper animate-fade-in delay-200">
-                <img src="/images/hero-sneaker.jpg" alt="Luxury Sneaker" class="hero-image">
-                <div class="hero-accent-block"></div>
-            </div>
+
         </section>
 
+        <!-- ===================================================== -->
         <!-- FEATURED PRODUCTS -->
-        <section class="section container">
-            <div class="flex justify-between items-center mb-4 animate-fade-up">
-                <h2 class="m-0">Featured Essentials</h2>
-                <a href="/shop" class="btn btn-secondary">View All</a>
-            </div>
-            
-            <div class="grid grid-4">
-                <% if(typeof products !== 'undefined' && products.length > 0) { %>
-                    <% products.slice(0, 4).forEach(product => { %>
-                        <%- include('../partials/user/product-card', { product: product }) %>
-                    <% }) %>
+        <!-- ===================================================== -->
+
+        <section class="section">
+
+            <div class="container">
+
+                <div
+                    class="section-header"
+                >
+
+                    <div>
+
+                        <span class="section-label">
+                            CURATED PICKS
+                        </span>
+
+                        <h2>
+                            Featured Essentials
+                        </h2>
+
+                    </div>
+
+                    <a
+                        href="/shop"
+                        class="btn btn-secondary"
+                    >
+
+                        View All
+
+                    </a>
+
+                </div>
+
+                <% if (
+                    products &&
+                    products.length > 0
+                ) { %>
+
+                    <div class="grid grid-4">
+
+                        <% products.slice(0, 4)
+                        .forEach(product => { %>
+
+                            <%- include(
+                                '../partials/user/product-card',
+                                {
+                                    product
+                                }
+                            ) %>
+
+                        <% }) %>
+
+                    </div>
+
                 <% } else { %>
-                    <p class="text-muted">No featured products available.</p>
+
+                    <div class="empty-home-state">
+
+                        <i class="fas fa-box-open"></i>
+
+                        <p>
+                            No featured products available.
+                        </p>
+
+                    </div>
+
                 <% } %>
+
             </div>
+
         </section>
 
-        <!-- TRENDING / EDITORIAL SECTION -->
+        <!-- ===================================================== -->
+        <!-- EDITORIAL SECTION -->
+        <!-- ===================================================== -->
+
         <section class="editorial-section">
-            <div class="container grid grid-2 items-center">
-                <div class="editorial-img-box animate-fade-up">
-                    <img src="/images/editorial-1.jpg" alt="Editorial Fashion" class="editorial-img">
+
+            <div class="container editorial-grid">
+
+                <!-- IMAGE -->
+
+                <div class="editorial-image-box">
+
+                    <img
+
+                        src="/images/editorial-1.jpg"
+
+                        alt="Editorial Fashion"
+
+                        class="editorial-image"
+                    >
+
                 </div>
-                <div class="editorial-content animate-fade-up delay-200">
-                    <span class="uppercase-label text-muted mb-2 block">The Autumn Edit</span>
-                    <h2 class="editorial-title">Timeless Design.<br>Uncompromising Quality.</h2>
-                    <p class="mb-4">Our latest collection bridges the gap between high-end fashion and everyday utility. Handcrafted with premium materials sourced from the world's finest tanneries.</p>
-                    <a href="/shop?category=new" class="btn btn-accent">Discover The Edit</a>
+
+                <!-- CONTENT -->
+
+                <div class="editorial-content">
+
+                    <span class="section-label">
+
+                        THE AUTUMN EDIT
+
+                    </span>
+
+                    <h2 class="editorial-title">
+
+                        Timeless Design.
+                        Uncompromising Quality.
+
+                    </h2>
+
+                    <p>
+
+                        Our latest collection bridges
+                        the gap between premium fashion
+                        and everyday comfort.
+                        Designed with exceptional
+                        craftsmanship and minimalist
+                        aesthetics.
+
+                    </p>
+
+                    <a
+                        href="/shop"
+                        class="btn btn-accent"
+                    >
+
+                        Discover The Edit
+
+                    </a>
+
                 </div>
+
             </div>
+
         </section>
 
-        <!-- BRAND PHILOSOPHY -->
-        <section class="section-lg text-center bg-beige">
-            <div class="container-sm animate-fade-up">
-                <h2>The SNEACKS Philosophy</h2>
-                <p class="text-lg">We believe that true luxury lies in simplicity. Our approach strips away the unnecessary, leaving only perfect forms, exceptional comfort, and enduring style. Welcome to the new era of footwear.</p>
+        <!-- ===================================================== -->
+        <!-- PHILOSOPHY -->
+        <!-- ===================================================== -->
+
+        <section class="philosophy-section">
+
+            <div class="container-sm">
+
+                <span class="section-label">
+
+                    OUR PHILOSOPHY
+
+                </span>
+
+                <h2>
+
+                    The SNEACKS Philosophy
+
+                </h2>
+
+                <p>
+
+                    We believe luxury lies in
+                    simplicity. Every pair is crafted
+                    to deliver timeless style,
+                    unmatched comfort, and a premium
+                    experience for modern living.
+
+                </p>
+
             </div>
+
         </section>
 
     </main>
 
     <!-- FOOTER -->
+
     <%- include('../partials/user/footer') %>
 
 </body>
+
 </html>

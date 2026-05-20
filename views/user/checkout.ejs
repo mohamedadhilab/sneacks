@@ -1,226 +1,724 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Checkout | SNEACKS</title>
-    
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
+    <!-- ICONS -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
     <!-- CSS -->
-    <link rel="stylesheet" href="/styles/user/base.css">
-    <link rel="stylesheet" href="/styles/user/layout.css">
-    <link rel="stylesheet" href="/styles/user/components.css">
-    <link rel="stylesheet" href="/styles/user/animations.css">
-    <link rel="stylesheet" href="/styles/user/checkout.css">
-    <link rel="stylesheet" href="/styles/user/responsive.css">
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/base.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/components.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/animations.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/checkout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/responsive.css"
+    >
+
 </head>
+
 <body>
 
-    <!-- Minimal Navbar for Checkout -->
+    <!-- NAVBAR -->
+
     <nav class="navbar checkout-navbar">
-        <div class="container navbar-container" style="justify-content: center;">
-            <a href="/" class="nav-logo">SNEACKS</a>
+
+        <div
+            class="container navbar-container"
+            style="justify-content: center;"
+        >
+
+            <a href="/" class="nav-logo">
+                SNEACKS
+            </a>
+
         </div>
+
     </nav>
 
     <main class="page-wrapper">
-        
-        <div class="container section">
-            
-            <div class="checkout-layout animate-fade-up">
-                
-                <!-- LEFT: Checkout Forms -->
-                <div class="checkout-form-section">
-                    <h2 class="mb-4">Secure Checkout</h2>
 
-                    <!-- 1. Shipping Address -->
-                    <div class="checkout-step active" id="stepAddress">
+        <div class="container section">
+
+            <div
+                class="checkout-layout animate-fade-up"
+            >
+
+                <!-- ===================================== -->
+                <!-- LEFT SIDE -->
+                <!-- ===================================== -->
+
+                <div class="checkout-form-section">
+
+                    <h2 class="mb-4">
+
+                        Secure Checkout
+
+                    </h2>
+
+                    <!-- ================================= -->
+                    <!-- ADDRESS STEP -->
+                    <!-- ================================= -->
+
+                    <div
+                        class="checkout-step active"
+                        id="stepAddress"
+                    >
+
                         <div class="step-header">
-                            <span class="step-number">1</span>
-                            <h3 class="step-title m-0">Shipping Information</h3>
+
+                            <span class="step-number">
+
+                                1
+
+                            </span>
+
+                            <h3 class="step-title m-0">
+
+                                Shipping Information
+
+                            </h3>
+
                         </div>
+
                         <div class="step-content">
-                            
-                            <% if(typeof addresses !== 'undefined' && addresses.length > 0) { %>
-                                <div class="saved-addresses grid grid-2 mb-4">
-                                    <% addresses.forEach((addr, index) => { %>
-                                        <label class="address-card <%= index === 0 ? 'selected' : '' %>">
-                                            <input type="radio" name="selectedAddress" value="<%= addr._id %>" <%= index === 0 ? 'checked' : '' %>>
-                                            <div class="address-card-inner">
-                                                <strong><%= addr.name %></strong>
-                                                <p><%= addr.street %>, <%= addr.city %></p>
-                                                <p><%= addr.state %>, <%= addr.pincode %></p>
-                                                <p><%= addr.phone %></p>
+
+                            <!-- SAVED ADDRESSES -->
+
+                            <% if(
+                                addresses &&
+                                addresses.length > 0
+                            ){ %>
+
+                                <div
+                                    class="saved-addresses grid grid-2 mb-4"
+                                >
+
+                                    <% addresses.forEach((addr,index)=>{ %>
+
+                                        <label
+                                            class="address-card <%= index === 0 ? 'selected' : '' %>"
+                                        >
+
+                                            <input
+                                                type="radio"
+                                                name="selectedAddress"
+                                                value="<%= addr._id %>"
+                                                <%= index === 0 ? 'checked' : '' %>
+                                            >
+
+                                            <div
+                                                class="address-card-inner"
+                                            >
+
+                                                <strong>
+
+                                                    <%= addr.name %>
+
+                                                </strong>
+
+                                                <p>
+
+                                                    <%= addr.city %>,
+
+                                                    <%= addr.state %>
+
+                                                </p>
+
+                                                <p>
+
+                                                    <%= addr.pincode %>
+
+                                                </p>
+
+                                                <p>
+
+                                                    <%= addr.phone %>
+
+                                                </p>
+
                                             </div>
+
                                         </label>
+
                                     <% }) %>
+
                                 </div>
-                                <button class="btn btn-secondary mb-4" id="addNewAddressBtn">+ Add New Address</button>
+
+                                <button
+                                    class="btn btn-secondary mb-4"
+                                    id="addNewAddressBtn"
+                                >
+
+                                    + Add New Address
+
+                                </button>
+
                             <% } %>
 
-                            <!-- New Address Form (Hidden by default if addresses exist) -->
-                            <form id="addressForm" class="checkout-form <%= typeof addresses !== 'undefined' && addresses.length > 0 ? 'hidden' : '' %>">
+                            <!-- NEW ADDRESS FORM -->
+
+                            <form
+                                id="addressForm"
+                                class="checkout-form <%= addresses && addresses.length > 0 ? 'hidden' : '' %>"
+                            >
+
                                 <div class="grid grid-2">
+
                                     <div class="form-group">
-                                        <label class="form-label">First Name</label>
-                                        <input type="text" class="form-input" required>
+
+                                        <label class="form-label">
+
+                                            First Name
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="form-input"
+                                        >
+
                                     </div>
+
                                     <div class="form-group">
-                                        <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-input" required>
+
+                                        <label class="form-label">
+
+                                            Last Name
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="form-input"
+                                        >
+
                                     </div>
+
                                 </div>
+
                                 <div class="form-group">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="email" class="form-input" required>
+
+                                    <label class="form-label">
+
+                                        Email Address
+
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        class="form-input"
+                                    >
+
                                 </div>
+
                                 <div class="form-group">
-                                    <label class="form-label">Street Address</label>
-                                    <input type="text" class="form-input" required>
+
+                                    <label class="form-label">
+
+                                        Street Address
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-input"
+                                    >
+
                                 </div>
+
                                 <div class="grid grid-2">
+
                                     <div class="form-group">
-                                        <label class="form-label">City</label>
-                                        <input type="text" class="form-input" required>
+
+                                        <label class="form-label">
+
+                                            City
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="form-input"
+                                        >
+
                                     </div>
+
                                     <div class="form-group">
-                                        <label class="form-label">State</label>
-                                        <select class="form-input custom-select" required>
-                                            <option value="">Select State</option>
-                                            <option value="KL">Kerala</option>
-                                            <option value="TN">Tamil Nadu</option>
-                                            <option value="MH">Maharashtra</option>
-                                        </select>
+
+                                        <label class="form-label">
+
+                                            State
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="form-input"
+                                        >
+
                                     </div>
+
                                 </div>
+
                                 <div class="grid grid-2">
+
                                     <div class="form-group">
-                                        <label class="form-label">Pincode</label>
-                                        <input type="text" class="form-input" required>
+
+                                        <label class="form-label">
+
+                                            Pincode
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="form-input"
+                                        >
+
                                     </div>
+
                                     <div class="form-group">
-                                        <label class="form-label">Phone Number</label>
-                                        <input type="tel" class="form-input" required>
+
+                                        <label class="form-label">
+
+                                            Phone Number
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="form-input"
+                                        >
+
                                     </div>
+
                                 </div>
+
                             </form>
-                            
-                            <button class="btn btn-primary mt-2" id="continueToPaymentBtn">Continue to Payment</button>
+
+                            <button
+                                class="btn btn-primary mt-2"
+                                id="continueToPaymentBtn"
+                            >
+
+                                Continue to Payment
+
+                            </button>
+
                         </div>
+
                     </div>
 
-                    <!-- 2. Payment Methods -->
-                    <div class="checkout-step" id="stepPayment">
+                    <!-- ================================= -->
+                    <!-- PAYMENT STEP -->
+                    <!-- ================================= -->
+
+                    <div
+                        class="checkout-step"
+                        id="stepPayment"
+                    >
+
                         <div class="step-header disabled">
-                            <span class="step-number">2</span>
-                            <h3 class="step-title m-0">Payment Method</h3>
+
+                            <span class="step-number">
+
+                                2
+
+                            </span>
+
+                            <h3 class="step-title m-0">
+
+                                Payment Method
+
+                            </h3>
+
                         </div>
+
                         <div class="step-content hidden">
-                            
+
                             <div class="payment-methods">
-                                
-                                <label class="payment-card selected">
-                                    <input type="radio" name="paymentMethod" value="razorpay" checked>
-                                    <div class="payment-card-inner flex items-center gap-sm">
-                                        <i class="fas fa-credit-card"></i>
+
+                                <!-- RAZORPAY -->
+
+                                <label
+                                    class="payment-card selected"
+                                >
+
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="razorpay"
+                                        checked
+                                    >
+
+                                    <div
+                                        class="payment-card-inner flex items-center gap-sm"
+                                    >
+
+                                        <i
+                                            class="fas fa-credit-card"
+                                        ></i>
+
                                         <div>
-                                            <strong>Credit/Debit Card, UPI, NetBanking</strong>
-                                            <p class="text-sm text-muted m-0">Secure payment via Razorpay</p>
+
+                                            <strong>
+
+                                                Credit/Debit Card, UPI
+
+                                            </strong>
+
+                                            <p
+                                                class="text-sm text-muted m-0"
+                                            >
+
+                                                Secure payment via Razorpay
+
+                                            </p>
+
                                         </div>
+
                                     </div>
+
                                 </label>
 
-                                <label class="payment-card">
-                                    <input type="radio" name="paymentMethod" value="wallet">
-                                    <div class="payment-card-inner flex items-center gap-sm">
-                                        <i class="fas fa-wallet"></i>
+                                <!-- WALLET -->
+
+                                <label
+                                    class="payment-card"
+                                >
+
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="wallet"
+                                    >
+
+                                    <div
+                                        class="payment-card-inner flex items-center gap-sm"
+                                    >
+
+                                        <i
+                                            class="fas fa-wallet"
+                                        ></i>
+
                                         <div>
-                                            <strong>SNEACKS Wallet</strong>
-                                            <p class="text-sm text-muted m-0">Balance: ₹<%= typeof walletBalance !== 'undefined' ? walletBalance.toLocaleString() : 0 %></p>
+
+                                            <strong>
+
+                                                Wallet
+
+                                            </strong>
+
+                                            <p
+                                                class="text-sm text-muted m-0"
+                                            >
+
+                                                Balance:
+
+                                                ₹<%= typeof walletBalance !== 'undefined' ? walletBalance.toLocaleString() : 0 %>
+
+                                            </p>
+
                                         </div>
+
                                     </div>
+
                                 </label>
 
-                                <label class="payment-card">
-                                    <input type="radio" name="paymentMethod" value="cod">
-                                    <div class="payment-card-inner flex items-center gap-sm">
-                                        <i class="fas fa-money-bill-wave"></i>
+                                <!-- COD -->
+
+                                <label
+                                    class="payment-card"
+                                >
+
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="cod"
+                                    >
+
+                                    <div
+                                        class="payment-card-inner flex items-center gap-sm"
+                                    >
+
+                                        <i
+                                            class="fas fa-money-bill-wave"
+                                        ></i>
+
                                         <div>
-                                            <strong>Cash on Delivery (COD)</strong>
-                                            <p class="text-sm text-muted m-0">Pay when your order arrives</p>
+
+                                            <strong>
+
+                                                Cash on Delivery
+
+                                            </strong>
+
+                                            <p
+                                                class="text-sm text-muted m-0"
+                                            >
+
+                                                Pay when delivered
+
+                                            </p>
+
                                         </div>
+
                                     </div>
+
                                 </label>
 
                             </div>
-                            
+
                             <div class="flex gap-sm mt-4">
-                                <button class="btn btn-secondary" id="backToAddressBtn">Back</button>
-                                <button class="btn btn-primary flex-1" id="placeOrderBtn">Place Order</button>
+
+                                <button
+                                    class="btn btn-secondary"
+                                    id="backToAddressBtn"
+                                >
+
+                                    Back
+
+                                </button>
+
+                                <button
+                                    class="btn btn-primary flex-1"
+                                    id="placeOrderBtn"
+                                >
+
+                                    Place Order
+
+                                </button>
+
                             </div>
 
                         </div>
+
                     </div>
 
                 </div>
 
-                <!-- RIGHT: Order Summary -->
+                <!-- ===================================== -->
+                <!-- RIGHT SIDE -->
+                <!-- ===================================== -->
+
                 <div class="checkout-summary-section">
+
                     <div class="summary-box">
-                        <h3 class="mb-3">Order Summary</h3>
-                        
+
+                        <h3 class="mb-3">
+
+                            Order Summary
+
+                        </h3>
+
+                        <!-- CART ITEMS -->
+
                         <div class="summary-items mb-4">
-                            <% if(typeof cart !== 'undefined' && cart.items) { %>
+
+                            <% if(
+                                cart &&
+                                cart.items
+                            ){ %>
+
                                 <% cart.items.forEach(item => { %>
-                                    <div class="summary-item">
-                                        <div class="s-item-img">
-                                            <img src="<%= item.product.productImage && item.product.productImage.length > 0 ? '/uploads/products/' + item.product.productImage[0] : '/images/placeholder-shoe.png' %>">
+
+                                    <% if(item.productId){ %>
+
+                                        <div
+                                            class="summary-item"
+                                        >
+
+                                            <div
+                                                class="s-item-img"
+                                            >
+
+                                                <img
+                                                    src="<%= item.productId.productImage && item.productId.productImage.length > 0 ? '/uploads/products/' + item.productId.productImage[0] : '/images/placeholder-shoe.png' %>"
+                                                >
+
+                                            </div>
+
+                                            <div
+                                                class="s-item-info"
+                                            >
+
+                                                <span
+                                                    class="s-item-name"
+                                                >
+
+                                                    <%= item.productId.product_name %>
+
+                                                </span>
+
+                                                <span
+                                                    class="text-sm text-muted block"
+                                                >
+
+                                                    Size:
+                                                    <%= item.size %>
+
+                                                    |
+
+                                                    Qty:
+                                                    <%= item.quantity %>
+
+                                                </span>
+
+                                            </div>
+
+                                            <div
+                                                class="s-item-price"
+                                            >
+
+                                                ₹<%= (
+                                                    item.productId.price *
+                                                    item.quantity
+                                                ).toLocaleString() %>
+
+                                            </div>
+
                                         </div>
-                                        <div class="s-item-info">
-                                            <span class="s-item-name"><%= item.product.product_name %></span>
-                                            <span class="text-sm text-muted block">Size: <%= item.size %> | Qty: <%= item.quantity %></span>
-                                        </div>
-                                        <div class="s-item-price">
-                                            ₹<%= (item.product.price * item.quantity).toLocaleString() %>
-                                        </div>
-                                    </div>
+
+                                    <% } %>
+
                                 <% }) %>
+
                             <% } %>
+
                         </div>
 
-                        <!-- Coupon Section -->
-                        <div class="coupon-section mb-4">
-                            <label class="form-label">Discount Code</label>
+                        <!-- COUPON -->
+
+                        <div
+                            class="coupon-section mb-4"
+                        >
+
+                            <label class="form-label">
+
+                                Discount Code
+
+                            </label>
+
                             <div class="flex gap-sm">
-                                <input type="text" id="couponInput" class="form-input" placeholder="Enter code">
-                                <button type="button" class="btn btn-secondary" id="applyCouponBtn">Apply</button>
+
+                                <input
+                                    type="text"
+                                    id="couponInput"
+                                    class="form-input"
+                                    placeholder="Enter code"
+                                >
+
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    id="applyCouponBtn"
+                                >
+
+                                    Apply
+
+                                </button>
+
                             </div>
-                            <div id="couponMsg" class="mt-1 text-sm"></div>
+
+                        </div>
+
+                        <!-- TOTALS -->
+
+                        <div class="summary-row">
+
+                            <span>
+
+                                Subtotal
+
+                            </span>
+
+                            <span>
+
+                                ₹<%= cartTotal.toLocaleString() %>
+
+                            </span>
+
                         </div>
 
                         <div class="summary-row">
-                            <span>Subtotal</span>
-                            <span>₹<%= typeof cartTotal !== 'undefined' ? cartTotal.toLocaleString() : 0 %></span>
+
+                            <span>
+
+                                Shipping
+
+                            </span>
+
+                            <span>
+
+                                Free
+
+                            </span>
+
                         </div>
-                        <div class="summary-row">
-                            <span>Shipping</span>
-                            <span>Free</span>
+
+                        <div
+                            class="summary-divider"
+                        ></div>
+
+                        <div
+                            class="summary-row total-row"
+                        >
+
+                            <span>
+
+                                Total
+
+                            </span>
+
+                            <span
+                                id="finalTotal"
+                            >
+
+                                ₹<%= cartTotal.toLocaleString() %>
+
+                            </span>
+
                         </div>
-                        <div class="summary-row" id="discountRow" style="display: none;">
-                            <span>Discount</span>
-                            <span class="text-accent">-₹<span id="discountAmount">0</span></span>
-                        </div>
-                        
-                        <div class="summary-divider"></div>
-                        
-                        <div class="summary-row total-row">
-                            <span>Total</span>
-                            <span id="finalTotal">₹<%= typeof cartTotal !== 'undefined' ? cartTotal.toLocaleString() : 0 %></span>
-                        </div>
-                        
+
                     </div>
+
                 </div>
 
             </div>
@@ -230,8 +728,9 @@
     </main>
 
     <!-- JS -->
-    <!-- Razorpay SDK would go here -->
+
     <script src="/js/user/checkout.js"></script>
 
 </body>
+
 </html>
