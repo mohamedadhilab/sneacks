@@ -450,34 +450,76 @@
 
                         </div>
 
-                        <!-- PAGINATION -->
 
-                        <% if(totalPages > 1){ %>
+                            <!-- PAGINATION -->
 
-                            <div class="pagination-wrapper">
+                    <% if(totalPages > 1){ %>
 
-                                <% for(let i = 1; i <= totalPages; i++){ %>
+                    <div class="premium-pagination">
 
-                                    <a
+                        <!-- PREVIOUS -->
 
-                                        href="/shop?page=<%= i %>&search=<%= search || '' %>&sort=<%= sort || '' %>&minPrice=<%= minPrice || '' %>&maxPrice=<%= maxPrice || '' %>"
+                        <% if(currentPage > 1){ %>
 
-                                        class="pagination-btn
-                                        <%= currentPage == i
-                                            ? 'active-page'
-                                            : ''
-                                        %>"
+                            <a
 
-                                    >
+                                href="/shop?page=<%= currentPage - 1 %>&<%= queryString %>"
 
-                                        <%= i %>
+                                class="pagination-arrow"
 
-                                    </a>
+                            >
 
-                                <% } %>
+                                <i class="fas fa-chevron-left"></i>
 
-                            </div>
+                            </a>
 
+                        <% } %>
+
+                        <!-- PAGE NUMBERS -->
+
+                        <div class="pagination-numbers">
+
+                            <% for(let i = 1; i <= totalPages; i++){ %>
+
+                                <a
+
+                                    href="/shop?page=<%= i %>&<%= queryString %>"
+
+                                    class="pagination-number
+                                    <%= currentPage === i
+                                        ? 'active-page'
+                                        : ''
+                                    %>"
+
+                                >
+
+                                    <%= i %>
+
+                                </a>
+
+                            <% } %>
+
+                        </div>
+
+                        <!-- NEXT -->
+
+                        <% if(currentPage < totalPages){ %>
+
+                            <a
+
+                                href="/shop?page=<%= currentPage + 1 %>&<%= queryString %>"
+
+                                class="pagination-arrow"
+
+                            >
+
+                                <i class="fas fa-chevron-right"></i>
+
+                            </a>
+
+                        <% } %>
+
+                    </div>
                         <% } %>
 
                     <% } else { %>

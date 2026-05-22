@@ -144,6 +144,14 @@ router.get(
 );
 
 router.get(
+
+  '/restore-category/:id',
+  isAdminLoggedIn,
+  categoryController.restoreCategory
+
+);
+
+router.get(
   '/products',
   isAdminLoggedIn,
   productController.getProducts

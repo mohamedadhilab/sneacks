@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // =========================================
-    // REMOVE BUTTONS
-    // =========================================
+
 
     const removeButtons =
         document.querySelectorAll(
@@ -20,9 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const productId =
                         button.dataset.productId;
 
-                    // =========================
-                    // API CALL
-                    // =========================
+                    
 
                     const response = await fetch(
 
@@ -52,9 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data =
                         await response.json();
 
-                    // =========================
-                    // FAILED
-                    // =========================
+              
 
                     if (!data.success) {
 
@@ -75,9 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     }
 
-                    // =========================
-                    // REMOVE CARD
-                    // =========================
+                    
 
                     const card =
                         button.closest(
@@ -90,9 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         card.remove();
 
-                        // =====================
-                        // EMPTY CHECK
-                        // =====================
+                       
 
                         const remainingItems =
                             document.querySelectorAll(
@@ -109,9 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     }, 300);
 
-                    // =========================
-                    // SUCCESS
-                    // =========================
+                   
 
                     Swal.fire({
 

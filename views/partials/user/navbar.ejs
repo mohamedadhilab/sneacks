@@ -30,10 +30,21 @@
             <a href="/profile" class="nav-icon">
                 <i class="far fa-user"></i>
             </a>
-            <a href="/cart" class="nav-icon">
-                <i class="fas fa-shopping-bag"></i>
-                <span class="cart-badge">0</span>
-            </a>
+            <a href="/cart" class="nav-icon cart-wrapper">
+
+            <i class="fas fa-shopping-bag"></i>
+
+            <% if(cartCount > 0){ %>
+
+                <span class="cart-badge">
+
+                    <%= cartCount %>
+
+                </span>
+
+            <% } %>
+
+        </a>
         </div>
     </div>
 </nav>

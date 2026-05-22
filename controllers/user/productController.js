@@ -6,9 +6,7 @@ const loadProductDetails = async (req, res) => {
 
         const productId = req.params.id;
 
-        // =================================================
-        // FETCH PRODUCT
-        // =================================================
+
 
         const product = await Product.findOne({
 
@@ -34,9 +32,7 @@ const loadProductDetails = async (req, res) => {
 
         });
 
-        // =================================================
-        // PRODUCT NOT FOUND
-        // =================================================
+
 
         if (!product || !product.category) {
 
@@ -44,9 +40,7 @@ const loadProductDetails = async (req, res) => {
 
         }
 
-        // =================================================
-// TOTAL STOCK
-// =================================================
+      
 
 const totalStock = product.variants.reduce(
 
@@ -56,9 +50,6 @@ const totalStock = product.variants.reduce(
 
 );
 
-        // =================================================
-        // RELATED PRODUCTS
-        // =================================================
 
         const relatedProducts = await Product.find({
 
@@ -74,9 +65,7 @@ const totalStock = product.variants.reduce(
 
         .limit(4);
 
-        // =================================================
-        // RENDER PAGE
-        // =================================================
+      
 
         res.render('user/product-details', {
 

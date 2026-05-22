@@ -146,13 +146,34 @@ exports.addProduct = async (req, res) => {
 
         } = req.body;
 
-        // =====================================================
-        // JOI VALIDATION
-        // =====================================================
+
 
         const { error } =
             addProductSchema.validate(req.body);
 
+
+const categoryExists =
+    await Category.findOne({
+
+        _id: category,
+
+        is_deleted: false
+
+    });
+
+if (!categoryExists) {
+
+    req.session.message = {
+
+        type: 'error',
+
+        text: 'Selected category is invalid'
+
+    };
+
+    return res.redirect('/admin/products');
+
+}
         if (error) {
 
             req.session.message = {
@@ -167,9 +188,7 @@ exports.addProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // IMAGE VALIDATION
-        // =====================================================
+
 
         if (!req.files || req.files.length < 3) {
 
@@ -185,9 +204,7 @@ exports.addProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // DUPLICATE SIZE VALIDATION
-        // =====================================================
+      
 
         const sizeArray =
             Array.isArray(sizes)
@@ -216,9 +233,7 @@ exports.addProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // SKU VALIDATION
-        // =====================================================
+        
 
         if (sku && sku.trim() !== '') {
 
@@ -245,9 +260,6 @@ exports.addProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // VARIANTS
-        // =====================================================
 
         const variants = [];
 
@@ -285,9 +297,7 @@ exports.addProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // MINIMUM VARIANT
-        // =====================================================
+
 
         if (variants.length === 0) {
 
@@ -303,9 +313,7 @@ exports.addProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // IMAGE PROCESSING
-        // =====================================================
+    
 
         const images = [];
 
@@ -337,7 +345,6 @@ exports.addProduct = async (req, res) => {
 
                 );
 
-            // DELETE TEMP FILE
 
             fs.unlinkSync(file.path);
 
@@ -345,9 +352,7 @@ exports.addProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // CREATE PRODUCT
-        // =====================================================
+     
 
         const product = new Product({
 
@@ -379,15 +384,11 @@ exports.addProduct = async (req, res) => {
 
         });
 
-        // =====================================================
-        // SAVE
-        // =====================================================
+     
 
         await product.save();
 
-        // =====================================================
-        // SUCCESS
-        // =====================================================
+    
 
         req.session.message = {
 
@@ -505,12 +506,34 @@ exports.editProduct = async (req, res) => {
 
         } = req.body;
 
-        // =====================================================
-        // JOI VALIDATION
-        // =====================================================
+
 
         const { error } =
             editProductSchema.validate(req.body);
+    
+
+const categoryExists =
+    await Category.findOne({
+
+        _id: category,
+
+        is_deleted: false
+
+    });
+
+if (!categoryExists) {
+
+    req.session.message = {
+
+        type: 'error',
+
+        text: 'Selected category is invalid'
+
+    };
+
+    return res.redirect('/admin/products');
+
+}
 
         if (error) {
 
@@ -526,9 +549,7 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // SIZE ARRAY
-        // =====================================================
+
 
         const sizeArray =
             Array.isArray(sizes)
@@ -540,9 +561,7 @@ exports.editProduct = async (req, res) => {
                 ? stocks
                 : [stocks];
 
-        // =====================================================
-        // DUPLICATE SIZE VALIDATION
-        // =====================================================
+       
 
         const uniqueSizes =
             new Set(sizeArray);
@@ -561,9 +580,6 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // SKU VALIDATION
-        // =====================================================
 
         if (sku && sku.trim() !== '') {
 
@@ -592,9 +608,7 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // VARIANTS
-        // =====================================================
+     
 
         const variants = [];
 
@@ -631,9 +645,6 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // EXISTING IMAGES
-        // =====================================================
 
         let existingImages =
             JSON.parse(
@@ -643,9 +654,7 @@ exports.editProduct = async (req, res) => {
         const oldProduct =
             await Product.findById(id);
 
-        // =====================================================
-        // NEW IMAGES
-        // =====================================================
+       
 
         const newImages = [];
 
@@ -687,16 +696,12 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // FINAL IMAGE ARRAY
-        // =====================================================
+ 
 
         const finalImages =
             [...existingImages];
 
-        // =====================================================
-        // DELETE REMOVED IMAGES
-        // =====================================================
+ 
 
         for (
 
@@ -738,9 +743,7 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // REPLACED IMAGES
-        // =====================================================
+  
 
         let replaced = [];
 
@@ -753,9 +756,7 @@ exports.editProduct = async (req, res) => {
 
         let newIndex = 0;
 
-        // =====================================================
-        // REPLACE IMAGES
-        // =====================================================
+   
 
         for (const index of replaced) {
 
@@ -792,9 +793,7 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // ADD NEW IMAGES
-        // =====================================================
+
 
         for (let i = 0; i < 5; i++) {
 
@@ -815,9 +814,7 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // IMAGE VALIDATION
-        // =====================================================
+      
 
         const validImages =
             finalImages.filter(img => img);
@@ -836,9 +833,7 @@ exports.editProduct = async (req, res) => {
 
         }
 
-        // =====================================================
-        // UPDATE DATA
-        // =====================================================
+  
 
         const updateData = {
 
@@ -871,9 +866,7 @@ exports.editProduct = async (req, res) => {
 
         };
 
-        // =====================================================
-        // UPDATE PRODUCT
-        // =====================================================
+   
 
         await Product.findByIdAndUpdate(
 
@@ -885,9 +878,7 @@ exports.editProduct = async (req, res) => {
 
         );
 
-        // =====================================================
-        // SUCCESS
-        // =====================================================
+
 
         req.session.message = {
 

@@ -1,16 +1,12 @@
 const Product = require('../../models/productModel');
 
-// ======================================================
-// LOAD HOME PAGE
-// ======================================================
+
 
 const loadHome = async (req, res) => {
 
     try {
 
-        // =========================================
-        // GET PRODUCTS
-        // =========================================
+  
 
         const products = await Product.find({
 
@@ -38,9 +34,7 @@ const loadHome = async (req, res) => {
 
         .limit(8);
 
-        // =========================================
-        // REMOVE INVALID CATEGORY PRODUCTS
-        // =========================================
+      
 
         const validProducts = products.filter(product =>
 
@@ -48,9 +42,7 @@ const loadHome = async (req, res) => {
 
         );
 
-        // =========================================
-        // RENDER
-        // =========================================
+        
 
         res.render('user/home', {
 

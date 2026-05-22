@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // =====================================================
-    // ELEMENTS
-    // =====================================================
+
 
     const mainImage =
         document.getElementById('mainImage');
@@ -31,15 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnPlus =
         document.querySelector('.qty-btn.plus');
 
-    // =====================================================
-    // VARIABLES
-    // =====================================================
+
 
     let currentMaxStock = 0;
 
-    // =====================================================
-    // THUMBNAIL IMAGE SWITCH
-    // =====================================================
+
 
     if (mainImage && thumbnails.length > 0) {
 
@@ -72,9 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    // =====================================================
-    // SIZE SELECTOR
-    // =====================================================
+
 
     const totalStockElement =
     document.querySelector('.out-stock-banner');
@@ -136,9 +128,6 @@ if(totalStockElement){
 
                 qtyInput.max = Math.min(stock, 5);
 
-                // =================================================
-                // STOCK MESSAGE
-                // =================================================
 
                 if (stock <= 0) {
 
@@ -191,10 +180,6 @@ if(totalStockElement){
 
     }
 
-    // =====================================================
-    // DEFAULT BUTTON STATE
-    // =====================================================
-
     if (addToCartBtn) {
 
         addToCartBtn.disabled = true;
@@ -204,9 +189,7 @@ if(totalStockElement){
 
     }
 
-    // =====================================================
-    // QUANTITY DECREASE
-    // =====================================================
+  
 
     if (btnMinus && qtyInput) {
 
@@ -226,9 +209,6 @@ if(totalStockElement){
 
     }
 
-    // =====================================================
-    // QUANTITY INCREASE
-    // =====================================================
 
     if (btnPlus && qtyInput) {
 
@@ -250,9 +230,7 @@ if(totalStockElement){
         });
 
     }
-    // =====================================================
-// PROFESSIONAL IMAGE ZOOM
-// =====================================================
+  
 
 const zoomContainer = document.querySelector('.zoom-container');
 const zoomLens = document.getElementById('zoomLens');
@@ -313,9 +291,7 @@ if (zoomContainer && mainImage && zoomLens && zoomResult) {
     
 
 });
-// ======================================================
-// ADD TO CART
-// ======================================================
+
 
 const addToCartForm =
     document.getElementById('addToCartForm');
@@ -345,9 +321,7 @@ if (addToCartForm) {
                         'qtyInput'
                     ).value;
 
-                // ======================================================
-                // VALIDATION
-                // ======================================================
+
 
                 if (!size) {
 
@@ -365,18 +339,14 @@ Swal.fire({
                     return;
                 }
 
-                // ======================================================
-                // BUTTON LOADING
-                // ======================================================
+
 
                 addToCartBtn.disabled = true;
 
                 addToCartBtn.innerText =
                     'Adding...';
 
-                // ======================================================
-                // API CALL
-                // ======================================================
+             
 
                 const response = await fetch(
                     '/add-to-cart',
@@ -433,9 +403,7 @@ try {
 }
      
 
-                // ======================================================
-                // SUCCESS
-                // ======================================================
+
 
                 if (data.success) {
 
@@ -500,9 +468,7 @@ Swal.fire({
     );
 
 }
-// =====================================================
-// ADD TO WISHLIST
-// =====================================================
+
 
 const wishlistBtn =
     document.getElementById(
@@ -520,9 +486,6 @@ if (wishlistBtn) {
                 const productId =
                     wishlistBtn.dataset.productId;
 
-                // =====================================
-                // API CALL
-                // =====================================
 
                 const response = await fetch(
 
@@ -576,9 +539,7 @@ try {
     return;
 
 }
-                // =====================================
-                // SUCCESS
-                // =====================================
+                
 
                 if (data.success) {
 
@@ -601,9 +562,6 @@ try {
 
                 }
 
-                // =====================================
-                // FAILED
-                // =====================================
 
                 else {
 

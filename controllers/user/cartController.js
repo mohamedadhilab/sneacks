@@ -1,17 +1,14 @@
 const Cart = require("../../models/cartModel");
 const Product = require("../../models/productModel");
+const Wishlist = require('../../models/wishlistModel');
 
-// ======================================================
-// ADD TO CART
-// ======================================================
+
 
 const addToCart = async (req, res) => {
 
     try {
 
-        // =========================================
-        // USER CHECK
-        // =========================================
+        
 
         const userId =
             req.session.user?.id;
@@ -28,9 +25,7 @@ const addToCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // GET DATA
-        // =========================================
+       
 
         const {
             productId,
@@ -38,9 +33,7 @@ const addToCart = async (req, res) => {
             selectedSize
         } = req.body;
 
-        // =========================================
-        // PRODUCT CHECK
-        // =========================================
+      
 
         const product = await Product.findOne({
 
@@ -64,9 +57,6 @@ const addToCart = async (req, res) => {
 
         });
 
-        // =========================================
-        // PRODUCT NOT FOUND
-        // =========================================
 
         if (!product || !product.category) {
 
@@ -80,9 +70,6 @@ const addToCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // FIND VARIANT
-        // =========================================
 
         const variant =
             product.variants.find(
@@ -92,9 +79,6 @@ const addToCart = async (req, res) => {
 
             );
 
-        // =========================================
-        // VARIANT NOT FOUND
-        // =========================================
 
         if (!variant) {
 
@@ -108,9 +92,6 @@ const addToCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // STOCK CHECK
-        // =========================================
 
         if (
             variant.stock <
@@ -127,9 +108,7 @@ const addToCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // FIND USER CART
-        // =========================================
+    
 
         let cart = await Cart.findOne({
 
@@ -137,9 +116,7 @@ const addToCart = async (req, res) => {
 
         });
 
-        // =========================================
-        // CREATE CART
-        // =========================================
+        
 
         if (!cart) {
 
@@ -153,9 +130,7 @@ const addToCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // CHECK EXISTING ITEM
-        // =========================================
+     
 
         const existingItem =
             cart.items.find(
@@ -169,9 +144,7 @@ const addToCart = async (req, res) => {
 
             );
 
-        // =========================================
-        // UPDATE EXISTING ITEM
-        // =========================================
+     
 
         if (existingItem) {
 
@@ -180,9 +153,7 @@ const addToCart = async (req, res) => {
                 existingItem.quantity +
                 Number(quantity);
 
-            // =====================================
-            // MAX LIMIT
-            // =====================================
+        
 
             if (newQuantity > 5) {
 
@@ -197,9 +168,7 @@ const addToCart = async (req, res) => {
 
             }
 
-            // =====================================
-            // STOCK LIMIT
-            // =====================================
+       
 
             if (
                 newQuantity >
@@ -222,9 +191,7 @@ const addToCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // ADD NEW ITEM
-        // =========================================
+     
 
         else {
 
@@ -242,15 +209,31 @@ const addToCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // SAVE CART
-        // =========================================
+  
 
         await cart.save();
+      
 
-        // =========================================
-        // SUCCESS
-        // =========================================
+        await Wishlist.updateOne(
+
+            { userId: req.session.user.id },
+
+            {
+
+                $pull: {
+
+                    items: {
+
+                        productId: productId
+
+                    }
+
+                }
+
+            }
+
+        );
+
 
         return res.status(200).json({
 
@@ -283,24 +266,17 @@ const addToCart = async (req, res) => {
 
 };
 
-// ======================================================
-// LOAD CART PAGE
-// ======================================================
 
 const loadCart = async (req, res) => {
 
     try {
 
-        // =========================================
-        // USER ID
-        // =========================================
+  
 
         const userId =
             req.session.user.id;
 
-        // =========================================
-        // FIND CART
-        // =========================================
+    
 
         const cart = await Cart.findOne({
 
@@ -318,9 +294,7 @@ const loadCart = async (req, res) => {
 
         });
 
-        // =========================================
-        // REMOVE INVALID PRODUCTS
-        // =========================================
+
 
         if (
             cart &&
@@ -348,9 +322,7 @@ const loadCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // CART TOTAL
-        // =========================================
+  
 
         let cartTotal = 0;
 
@@ -370,9 +342,7 @@ const loadCart = async (req, res) => {
 
         }
 
-        // =========================================
-        // RENDER
-        // =========================================
+
 
         res.render('user/cart', {
 
@@ -397,17 +367,12 @@ const loadCart = async (req, res) => {
 
 };
 
-// ======================================================
-// UPDATE CART QUANTITY
-// ======================================================
+
 
 const updateCartQuantity = async (req, res) => {
 
     try {
 
-        // =========================================
-        // GET DATA
-        // =========================================
 
         const userId =
             req.session.user.id;
@@ -417,9 +382,6 @@ const updateCartQuantity = async (req, res) => {
             action
         } = req.body;
 
-        // =========================================
-        // FIND CART
-        // =========================================
 
         const cart = await Cart.findOne({
 
@@ -439,9 +401,6 @@ const updateCartQuantity = async (req, res) => {
 
         }
 
-        // =========================================
-        // FIND ITEM
-        // =========================================
 
         const item =
             cart.items.id(itemId);
@@ -458,9 +417,7 @@ const updateCartQuantity = async (req, res) => {
 
         }
 
-        // =========================================
-        // FIND PRODUCT
-        // =========================================
+     
 
         const product = await Product.findOne({
 
@@ -484,9 +441,6 @@ const updateCartQuantity = async (req, res) => {
 
         });
 
-        // =========================================
-        // PRODUCT CHECK
-        // =========================================
 
         if (!product || !product.category) {
 
@@ -501,9 +455,7 @@ const updateCartQuantity = async (req, res) => {
 
         }
 
-        // =========================================
-        // FIND VARIANT
-        // =========================================
+   
 
         const variant =
             product.variants.find(
@@ -512,9 +464,7 @@ const updateCartQuantity = async (req, res) => {
 
             );
 
-        // =========================================
-        // VARIANT CHECK
-        // =========================================
+      
 
         if (!variant) {
 
@@ -529,9 +479,6 @@ const updateCartQuantity = async (req, res) => {
 
         }
 
-        // =========================================
-        // INCREASE
-        // =========================================
 
         if (action === 'increase') {
 
@@ -568,9 +515,7 @@ const updateCartQuantity = async (req, res) => {
 
         }
 
-        // =========================================
-        // DECREASE
-        // =========================================
+     
 
         if (action === 'decrease') {
 
@@ -582,15 +527,10 @@ const updateCartQuantity = async (req, res) => {
 
         }
 
-        // =========================================
-        // SAVE
-        // =========================================
+
 
         await cart.save();
 
-        // =========================================
-        // TOTALS
-        // =========================================
 
         const itemTotal =
 
@@ -625,9 +565,7 @@ const updateCartQuantity = async (req, res) => {
             }
         );
 
-        // =========================================
-        // RESPONSE
-        // =========================================
+      
 
         return res.json({
 
@@ -664,31 +602,23 @@ const updateCartQuantity = async (req, res) => {
 
 };
 
-// ======================================================
-// REMOVE CART ITEM
-// ======================================================
+
 
 const removeCartItem = async (req, res) => {
 
     try {
 
-        // =========================================
-        // USER
-        // =========================================
+
 
         const userId =
             req.session.user.id;
 
-        // =========================================
-        // ITEM ID
-        // =========================================
+       
 
         const { itemId } =
             req.body;
 
-        // =========================================
-        // FIND CART
-        // =========================================
+     
 
         const cart = await Cart.findOne({
 
@@ -708,9 +638,7 @@ const removeCartItem = async (req, res) => {
 
         }
 
-        // =========================================
-        // REMOVE ITEM
-        // =========================================
+      
 
         cart.items =
             cart.items.filter(
@@ -722,15 +650,10 @@ const removeCartItem = async (req, res) => {
 
             );
 
-        // =========================================
-        // SAVE
-        // =========================================
+    
 
         await cart.save();
 
-        // =========================================
-        // RESPONSE
-        // =========================================
 
         return res.status(200).json({
 

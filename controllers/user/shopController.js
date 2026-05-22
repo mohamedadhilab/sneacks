@@ -2,17 +2,11 @@ const Product = require('../../models/productModel');
 const Category = require('../../models/categoryModel');
 const mongoose = require('mongoose');
 
-// =====================================================
-// LOAD SHOP PAGE
-// =====================================================
 
 const loadShopPage = async (req, res) => {
 
     try {
 
-        // =====================================================
-        // QUERY PARAMS
-        // =====================================================
 
         const search = req.query.search || '';
 
@@ -24,9 +18,6 @@ const loadShopPage = async (req, res) => {
 
         const page = parseInt(req.query.page) || 1;
 
-        // =====================================================
-        // CATEGORY ARRAY
-        // =====================================================
 
         const selectedCategories = req.query.category
             ? Array.isArray(req.query.category)
@@ -34,9 +25,6 @@ const loadShopPage = async (req, res) => {
                 : [req.query.category]
             : [];
 
-        // =====================================================
-        // FILTER OBJECT
-        // =====================================================
 
         const filter = {
 
@@ -46,9 +34,7 @@ const loadShopPage = async (req, res) => {
 
         };
 
-        // =====================================================
-        // SEARCH FILTER
-        // =====================================================
+
 
         if (search.trim()) {
 
@@ -62,9 +48,7 @@ const loadShopPage = async (req, res) => {
 
         }
 
-        // =====================================================
-        // CATEGORY FILTER
-        // =====================================================
+
 
         if (selectedCategories.length > 0) {
 
@@ -78,9 +62,6 @@ const loadShopPage = async (req, res) => {
 
         }
 
-        // =====================================================
-        // PRICE FILTER
-        // =====================================================
 
         if (minPrice || maxPrice) {
 
@@ -100,9 +81,6 @@ const loadShopPage = async (req, res) => {
 
         }
 
-        // =====================================================
-        // SORTING
-        // =====================================================
 
         let sortOption = {
 
@@ -172,17 +150,12 @@ const loadShopPage = async (req, res) => {
 
         }
 
-        // =====================================================
-        // PAGINATION
-        // =====================================================
-
-        const limit = 8;
+        
+        const limit = 6;
 
         const skip = (page - 1) * limit;
 
-        // =====================================================
-        // TOTAL PRODUCTS
-        // =====================================================
+
 
         const totalProducts =
             await Product.countDocuments(filter);
@@ -190,9 +163,7 @@ const loadShopPage = async (req, res) => {
         const totalPages =
             Math.ceil(totalProducts / limit);
 
-        // =====================================================
-        // FETCH PRODUCTS
-        // =====================================================
+
 
         const products = await Product.find(filter)
 
@@ -216,17 +187,11 @@ const loadShopPage = async (req, res) => {
 
             .limit(limit);
 
-        // =====================================================
-        // REMOVE PRODUCTS WITH NULL CATEGORY
-        // =====================================================
-
         const filteredProducts = products.filter(
             product => product.category
         );
 
-        // =====================================================
-        // FETCH ACTIVE CATEGORIES
-        // =====================================================
+
 
         const categories = await Category.find({
 
@@ -236,9 +201,7 @@ const loadShopPage = async (req, res) => {
 
         });
 
-        // =====================================================
-        // QUERY STRING FOR PAGINATION
-        // =====================================================
+
 
         const queryParams = new URLSearchParams();
 
@@ -274,9 +237,7 @@ const loadShopPage = async (req, res) => {
 
         const queryString = queryParams.toString();
 
-        // =====================================================
-        // RENDER SHOP PAGE
-        // =====================================================
+
 
         res.render('user/shop', {
 

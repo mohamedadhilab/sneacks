@@ -61,13 +61,16 @@ exports.addProductSchema = Joi.object({
         }),
 
     category: Joi.string()
-        .required()
-        .messages({
+    .required()
+    .messages({
 
-            'string.empty':
-                'Category is required'
+        'string.empty':
+            'Category is required',
 
-        }),
+        'any.required':
+            'Category is required'
+
+    }),
 
     price: Joi.number()
         .min(1)
@@ -111,5 +114,63 @@ exports.addProductSchema = Joi.object({
 // EDIT PRODUCT SCHEMA
 // ======================================================
 
-exports.editProductSchema =
-    exports.addProductSchema;
+exports.editProductSchema = Joi.object({
+
+    product_name: Joi.string()
+        .trim()
+        .min(3)
+        .max(100)
+        .required(),
+
+    description: Joi.string()
+        .trim()
+        .min(20)
+        .max(2000)
+        .required(),
+
+    brand: Joi.string()
+        .trim()
+        .required(),
+
+    category: Joi.string()
+        .required(),
+
+    price: Joi.number()
+        .min(1)
+        .max(1000000)
+        .required(),
+
+    sku: Joi.string()
+        .trim()
+        .allow(''),
+
+    is_active: Joi.any(),
+
+    existingImages: Joi.string()
+        .optional(),
+
+    replacedIndexes: Joi.string()
+        .optional(),
+
+    sizes: Joi.alternatives().try(
+
+        Joi.array().items(
+            Joi.string().trim()
+        ),
+
+        Joi.string()
+
+    ).required(),
+
+    stocks: Joi.alternatives().try(
+
+        Joi.array().items(
+            Joi.number().min(0)
+        ),
+
+        Joi.number().min(0)
+
+    ).required()
+
+});
+    

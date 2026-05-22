@@ -10,6 +10,9 @@ const session = require('express-session');
 const passport = require('passport');
 require('./config/passport');
 
+const cartCountMiddleware =
+require('./middleware/cartCountMiddleware');
+
 const app = express();
 
 
@@ -33,6 +36,8 @@ app.use(
     }
   })
 );
+app.use(cartCountMiddleware);
+
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.message = req.session.message || null;

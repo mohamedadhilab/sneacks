@@ -469,3 +469,26 @@
     .premium-stats { grid-template-columns: 1fr; }
     .page-header { flex-direction: column; gap: 1.5rem; }
 }
+/* =========================================
+   DESCRIPTION TEXTAREA
+========================================= */
+
+.textarea-input {
+
+    min-height: 140px;
+
+    resize: vertical;
+
+    padding-top: 14px;
+
+    font-family: inherit;
+
+}
+
+/* FULL WIDTH */
+
+.full-width {
+
+    grid-column: 1 / -1;
+
+}

@@ -6,6 +6,15 @@
    BASE
 ============================================================ */
 
+:root {
+    --border: var(--color-border, #d8d4c8);
+    --text-dark: var(--color-text-primary, #2c2c1e);
+    --text-mid: var(--color-text-secondary, #4a4a38);
+    --text-placeholder: #b0ad9e;
+    --cream-card: #f7f4ee;
+    --white: var(--color-white, #ffffff);
+}
+
 body {
 
     background: #f7f4ee;
@@ -120,9 +129,9 @@ body {
 
     border: 1px solid var(--border);
 
-    background: var(--cream-card);
+    background-color: var(--cream-card);
 
-    padding: 0 18px;
+    padding: 0 2.5rem 0 18px;
 
     font-size: 0.85rem;
 
@@ -790,5 +799,89 @@ body {
         left: -100%;
 
     }
+
+}
+
+/* =========================================
+   PREMIUM PAGINATION
+========================================= */
+
+.premium-pagination{
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-top: 80px;
+
+    margin-bottom: 80px;
+
+}
+
+.pagination-numbers{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.pagination-number,
+.pagination-arrow{
+
+    width: 48px;
+
+    height: 48px;
+
+    border: 1px solid #d8d2c8;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-decoration: none;
+
+    color: #1e1e1e;
+
+    font-size: 0.95rem;
+
+    font-weight: 500;
+
+    transition: all 0.3s ease;
+
+    background: transparent;
+
+}
+
+.pagination-number:hover,
+.pagination-arrow:hover{
+
+    background: #1e1e1e;
+
+    color: #f5f1ea;
+
+    border-color: #1e1e1e; 
+
+    transform: translateY(-2px);
+
+}
+
+.active-page{
+
+    background: #1e1e1e;
+
+    color: #f5f1ea;
+
+    border-color: #1e1e1e;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 
 }

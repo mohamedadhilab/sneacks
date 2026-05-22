@@ -12,9 +12,11 @@ exports.getCategories = async (req, res) => {
 
     const search = req.query.search || '';
 
+    const trash = req.query.trash === 'true';
+
     const searchQuery = {
 
-      is_deleted: false,
+      is_deleted:trash,
 
       category_name: {
         $regex: search,
@@ -59,7 +61,8 @@ exports.getCategories = async (req, res) => {
 
       totalPages,
 
-      search
+      search,
+      trash
 
     });
 
@@ -300,6 +303,47 @@ exports.deleteCategory = async (req, res) => {
     };
 
     res.redirect('/admin/categories');
+
+  }
+
+};
+exports.restoreCategory = async (req, res) => {
+
+  try {
+
+    const id = req.params.id;
+
+    await Category.findByIdAndUpdate(id, {
+
+      is_deleted: false
+
+    });
+
+    req.session.message = {
+
+      type: 'success',
+
+      text: 'Category restored successfully'
+
+    };
+
+    res.redirect('/admin/categories?trash=true');
+
+  }
+
+  catch (error) {
+
+    console.log(error);
+
+    req.session.message = {
+
+      type: 'error',
+
+      text: 'Failed to restore category'
+
+    };
+
+    res.redirect('/admin/categories?trash=true');
 
   }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,679 +13,657 @@
     <link rel="stylesheet" href="/styles/admin/layout.css">
     <link rel="stylesheet" href="/styles/admin/categories.css">
 </head>
+
 <body>
 
-<!-- SIDEBAR -->
-<%- include('../partials/admin/sidebar', { page: 'categories' }) %>
+    <!-- SIDEBAR -->
+    <%- include('../partials/admin/sidebar', { page: 'categories' }) %>
 
-<!-- MAIN CONTENT -->
-<div class="main-content">
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
 
-<!-- TOPBAR -->
-<%- include('../partials/admin/topbar', {
+            <!-- TOPBAR -->
+            <%- include('../partials/admin/topbar', { searchPlaceholder: 'Search categories...' ,
+                searchAction: '/admin/categories' , search }) %>
+                <!-- PAGE CONTENT -->
+                <div class="page-container">
 
-    searchPlaceholder: 'Search categories...',
+                    <!-- PAGE HEADER -->
+                    <header class="page-header">
 
-    searchAction: '/admin/categories',
+                        <div class="header-titles">
+                            <h1 class="premium-title">COLLECTIONS</h1>
+                            <p class="premium-subtitle">
+                                Manage your product ecosystems and category hierarchies.
+                            </p>
+                        </div>
 
-    search
+                        <% if(!trash){ %>
 
-}) %>
-    <!-- PAGE CONTENT -->
-    <div class="page-container">
+                            <button class="btn-premium-glow" id="openAddModal">
 
-        <!-- PAGE HEADER -->
-        <header class="page-header">
+                                <i class="fas fa-plus"></i>
 
-            <div class="header-titles">
-                <h1 class="premium-title">COLLECTIONS</h1>
-                <p class="premium-subtitle">
-                    Manage your product ecosystems and category hierarchies.
-                </p>
-            </div>
+                                ADD NEW CATEGORY
 
-            <button class="btn-premium-glow" id="openAddModal">
-                <i class="fas fa-plus"></i>
-                ADD NEW CATEGORY
-            </button>
+                            </button>
 
-        </header>
+                            <% } %>
 
-        <!-- STATS -->
-        <section class="stats-grid">
+                    </header>
 
-            <div class="card stat-card">
-                <div class="stat-info">
-                    <span class="stat-label">Total Collections</span>
-                    <h2 class="stat-number"><%= totalCategories %></h2>
-                </div>
+                    <!-- STATS -->
+                    <section class="stats-grid">
 
-                <i class="fas fa-layer-group stat-icon"></i>
-            </div>
+                        <div class="card stat-card">
+                            <div class="stat-info">
+                                <span class="stat-label">Total Collections</span>
+                                <h2 class="stat-number">
+                                    <%= totalCategories %>
+                                </h2>
+                            </div>
 
-            <div class="card stat-card">
-                <div class="stat-info">
-                    <span class="stat-label">Active Categories</span>
-                    <h2 class="stat-number"><%= activeCategories %></h2>
-                </div>
+                            <i class="fas fa-layer-group stat-icon"></i>
+                        </div>
 
-                <i class="fas fa-check-circle stat-icon text-cyan"></i>
-            </div>
+                        <div class="card stat-card">
+                            <div class="stat-info">
+                                <span class="stat-label">Active Categories</span>
+                                <h2 class="stat-number">
+                                    <%= activeCategories %>
+                                </h2>
+                            </div>
 
-            <div class="card stat-card">
-                <div class="stat-info">
-                    <span class="stat-label">Unlisted Categories</span>
-                    <h2 class="stat-number"><%= unlistedCategories %></h2>
-                </div>
+                            <i class="fas fa-check-circle stat-icon text-cyan"></i>
+                        </div>
 
-                <i class="fas fa-eye-slash stat-icon text-orange"></i>
-            </div>
+                        <div class="card stat-card">
+                            <div class="stat-info">
+                                <span class="stat-label">Unlisted Categories</span>
+                                <h2 class="stat-number">
+                                    <%= unlistedCategories %>
+                                </h2>
+                            </div>
 
-        </section>
+                            <i class="fas fa-eye-slash stat-icon text-orange"></i>
+                        </div>
 
-        <!-- TABLE -->
-        <section class="table-container card">
+                    </section>
 
-            <div class="table-header">
+                    <div class="filter-tabs">
 
-                <h3 class="table-title">Category Inventory</h3>
+                        <a href="/admin/categories" class="page-btn <%= !trash ? 'active-page' : '' %>">
+                            ACTIVE
+                        </a>
 
-
-            </div>
-
-            <!-- TABLE -->
-            <div class="responsive-table">
-
-                <table class="premium-table">
-
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Category Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="categoryTableBody">
-
-                        <% if(categories.length > 0){ %>
-
-                            <% categories.forEach(category => { %>
-
-                                <tr data-id="<%= category._id %>">
-
-                                    <!-- IMAGE -->
-                                    <td>
-
-                                        <div class="table-img-wrapper">
-
-                                            <img 
-                                                src="<%= category.image || '/images/default-category.png' %>" 
-                                                alt="<%= category.category_name %>"
-                                            >
-
-                                        </div>
-
-                                    </td>
-
-                                    <!-- NAME -->
-                                    <td class="font-bold">
-                                        <%= category.category_name %>
-                                    </td>
-
-                                    <!-- DESCRIPTION -->
-                                    <td class="text-muted">
-
-                                        <%= category.description 
-                                            ? category.description.substring(0, 50) 
-                                            : 'No description' 
-                                        %>
-
-                                    </td>
-
-                                    <!-- STATUS -->
-                                    <td>
-
-                                        <% if(category.is_active){ %>
-
-                                            <span class="badge badge-active">
-                                                ACTIVE
-                                            </span>
-
-                                        <% } else { %>
-
-                                            <span class="badge badge-unlisted">
-                                                UNLISTED
-                                            </span>
-
-                                        <% } %>
-
-                                    </td>
-
-                                    <!-- ACTIONS -->
-                                    <td>
-
-                                       <div class="action-group">
-
-                                            <!-- EDIT -->
-                                            <button 
-                                                class="btn-action edit-btn"
-                                                data-id="<%= category._id %>"
-                                                data-name="<%= category.category_name %>"
-                                                data-desc="<%= category.description %>"
-                                                data-status="<%= category.is_active %>"
-                                                data-image="<%= category.image %>"
-                                            >
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-
-                                            <!-- TOGGLE -->
-                                            <a 
-                                                href="/admin/toggle-category/<%= category._id %>"
-                                                class="btn-action"
-                                            >
-                                                <i class="fas <%= category.is_active ? 'fa-eye-slash' : 'fa-eye' %>"></i>
-                                            </a>
-
-                                            <!-- DELETE -->
-                                            <button 
-                                                class="btn-action delete-btn"
-                                                onclick="deleteCategory('<%= category._id %>')"
-                                            >
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-
-                                        </div>
-                                    </td>
-
-                                </tr>
-
-                            <% }) %>
-
-                        <% } else { %>
-
-                            <tr>
-
-                                <td colspan="5" class="empty-table">
-                                    No categories found
-                                </td>
-
-                            </tr>
-
-                        <% } %>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-            <!-- PAGINATION -->
-            <div class="pagination">
-
-                <% if(currentPage > 1){ %>
-
-                    <a 
-                        href="/admin/categories?page=<%= currentPage - 1 %>&search=<%= search %>"
-                        class="page-btn"
-                    >
-                        Prev
-                    </a>
-
-                <% } %>
-
-                <% for(let i = 1; i <= totalPages; i++){ %>
-
-                    <a 
-                        href="/admin/categories?page=<%= i %>&search=<%= search %>"
-                        class="page-btn <%= currentPage === i ? 'active-page' : '' %>"
-                    >
-                        <%= i %>
-                    </a>
-
-                <% } %>
-
-                <% if(currentPage < totalPages){ %>
-
-                    <a 
-                        href="/admin/categories?page=<%= currentPage + 1 %>&search=<%= search %>"
-                        class="page-btn"
-                    >
-                        Next
-                    </a>
-
-                <% } %>
-
-            </div>
-
-        </section>
-
-    </div>
-
-</div>
-
-<!-- ADD CATEGORY MODAL -->
-<div class="modal-overlay" id="addCategoryModal">
-
-    <div class="modal-content card">
-
-        <div class="modal-header">
-
-            <h3>CREATE CATEGORY</h3>
-
-            <button class="close-modal">
-                &times;
-            </button>
-
-        </div>
-
-        <form 
-            id="addCategoryForm"
-            method="POST"
-            action="/admin/add-category"
-            enctype="multipart/form-data"
-        >
-
-            <div class="modal-body">
-
-                <div class="input-group">
-
-                    <label>Category Name</label>
-
-                    <input 
-                        type="text"
-                        name="category_name"
-                        placeholder="e.g. Lifestyle, Running"
-                        required
-                    >
-
-                </div>
-
-                <div class="input-group">
-
-                    <label>Description</label>
-
-                    <textarea 
-                        name="description"
-                        rows="3"
-                        placeholder="Briefly describe the category..."
-                    ></textarea>
-
-                </div>
-
-                <div class="upload-section">
-
-                    <label>Category Visual</label>
-
-                    <div class="drop-zone" id="dropZoneAdd">
-
-                        <i class="fas fa-cloud-upload-alt"></i>
-
-                        <p>DROP IMAGE HERE</p>
-
-                        <span>JPG, PNG, WEBP (MAX 5MB)</span>
-
-                        <input 
-                            type="file"
-                            name="image"
-                            id="fileInputAdd"
-                            hidden
-                        >
-
-                        <img 
-                            id="previewAdd"
-                            class="img-preview"
-                            src=""
-                            alt=""
-                        >
+                        <a href="/admin/categories?trash=true" class="page-btn <%= trash ? 'active-page' : '' %>">
+                            TRASH
+                        </a>
 
                     </div>
 
-                </div>
+                    <!-- TABLE -->
+                    <section class="table-container card">
 
-                <div class="toggle-wrapper">
+                        <div class="table-header">
 
-                    <span>Active Status</span>
+                            <h3 class="table-title">Category Inventory</h3>
 
-                    <label class="switch">
 
-                        <input 
-                            type="checkbox"
-                            name="is_active"
-                            checked
-                        >
+                        </div>
 
-                        <span class="slider"></span>
+                        <!-- TABLE -->
+                        <div class="responsive-table">
 
-                    </label>
+                            <table class="premium-table">
 
-                </div>
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Category Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
 
-            </div>
+                                <tbody id="categoryTableBody">
 
-            <div class="modal-footer">
+                                    <% if(categories.length> 0){ %>
 
-                <button 
-                    type="button"
-                    class="btn-secondary close-modal"
-                >
-                    Discard
-                </button>
+                                        <% categories.forEach(category=> { %>
 
-                <button 
-                    type="submit"
-                    class="btn-premium-glow"
-                >
-                    CREATE CATEGORY
-                </button>
+                                            <tr data-id="<%= category._id %>">
 
-            </div>
+                                                <!-- IMAGE -->
+                                                <td>
 
-        </form>
+                                                    <div class="table-img-wrapper">
 
-    </div>
+                                                        <img src="<%= category.image || '/images/default-category.png' %>"
+                                                            alt="<%= category.category_name %>">
+
+                                                    </div>
+
+                                                </td>
+
+                                                <!-- NAME -->
+                                                <td class="font-bold">
+                                                    <%= category.category_name %>
+                                                </td>
+
+                                                <!-- DESCRIPTION -->
+                                                <td class="text-muted">
+
+                                                    <%= category.description ? category.description.substring(0, 50)
+                                                        : 'No description' %>
+
+                                                </td>
+
+                                                <!-- STATUS -->
+
+                                                <td>
+
+                                                    <% if(category.is_deleted){ %>
+
+                                                        <span class="badge badge-unlisted">
+
+                                                            DELETED
+
+                                                        </span>
+
+                                                        <% } else if(category.is_active){ %>
+
+                                                            <span class="badge badge-active">
+
+                                                                ACTIVE
+
+                                                            </span>
+
+                                                            <% } else { %>
+
+                                                                <span class="badge badge-unlisted">
+
+                                                                    UNLISTED
+
+                                                                </span>
+
+                                                                <% } %>
+
+                                                </td>
+                                                <!-- ACTIONS -->
+                                                <td>
+
+                                                    <div class="action-group">
+
+                                                        <% if(trash){ %>
+
+                                                            <!-- RESTORE -->
+
+                                                            <a href="/admin/restore-category/<%= category._id %>"
+                                                                class="btn-action">
+                                                                <i class="fas fa-rotate-left"></i>
+                                                            </a>
+
+                                                            <% } else { %>
+
+                                                                <!-- EDIT -->
+
+                                                                <button class="btn-action edit-btn"
+                                                                    data-id="<%= category._id %>"
+                                                                    data-name="<%= category.category_name %>"
+                                                                    data-desc="<%= category.description %>"
+                                                                    data-status="<%= category.is_active %>"
+                                                                    data-image="<%= category.image %>">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+
+                                                                <!-- TOGGLE -->
+
+                                                                <a href="/admin/toggle-category/<%= category._id %>"
+                                                                    class="btn-action">
+                                                                    <i
+                                                                        class="fas <%= category.is_active ? 'fa-eye-slash' : 'fa-eye' %>"></i>
+                                                                </a>
+
+                                                                <!-- DELETE -->
+
+                                                                <button class="btn-action delete-btn"
+                                                                    onclick="deleteCategory('<%= category._id %>')">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+
+                                                                <% } %>
+
+                                                    </div>
+
+                                                </td>
+
+                                            </tr>
+
+                                            <% }) %>
+
+                                                <% } else { %>
+
+                                                    <tr>
+
+                                                        <td colspan="5" class="empty-table">
+
+                                                            <div class="empty-state">
+
+                                                                <i class="fas fa-trash-alt"></i>
+
+                                                                <p>No categories found</p>
+
+                                                            </div>
+
+                                                        </td>
+
+                                                    </tr>
+
+                                                    <% } %>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                        <!-- PAGINATION -->
+                       <div class="pagination">
+
+    <% if(currentPage > 1){ %>
+
+        <a 
+            href="/admin/categories?page=<%= currentPage - 1 %>&search=<%= search %><%= trash ? '&trash=true' : '' %>"
+            class="page-btn"
+        >
+            Prev
+        </a>
+
+    <% } %>
+
+    <% for(let i = 1; i <= totalPages; i++){ %>
+
+        <a 
+            href="/admin/categories?page=<%= i %>&search=<%= search %><%= trash ? '&trash=true' : '' %>"
+            class="page-btn <%= currentPage === i ? 'active-page' : '' %>"
+        >
+            <%= i %>
+        </a>
+
+    <% } %>
+
+    <% if(currentPage < totalPages){ %>
+
+        <a 
+            href="/admin/categories?page=<%= currentPage + 1 %>&search=<%= search %><%= trash ? '&trash=true' : '' %>"
+            class="page-btn"
+        >
+            Next
+        </a>
+
+    <% } %>
 
 </div>
 
-<!-- EDIT MODAL -->
-<div class="modal-overlay" id="editCategoryModal">
+                    </section>
 
-    <div class="modal-content card">
-
-        <div class="modal-header">
-
-            <h3>EDIT CATEGORY</h3>
-
-            <button class="close-modal">
-                &times;
-            </button>
+                </div>
 
         </div>
 
-        <form 
-            id="editCategoryForm"
-            method="POST"
-            enctype="multipart/form-data"
-        >
+        <!-- ADD CATEGORY MODAL -->
+        <div class="modal-overlay" id="addCategoryModal">
 
-            <div class="modal-body">
+            <div class="modal-content card">
 
-                <input 
-                    type="hidden"
-                    name="categoryId"
-                    id="editCategoryId"
-                >
+                <div class="modal-header">
 
-                <div class="input-group">
+                    <h3>CREATE CATEGORY</h3>
 
-                    <label>Category Name</label>
-
-                    <input 
-                        type="text"
-                        name="category_name"
-                        id="editCategoryName"
-                        required
-                    >
+                    <button class="close-modal">
+                        &times;
+                    </button>
 
                 </div>
 
-                <div class="input-group">
+                <form id="addCategoryForm" method="POST" action="/admin/add-category" enctype="multipart/form-data">
 
-                    <label>Description</label>
+                    <div class="modal-body">
 
-                    <textarea 
-                        name="description"
-                        id="editCategoryDesc"
-                        rows="3"
-                    ></textarea>
+                        <div class="input-group">
 
-                </div>
+                            <label>Category Name</label>
 
-                <div class="upload-section">
+                            <input type="text" name="category_name" placeholder="e.g. Lifestyle, Running" required>
 
-                    <label>Replace Visual</label>
+                        </div>
 
-                    <div class="drop-zone" id="dropZoneEdit">
+                        <div class="input-group">
 
-                        <i class="fas fa-cloud-upload-alt"></i>
+                            <label>Description</label>
 
-                        <p>CLICK TO CHANGE</p>
+                            <textarea name="description" rows="3"
+                                placeholder="Briefly describe the category..."></textarea>
 
-                        <input 
-                            type="file"
-                            name="image"
-                            id="fileInputEdit"
-                            hidden
-                        >
+                        </div>
 
-                        <img 
-                            id="previewEdit"
-                            class="img-preview"
-                            src=""
-                            alt=""
-                        >
+                        <div class="upload-section">
+
+                            <label>Category Visual</label>
+
+                            <div class="drop-zone" id="dropZoneAdd">
+
+                                <i class="fas fa-cloud-upload-alt"></i>
+
+                                <p>DROP IMAGE HERE</p>
+
+                                <span>JPG, PNG, WEBP (MAX 5MB)</span>
+
+                                <input type="file" name="image" id="fileInputAdd" hidden>
+
+                                <img id="previewAdd" class="img-preview" src="" alt="">
+
+                            </div>
+
+                        </div>
+
+                        <div class="toggle-wrapper">
+
+                            <span>Active Status</span>
+
+                            <label class="switch">
+
+                                <input type="checkbox" name="is_active" checked>
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
 
                     </div>
 
-                </div>
+                    <div class="modal-footer">
 
-                <div class="toggle-wrapper">
+                        <button type="button" class="btn-secondary close-modal">
+                            Discard
+                        </button>
 
-                    <span>Active Status</span>
+                        <button type="submit" class="btn-premium-glow">
+                            CREATE CATEGORY
+                        </button>
 
-                    <label class="switch">
+                    </div>
 
-                        <input 
-                            type="checkbox"
-                            name="is_active"
-                            id="editCategoryStatus"
-                        >
-
-                        <span class="slider"></span>
-
-                    </label>
-
-                </div>
+                </form>
 
             </div>
 
-            <div class="modal-footer">
+        </div>
 
-                <button 
-                    type="button"
-                    class="btn-secondary close-modal"
-                >
-                    Discard
-                </button>
+        <!-- EDIT MODAL -->
+        <div class="modal-overlay" id="editCategoryModal">
 
-                <button 
-                    type="submit"
-                    class="btn-premium-glow"
-                >
-                    SAVE CHANGES
-                </button>
+            <div class="modal-content card">
+
+                <div class="modal-header">
+
+                    <h3>EDIT CATEGORY</h3>
+
+                    <button class="close-modal">
+                        &times;
+                    </button>
+
+                </div>
+
+                <form id="editCategoryForm" method="POST" enctype="multipart/form-data">
+
+                    <div class="modal-body">
+
+                        <input type="hidden" name="categoryId" id="editCategoryId">
+
+                        <div class="input-group">
+
+                            <label>Category Name</label>
+
+                            <input type="text" name="category_name" id="editCategoryName" required>
+
+                        </div>
+
+                        <div class="input-group">
+
+                            <label>Description</label>
+
+                            <textarea name="description" id="editCategoryDesc" rows="3"></textarea>
+
+                        </div>
+
+                        <div class="upload-section">
+
+                            <label>Replace Visual</label>
+
+                            <div class="drop-zone" id="dropZoneEdit">
+
+                                <i class="fas fa-cloud-upload-alt"></i>
+
+                                <p>CLICK TO CHANGE</p>
+
+                                <input type="file" name="image" id="fileInputEdit" hidden>
+
+                                <img id="previewEdit" class="img-preview" src="" alt="">
+
+                            </div>
+
+                        </div>
+
+                        <div class="toggle-wrapper">
+
+                            <span>Active Status</span>
+
+                            <label class="switch">
+
+                                <input type="checkbox" name="is_active" id="editCategoryStatus">
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn-secondary close-modal">
+                            Discard
+                        </button>
+
+                        <button type="submit" class="btn-premium-glow">
+                            SAVE CHANGES
+                        </button>
+
+                    </div>
+
+                </form>
 
             </div>
 
-        </form>
+        </div>
 
-    </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <%- include('../partials/toast') %>
 
-</div>
+            <script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<%- include('../partials/toast') %>
+                document.addEventListener('DOMContentLoaded', () => {
 
-<script>
+                    const addModal = document.getElementById('addCategoryModal');
 
-document.addEventListener('DOMContentLoaded', () => {
+                    const editModal = document.getElementById('editCategoryModal');
 
-    const addModal = document.getElementById('addCategoryModal');
+                    const openAddBtn = document.getElementById('openAddModal');
 
-    const editModal = document.getElementById('editCategoryModal');
+                    const closeBtns = document.querySelectorAll('.close-modal');
 
-    const openAddBtn = document.getElementById('openAddModal');
+                    // OPEN ADD MODAL
+                    openAddBtn.addEventListener('click', () => {
 
-    const closeBtns = document.querySelectorAll('.close-modal');
+                        addModal.classList.add('active');
 
-    // OPEN ADD MODAL
-    openAddBtn.addEventListener('click', () => {
+                    });
 
-        addModal.classList.add('active');
+                    // CLOSE MODALS
+                    closeBtns.forEach(btn => {
 
-    });
+                        btn.addEventListener('click', () => {
 
-    // CLOSE MODALS
-    closeBtns.forEach(btn => {
+                            addModal.classList.remove('active');
 
-        btn.addEventListener('click', () => {
+                            editModal.classList.remove('active');
 
-            addModal.classList.remove('active');
+                        });
 
-            editModal.classList.remove('active');
+                    });
 
-        });
+                    // IMAGE PREVIEW
+                    function setupImagePreview(dropZoneId, fileInputId, previewId) {
 
-    });
+                        const dropZone = document.getElementById(dropZoneId);
 
-    // IMAGE PREVIEW
-    function setupImagePreview(dropZoneId, fileInputId, previewId){
+                        const fileInput = document.getElementById(fileInputId);
 
-        const dropZone = document.getElementById(dropZoneId);
+                        const preview = document.getElementById(previewId);
 
-        const fileInput = document.getElementById(fileInputId);
+                        dropZone.addEventListener('click', () => {
 
-        const preview = document.getElementById(previewId);
+                            fileInput.click();
 
-        dropZone.addEventListener('click', () => {
+                        });
 
-            fileInput.click();
+                        fileInput.addEventListener('change', e => {
 
-        });
+                            const file = e.target.files[0];
 
-        fileInput.addEventListener('change', e => {
+                            if (file) {
 
-            const file = e.target.files[0];
+                                const reader = new FileReader();
 
-            if(file){
+                                reader.onload = event => {
 
-                const reader = new FileReader();
+                                    preview.src = event.target.result;
 
-                reader.onload = event => {
+                                    preview.classList.add('active');
 
-                    preview.src = event.target.result;
+                                };
 
-                    preview.classList.add('active');
+                                reader.readAsDataURL(file);
 
-                };
+                            }
 
-                reader.readAsDataURL(file);
+                        });
 
-            }
+                    }
 
-        });
+                    setupImagePreview('dropZoneAdd', 'fileInputAdd', 'previewAdd');
 
-    }
+                    setupImagePreview('dropZoneEdit', 'fileInputEdit', 'previewEdit');
 
-    setupImagePreview('dropZoneAdd', 'fileInputAdd', 'previewAdd');
+                    // EDIT BUTTON
+                    document.querySelectorAll('.edit-btn').forEach(btn => {
 
-    setupImagePreview('dropZoneEdit', 'fileInputEdit', 'previewEdit');
+                        btn.addEventListener('click', () => {
 
-    // EDIT BUTTON
-    document.querySelectorAll('.edit-btn').forEach(btn => {
+                            const data = btn.dataset;
 
-        btn.addEventListener('click', () => {
+                            document.getElementById('editCategoryId').value = data.id;
 
-            const data = btn.dataset;
+                            document.getElementById('editCategoryName').value = data.name;
 
-            document.getElementById('editCategoryId').value = data.id;
+                            document.getElementById('editCategoryDesc').value = data.desc;
 
-            document.getElementById('editCategoryName').value = data.name;
+                            document.getElementById('editCategoryStatus').checked = data.status === 'true';
 
-            document.getElementById('editCategoryDesc').value = data.desc;
+                            document.getElementById('previewEdit').src = data.image;
 
-            document.getElementById('editCategoryStatus').checked = data.status === 'true';
+                            document.getElementById('previewEdit').classList.add('active');
 
-            document.getElementById('previewEdit').src = data.image;
+                            document.getElementById('editCategoryForm').action = `/admin/edit-category/${data.id}`;
 
-            document.getElementById('previewEdit').classList.add('active');
+                            editModal.classList.add('active');
 
-            document.getElementById('editCategoryForm').action = `/admin/edit-category/${data.id}`;
+                        });
 
-            editModal.classList.add('active');
+                    });
 
-        });
+                });
+                function confirmAdminLogout() {
 
-    });
+                    Swal.fire({
 
-});
-function confirmAdminLogout() {
+                        title: 'Logout Admin?',
 
-  Swal.fire({
+                        text: 'Your admin session will end.',
 
-    title: 'Logout Admin?',
+                        icon: 'warning',
 
-    text: 'Your admin session will end.',
+                        showCancelButton: true,
 
-    icon: 'warning',
+                        confirmButtonColor: '#111111',
 
-    showCancelButton: true,
+                        cancelButtonColor: '#666666',
 
-    confirmButtonColor: '#111111',
+                        confirmButtonText: 'Yes, Logout',
 
-    cancelButtonColor: '#666666',
+                        cancelButtonText: 'Cancel',
 
-    confirmButtonText: 'Yes, Logout',
+                        reverseButtons: true
 
-    cancelButtonText: 'Cancel',
+                    }).then((result) => {
 
-    reverseButtons: true
+                        if (result.isConfirmed) {
 
-  }).then((result) => {
+                            window.location.href = '/admin/logout';
 
-    if (result.isConfirmed) {
+                        }
 
-      window.location.href = '/admin/logout';
+                    });
 
-    }
+                }
+                function deleteCategory(id) {
 
-  });
+                    Swal.fire({
 
-}
-function deleteCategory(id) {
+                        title: 'Delete Category?',
 
-    Swal.fire({
+                        text: 'This category will be deleted.',
 
-        title: 'Delete Category?',
+                        icon: 'warning',
 
-        text: 'This category will be deleted.',
+                        showCancelButton: true,
 
-        icon: 'warning',
+                        confirmButtonText: 'Delete',
 
-        showCancelButton: true,
+                        cancelButtonText: 'Cancel',
 
-        confirmButtonText: 'Delete',
+                        confirmButtonColor: '#ff5b5b'
 
-        cancelButtonText: 'Cancel',
+                    }).then((result) => {
 
-        confirmButtonColor: '#ff5b5b'
+                        if (result.isConfirmed) {
 
-    }).then((result) => {
+                            window.location.href = `/admin/delete-category/${id}`;
 
-        if(result.isConfirmed){
+                        }
 
-            window.location.href = `/admin/delete-category/${id}`;
+                    });
 
-        }
+                }
 
-    });
 
-}
 
-
-
-</script>
+            </script>
 
 </body>
+
 </html>

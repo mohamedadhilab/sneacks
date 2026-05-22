@@ -37,9 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     });
-    // =====================================================
-// REMOVE BUTTONS
-// =====================================================
+   
 
 const removeBtns =
     document.querySelectorAll(
@@ -61,9 +59,7 @@ removeBtns.forEach(button => {
 
 });
 
-// =====================================================
-// UPDATE QUANTITY
-// =====================================================
+
 
 async function updateQuantity(
     itemId,
@@ -119,9 +115,6 @@ async function updateQuantity(
 
         }
 
-        // =================================================
-        // ELEMENTS
-        // =================================================
 
         const minusBtn =
             document.querySelector(
@@ -139,9 +132,6 @@ async function updateQuantity(
                 '.item-total-price'
             );
 
-        // =================================================
-        // UPDATE UI
-        // =================================================
 
         qtyInput.value =
             data.quantity;
@@ -180,9 +170,7 @@ async function updateQuantity(
     }
 
 }
-// =====================================================
-// REMOVE CART ITEM
-// =====================================================
+
 
 async function removeCartItem(itemId) {
 
@@ -216,9 +204,7 @@ async function removeCartItem(itemId) {
         const data =
             await response.json();
 
-        // =============================================
-        // FAILED
-        // =============================================
+     
 
         if (!data.success) {
 
@@ -238,9 +224,7 @@ async function removeCartItem(itemId) {
 
         }
 
-        // =============================================
-        // REMOVE UI
-        // =============================================
+   
 
         const removeBtn =
             document.querySelector(
@@ -256,9 +240,7 @@ async function removeCartItem(itemId) {
 
     cartItem.remove();
 
-    // =========================================
-    // RECALCULATE TOTAL
-    // =========================================
+
 
     let newTotal = 0;
 
@@ -281,9 +263,7 @@ async function removeCartItem(itemId) {
 
         });
 
-    // =========================================
-    // UPDATE TOTAL UI
-    // =========================================
+
 
     document.getElementById(
         'cartSubtotal'
@@ -295,9 +275,7 @@ async function removeCartItem(itemId) {
     ).innerText =
         `₹${newTotal.toLocaleString()}`;
 
-    // =========================================
-    // EMPTY CART
-    // =========================================
+ 
 
     const remainingItems =
         document.querySelectorAll(
@@ -312,9 +290,7 @@ async function removeCartItem(itemId) {
 
 }, 300);
 
-        // =============================================
-        // SUCCESS
-        // =============================================
+     
 
         Swal.fire({
 

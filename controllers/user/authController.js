@@ -10,6 +10,23 @@ const {
   verifyOTP
 } = require('../../utils/otpService');
 
+exports.getLoginPage = (req, res) => {
+
+    res.render('user/login');
+
+};
+
+exports.getSignupPage = (req, res) => {
+
+    res.render('user/signup');
+
+};
+
+exports.getForgotPasswordPage = (req, res) => {
+
+    res.render('user/forgot-password');
+
+};
 
 exports.signup = async (req, res) => {
 

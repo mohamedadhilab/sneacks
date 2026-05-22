@@ -2,31 +2,22 @@ const Wishlist = require('../../models/wishlistModel');
 
 const Product = require('../../models/productModel');
 
-// ======================================================
-// ADD TO WISHLIST
-// ======================================================
+
 
 const addToWishlist = async (req, res) => {
 
     try {
 
-        // =========================================
-        // USER
-        // =========================================
+      
 
         const userId = req.session.user.id;
 
-        // =========================================
-        // PRODUCT
-        // =========================================
 
         const {
             productId
         } = req.body;
 
-        // =========================================
-        // CHECK PRODUCT
-        // =========================================
+        
 
         const product = await Product.findOne({
 
@@ -60,9 +51,7 @@ const addToWishlist = async (req, res) => {
 
         });
 
-        // =========================================
-        // CREATE WISHLIST
-        // =========================================
+   
 
         if (!wishlist) {
 
@@ -76,9 +65,7 @@ const addToWishlist = async (req, res) => {
 
         }
 
-        // =========================================
-        // CHECK EXISTING
-        // =========================================
+     
 
         const alreadyExists =
             wishlist.items.find(item =>
@@ -101,9 +88,7 @@ const addToWishlist = async (req, res) => {
 
         }
 
-        // =========================================
-        // ADD ITEM
-        // =========================================
+     
 
         wishlist.items.push({
 
@@ -111,15 +96,10 @@ const addToWishlist = async (req, res) => {
 
         });
 
-        // =========================================
-        // SAVE
-        // =========================================
+      
 
         await wishlist.save();
 
-        // =========================================
-        // RESPONSE
-        // =========================================
 
         return res.json({
 
@@ -152,23 +132,15 @@ const addToWishlist = async (req, res) => {
 
 };
 
-// ======================================================
-// LOAD WISHLIST PAGE
-// ======================================================
 
 const loadWishlist = async (req, res) => {
 
     try {
 
-        // =========================================
-        // USER
-        // =========================================
-
+   
         const userId = req.session.user.id;
 
-        // =========================================
-        // FIND WISHLIST
-        // =========================================
+        
 
         const wishlist = await Wishlist.findOne({
 
@@ -188,9 +160,7 @@ const loadWishlist = async (req, res) => {
 
         });
 
-        // =========================================
-        // CLEAN INVALID PRODUCTS
-        // =========================================
+     
 
         if (wishlist && wishlist.items.length > 0) {
 
@@ -215,9 +185,7 @@ const loadWishlist = async (req, res) => {
 
         }
 
-        // =========================================
-        // RENDER PAGE
-        // =========================================
+   
 
         res.render('user/wishlist', {
 
@@ -240,31 +208,22 @@ const loadWishlist = async (req, res) => {
 
 };
 
-// ======================================================
-// REMOVE FROM WISHLIST
-// ======================================================
+
 
 const removeWishlistItem = async (req, res) => {
 
     try {
 
-        // =========================================
-        // USER
-        // =========================================
+       
 
         const userId = req.session.user.id;
 
-        // =========================================
-        // PRODUCT
-        // =========================================
 
         const {
             productId
         } = req.body;
 
-        // =========================================
-        // FIND WISHLIST
-        // =========================================
+    
 
         const wishlist = await Wishlist.findOne({
 
@@ -285,9 +244,7 @@ const removeWishlistItem = async (req, res) => {
 
         }
 
-        // =========================================
-        // REMOVE ITEM
-        // =========================================
+
 
         wishlist.items =
             wishlist.items.filter(item =>
@@ -297,15 +254,10 @@ const removeWishlistItem = async (req, res) => {
 
             );
 
-        // =========================================
-        // SAVE
-        // =========================================
 
         await wishlist.save();
 
-        // =========================================
-        // RESPONSE
-        // =========================================
+ 
 
         return res.json({
 
@@ -338,9 +290,7 @@ const removeWishlistItem = async (req, res) => {
 
 };
 
-// ======================================================
-// EXPORT
-// ======================================================
+
 
 module.exports = {
 

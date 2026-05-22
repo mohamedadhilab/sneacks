@@ -2,24 +2,18 @@ const Cart = require('../../models/cartModel');
 
 const Address = require('../../models/addressModel');
 
-// ======================================================
-// LOAD CHECKOUT PAGE
-// ======================================================
+
 
 const loadCheckout = async (req, res) => {
 
     try {
 
-        // =========================================
-        // USER ID
-        // =========================================
+     
 
         const userId =
             req.session.user.id;
 
-        // =========================================
-        // GET ADDRESSES
-        // =========================================
+        
 
         const addresses =
             await Address.find({
@@ -28,9 +22,7 @@ const loadCheckout = async (req, res) => {
 
             });
 
-        // =========================================
-        // GET CART
-        // =========================================
+
 
         const cart =
             await Cart.findOne({
@@ -49,9 +41,7 @@ const loadCheckout = async (req, res) => {
 
             });
 
-        // =========================================
-        // EMPTY CART
-        // =========================================
+     
 
         if (
 
@@ -65,9 +55,6 @@ const loadCheckout = async (req, res) => {
 
         }
 
-        // =========================================
-        // REMOVE INVALID PRODUCTS
-        // =========================================
 
         cart.items =
             cart.items.filter(item => {
@@ -88,9 +75,7 @@ const loadCheckout = async (req, res) => {
 
         await cart.save();
 
-        // =========================================
-        // CART TOTAL
-        // =========================================
+      
 
         let cartTotal = 0;
 
@@ -104,18 +89,13 @@ const loadCheckout = async (req, res) => {
 
         });
 
-        // =========================================
-        // DEBUG
-        // =========================================
+
 
         console.log(
             'ADDRESSES:',
             addresses
         );
 
-        // =========================================
-        // RENDER
-        // =========================================
 
         res.render(
 
@@ -150,9 +130,6 @@ const loadCheckout = async (req, res) => {
 
 };
 
-// ======================================================
-// EXPORT
-// ======================================================
 
 module.exports = {
 

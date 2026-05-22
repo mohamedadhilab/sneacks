@@ -25,6 +25,16 @@ const validate = require('../middleware/validateMiddleware');
 const userValidation = require('../validations/userValidation');
 
 
+
+
+router.get('/', (req, res) => {
+
+    res.redirect('/home');
+
+});
+
+
+
 router.get(
 
     '/home',
@@ -34,32 +44,25 @@ router.get(
     homeController.loadHome
 
 );
-
 router.get(
   '/login',
   isLoggedOut,
   noCache,
-  (req, res) => {
-    res.render('user/login');
-  }
+  authController.getLoginPage
 );
 
 router.get(
   '/signup',
   isLoggedOut,
   noCache,
-  (req, res) => {
-    res.render('user/signup');
-  }
-);
+  authController.getSignupPage
+);;
 
 router.get(
   '/forgot-password',
   isLoggedOut,
   noCache,
-  (req, res) => {
-    res.render('user/forgot-password');
-  }
+  authController.getForgotPasswordPage
 );
 
 

@@ -1,8 +1,5 @@
 const Address = require('../../models/addressModel');
 
-// ======================================================
-// GET ADDRESS PAGE
-// ======================================================
 
 exports.getAddressPage = async (req, res) => {
 
@@ -46,9 +43,7 @@ exports.getAddressPage = async (req, res) => {
 
 };
 
-// ======================================================
-// ADD ADDRESS
-// ======================================================
+
 
 exports.addAddress = async (req, res) => {
 
@@ -65,9 +60,6 @@ exports.addAddress = async (req, res) => {
         const isDefault =
             data.is_default === 'true';
 
-        // =====================================
-        // REMOVE OLD DEFAULT
-        // =====================================
 
         if (isDefault) {
 
@@ -94,9 +86,7 @@ exports.addAddress = async (req, res) => {
 
         }
 
-        // =====================================
-        // CREATE ADDRESS
-        // =====================================
+     
 
         await Address.create({
 
@@ -157,9 +147,7 @@ exports.addAddress = async (req, res) => {
 
 };
 
-// ======================================================
-// UPDATE ADDRESS
-// ======================================================
+
 
 exports.updateAddress = async (req, res) => {
 
@@ -178,9 +166,7 @@ exports.updateAddress = async (req, res) => {
         const isDefault =
             data.is_default === 'true';
 
-        // =====================================
-        // REMOVE OLD DEFAULT
-        // =====================================
+      
 
         if (isDefault) {
 
@@ -207,9 +193,7 @@ exports.updateAddress = async (req, res) => {
 
         }
 
-        // =====================================
-        // UPDATE
-        // =====================================
+       
 
         await Address.updateOne(
 
@@ -284,9 +268,7 @@ exports.updateAddress = async (req, res) => {
 
 };
 
-// ======================================================
-// DELETE ADDRESS
-// ======================================================
+
 
 exports.deleteAddress = async (req, res) => {
 
@@ -310,9 +292,7 @@ exports.deleteAddress = async (req, res) => {
 
             });
 
-        // =====================================
-        // SET NEW DEFAULT
-        // =====================================
+  
 
         if (
 

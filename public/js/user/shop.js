@@ -50,9 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-// ======================================================
-// SORT DROPDOWN
-// ======================================================
+
 
 const sortSelect = document.getElementById('sortSelect');
 
@@ -69,9 +67,7 @@ if (sortSelect) {
     });
 
 }
-// ======================================================
-// SAVE SCROLL POSITION
-// ======================================================
+
 
 window.addEventListener('beforeunload', () => {
 
@@ -82,9 +78,7 @@ window.addEventListener('beforeunload', () => {
 
 });
 
-// ======================================================
-// RESTORE SCROLL POSITION
-// ======================================================
+
 
 window.addEventListener('load', () => {
 

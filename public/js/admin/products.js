@@ -111,6 +111,8 @@ function closeAddProductModal() {
 function openEditModal(
     id,
     name,
+    description,
+    brand,
     price,
     category,
     status,
@@ -129,6 +131,14 @@ function openEditModal(
     document
     .getElementById('editProductName')
     .value = name;
+
+    document
+    .getElementById('editProductDescription')
+    .value = description;
+
+    document
+    .getElementById('editProductBrand')
+    .value = brand;
 
     document
     .getElementById('editProductPrice')
