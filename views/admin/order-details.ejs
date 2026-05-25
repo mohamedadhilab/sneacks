@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details #10294 | SNEACKS Admin</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/admin/layout.css">
+    <link rel="stylesheet" href="/styles/admin/order-details.css">
+</head>
+
+<body>
+
+    <!-- Sidebar Partial -->
+    <%- include('../partials/admin/sidebar', { page: 'orders' }) %>
+
+    <%
+      // Safe fallback variables matching the fourth reference image exactly
+      if (typeof order === 'undefined') {
+          order = {
+              _id: "66504a535b434e208759f676",
+              orderId: "10294",
+              createdAt: "2026-05-24T09:42:00.000Z",
+              orderStatus: "Processing",
+              paymentMethod: "Visa Ending in 8492",
+              paymentCardExp: "11/26",
+              transactionId: "TRX_942_001_A883L0X",
+              paymentStatus: "Authorized & Captured",
+              subtotal: 460.00,
+              shippingCharge: 25.00,
+              tax: 36.80,
+              finalAmount: 521.80,
+              customer: {
+                  name: "Marcus Jensen",
+                  email: "marcus.j@velocity.io",
+                  tier: "ELITE MEMBER",
+                  avatarColor: "#e040fb"
+              },
+              address: {
+                  address_line: "1284 North Velocity Way",
+                  landmark: "Suite 405, Tech District",
+                  city: "Seattle",
+                  state: "WA",
+                  pincode: "98101",
+                  country: "United States"
+              },
+              items: [
+                  {
+                      productName: "Nike Air Max 270",
+                      color: "Solar Flare / Black",
+                      sku: "N-AM-270-4A",
+                      size: "US 10",
+                      quantity: 1,
+                      price: 150.00,
+                      productImage: "product-1778818514732-113902028.jpg"
+                  },
+                  {
+                      productName: "Air Jordan 1 Retro High",
+                      color: "Shadow Grey",
+                      sku: "AJ1-SH-SG1",
+                      size: "US 11",
+                      quantity: 1,
+                      price: 170.00,
+                      productImage: "product-1778818514732-113902028.jpg"
+                  },
+                  {
+                      productName: "Adidas NMD R1 V2",
+                      color: "Signal Green",
+                      sku: "AD-NMD-V2-G6",
+                      size: "US 9.5",
+                      quantity: 1,
+                      price: 140.00,
+                      productImage: "product-1778818514732-113902028.jpg"
+                  }
+              ]
+          };
+      }
+      
+      const dateFormatted = new Date(order.createdAt).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+      });
+      const timeFormatted = new Date(order.createdAt).toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit'
+      });
+      
+      // Compute initials
+      const initials = order.customer ? order.customer.name.split(' ').map(n=>n[0]).join('').slice(0, 2).toUpperCase() : 'CU';
+    %>
+
+    <div class="main-content">
+        <!-- Topbar Partial -->
+        <%- include('../partials/admin/topbar', { searchPlaceholder: 'Search details...' }) %>
+
+        <div class="page-container animate-fade-up">
+            
+            <!-- HEADER -->
+            <div class="order-detail-admin-header mb-4">
+                <div>
+                    <div class="header-breadcrumbs">
+                        <a href="/admin/dashboard" class="breadcrumb-link">SNEACKS</a>
+                        <span class="breadcrumb-sep">/</span>
+                        <span class="breadcrumb-curr">Order Fulfillment</span>
+                    </div>
+                    <div class="header-meta-row mt-2">
+                        <span class="badge badge-processing" id="headerStatusBadge">
+                            <span class="badge-dot"></span> <%= order.orderStatus %>
+                        </span>
+                        <span class="meta-date">Placed on <%= dateFormatted %> at <%= timeFormatted %></span>
+                    </div>
+                    <h1 class="admin-order-id-title mt-2">ORDER #<%= order.orderId %></h1>
+                </div>
+                <div class="admin-header-actions">
+                    <button class="btn btn-outline" onclick="window.print()">
+                        <i class="fas fa-print"></i> Invoice
+                    </button>
+                    <!-- Trigger Status Modal popup -->
+                    <button class="btn btn-orange ml-2" onclick="openStatusModalDirectly()">
+                        <i class="fas fa-edit"></i> Update Status
+                    </button>
+                </div>
+            </div>
+
+            <!-- MAIN TWO COLUMN GRID -->
+            <div class="admin-detail-grid">
+                
+                <!-- LEFT COLUMN: Items & Payments -->
+                <div class="items-payment-column">
+                    
+                    <!-- Order Items Card -->
+                    <div class="card card-admin-details mb-4">
+                        <div class="card-header-flex">
+                            <h3>Order Items <span class="item-count-pill">(<%= order.items.length %> items)</span></h3>
+                            <span class="stock-status-pill"><i class="fas fa-check-circle"></i> In Stock</span>
+                        </div>
+                        <div class="card-divider"></div>
+                        
+                        <div class="admin-ordered-list">
+                            <% order.items.forEach(item => { %>
+                                <div class="admin-order-item-row">
+                                    <div class="item-img-box">
+                                        <img src="/uploads/products/<%= item.productImage %>" alt="<%= item.productName %>" onerror="this.src='/images/placeholder-shoe.png'">
+                                    </div>
+                                    <div class="item-details-box">
+                                        <h4 class="item-name-heading"><%= item.productName %></h4>
+                                        <p class="item-meta-subtitle">
+                                            Color: <%= item.color || 'Default' %>
+                                        </p>
+                                        <span class="item-sku-tag">SKU: <%= item.sku %></span>
+                                    </div>
+                                    <div class="item-spec-box">
+                                        <span class="spec-label">SIZE / QTY</span>
+                                        <span class="spec-val"><%= item.size %> / x<%= item.quantity %></span>
+                                    </div>
+                                    <div class="item-price-box">
+                                        <span class="spec-label">PRICE</span>
+                                        <span class="price-val">₹<%= item.price.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+
+                    <!-- Payment Details Card -->
+                    <div class="card card-admin-details">
+                        <h3>Payment Details</h3>
+                        <div class="card-divider"></div>
+                        
+                        <div class="payment-details-flex">
+                            
+                            <div class="payment-method-box">
+                                <span class="details-label">Payment Method</span>
+                                <div class="method-flex mt-2">
+                                    <i class="fas fa-credit-card details-icon"></i>
+                                    <div>
+                                        <span class="method-title"><%= order.paymentMethod %></span>
+                                        <span class="method-exp">Exp: <%= order.paymentCardExp || 'N/A' %></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-transaction-box">
+                                <span class="details-label">Transaction ID</span>
+                                <div class="trx-flex mt-2">
+                                    <span class="trx-id font-mono" id="trxIdText"><%= order.transactionId %></span>
+                                    <button class="btn-copy-link" onclick="copyTransactionId()">
+                                        <i class="far fa-copy"></i> Copy Link
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="payment-status-box">
+                                <span class="details-label">Status</span>
+                                <div class="status-flex mt-2">
+                                    <span class="status-dot-active"></span>
+                                    <span class="status-text-highlight text-cyan"><%= order.paymentStatus %></span>
+                                </div>
+                                <span class="processed-tag mt-1">Processed via Stripe Core</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN: Customer, Shipping & Summary -->
+                <div class="customer-billing-column">
+                    
+                    <!-- Customer Card -->
+                    <div class="card card-admin-details mb-4">
+                        <h3>Customer</h3>
+                        <div class="card-divider"></div>
+                        <div class="customer-profile-card">
+                            <div class="cust-avatar-large" style="background-color: <%= order.customer.avatarColor %>;">
+                                <%= initials %>
+                            </div>
+                            <div class="cust-meta">
+                                <h4 class="cust-name-large"><%= order.customer.name %></h4>
+                                <span class="cust-email-large"><%= order.customer.email %></span>
+                            </div>
+                        </div>
+                        <div class="cust-tier-row mt-3">
+                            <span class="details-label">Customer Tier</span>
+                            <span class="badge-tier-elite"><%= order.customer.tier %></span>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address Card -->
+                    <div class="card card-admin-details mb-4">
+                        <h3>Shipping Address</h3>
+                        <div class="card-divider"></div>
+                        <div class="shipping-address-details">
+                            <strong class="shipping-recipient"><%= order.customer.name %></strong>
+                            <p class="shipping-text"><%= order.address.address_line %></p>
+                            <% if (order.address.landmark) { %>
+                                <p class="shipping-text"><%= order.address.landmark %></p>
+                            <% } %>
+                            <p class="shipping-text"><%= order.address.city %>, <%= order.address.state %> <%= order.address.pincode %></p>
+                            <p class="shipping-text"><%= order.address.country %></p>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary Card -->
+                    <div class="card card-admin-details mb-4">
+                        <h3>Order Summary</h3>
+                        <div class="card-divider"></div>
+                        
+                        <div class="summary-details">
+                            <div class="summary-row">
+                                <span class="summary-label">Subtotal</span>
+                                <span class="summary-val">₹<%= (order.subtotal || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Shipping (Expedited)</span>
+                                <span class="summary-val">₹<%= (order.shippingCharge || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Estimated Tax</span>
+                                <span class="summary-val">₹<%= (order.tax || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                            <div class="card-divider"></div>
+                            <div class="summary-row grand-total-row">
+                                <span class="grand-total-label">Total</span>
+                                <div class="text-right">
+                                    <span class="grand-total-val text-orange">₹<%= (order.finalAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                                    <span class="currency-tag">USD Currency Equivalent</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Big action dispatcher button -->
+                        <button class="btn btn-dispatch-approve mt-4" id="dispatchApproveBtn">
+                            <span>Approve For Dispatch</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <div class="fraud-risk-badge mt-2">
+                            <i class="fas fa-shield-alt"></i> Fraud Risk Score: <span class="text-cyan">Low (0.02)</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- UPDATE ORDER STATUS MODAL (Glassmorphism popup overlay) -->
+    <div id="statusModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Update Order Status</h3>
+                <button class="close-modal-btn" onclick="closeStatusModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="statusUpdateForm" onsubmit="handleStatusSubmit(event)">
+                    
+                    <div class="modal-meta-row">
+                        <div class="meta-item">
+                            <span class="meta-label">Order ID</span>
+                            <span id="modalOrderId" class="meta-val text-orange">#<%= order.orderId %></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Grand Total</span>
+                            <span id="modalOrderTotal" class="meta-val text-white">₹<%= order.finalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label">Current Status</label>
+                        <span id="modalCurrentStatus" class="badge badge-processing">Processing</span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="newStatusSelect" class="form-label">New Status</label>
+                        <select id="newStatusSelect" class="form-input custom-select">
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="Returned">Returned</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="adminNotes" class="form-label">Internal Staff Notes</label>
+                        <textarea id="adminNotes" class="form-input" placeholder="Enter private staff logs regarding shipping delay, stock verification, or customer interaction..."></textarea>
+                    </div>
+
+                    <div class="modal-footer-actions">
+                        <button type="button" class="btn-modal btn-modal-cancel" onclick="closeStatusModal()">Cancel</button>
+                        <button type="submit" class="btn-modal btn-modal-save">Save Updates</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/admin/order-details.js"></script>
+</body>
+
+</html>

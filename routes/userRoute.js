@@ -13,6 +13,7 @@ const cartController =require('../controllers/user/cartController');
 const wishlistController =require('../controllers/user/wishlistController');
 const checkoutController =require('../controllers/user/checkoutController');
 const homeController =require('../controllers/user/homeController');
+const orderController = require('../controllers/user/orderController');
 const {
   isLoggedIn,
   isLoggedOut
@@ -238,9 +239,7 @@ router.delete(
     isLoggedIn,
     cartController.removeCartItem
 );
-// ======================================================
-// WISHLIST ROUTES
-// ======================================================
+
 
 router.post(
 
@@ -278,6 +277,44 @@ router.get(
     isLoggedIn,
 
     checkoutController.loadCheckout
+
+);
+
+router.post(
+
+    '/place-order',
+
+    isLoggedIn,
+
+    checkoutController.placeOrder
+
+);
+router.get(
+
+    '/order-success/:id',
+
+    isLoggedIn,
+
+    checkoutController.loadSuccessPage
+
+);
+
+router.get(
+
+    '/orders',
+
+    isLoggedIn,
+
+    orderController.loadOrders
+
+);
+router.get(
+
+    '/order-details/:id',
+
+    isLoggedIn,
+
+    orderController.loadOrderDetails
 
 );
 module.exports = router;

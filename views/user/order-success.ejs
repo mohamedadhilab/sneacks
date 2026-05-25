@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Thank you for your order at SNEACKS. Your order has been placed successfully.">
+    <title>Order Confirmed | SNEACKS</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/user/base.css">
+    <link rel="stylesheet" href="/styles/user/layout.css">
+    <link rel="stylesheet" href="/styles/user/components.css">
+    <link rel="stylesheet" href="/styles/user/animations.css">
+    <link rel="stylesheet" href="/styles/user/order-success.css">
+    <link rel="stylesheet" href="/styles/user/responsive.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <%- include('../partials/user/navbar', { page: 'success' }) %>
+
+    <main class="page-wrapper">
+        <div class="container order-success-container section">
+            
+            <!-- Success Hero Section -->
+            <div class="success-hero animate-fade-up">
+                <div class="success-animation-container">
+                    <svg class="success-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <!-- Soft circular background with fill -->
+                        <circle class="success-circle-bg" cx="26" cy="26" r="25" />
+                        <!-- Animated circle outline -->
+                        <circle class="success-circle-outline" cx="26" cy="26" r="25" fill="none" />
+                        <!-- Animated checkmark -->
+                        <path class="success-checkmark" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                    </svg>
+                </div>
+                <h1 class="success-title">Thank You</h1>
+                <p class="success-subtitle">
+                    Your order has been placed successfully and is currently being curated at our atelier. You will receive a confirmation email shortly.
+                </p>
+            </div>
+
+            <!-- Main Two Column Layout -->
+            <div class="order-success-grid animate-fade-up delay-100">
+                
+                <!-- LEFT COLUMN: Order Summary, Shipping Address & Action Buttons -->
+                <div class="order-info-column">
+                    
+                    <!-- Order Summary Card -->
+                    <div class="luxury-card mb-3">
+                        <h3 class="card-title">Order Summary</h3>
+                        <div class="card-divider"></div>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Order Number</span>
+                            <span class="info-value highlight-value">#<%= order.orderId %></span>
+                        </div>
+                        
+                        <% 
+                            // Format the order creation date
+                            const orderDate = new Date(order.createdAt || Date.now());
+                            const dateFormatted = orderDate.toLocaleDateString('en-US', { 
+                                month: 'short', 
+                                day: 'numeric', 
+                                year: 'numeric' 
+                            });
+
+                            // Calculate estimated delivery: 3-5 days after orderDate
+                            const delStart = new Date(orderDate);
+                            delStart.setDate(orderDate.getDate() + 3);
+                            const delEnd = new Date(orderDate);
+                            delEnd.setDate(orderDate.getDate() + 5);
+
+                            const delStartFormatted = delStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                            const delEndFormatted = delEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                            const estimatedDelivery = `${delStartFormatted} - ${delEndFormatted}`;
+                            
+                            // Map payment method to readable name
+                            let readablePayment = 'Online Payment';
+                            const pMethod = (order.paymentMethod || '').toLowerCase();
+                            if (pMethod === 'cod') {
+                                readablePayment = 'Cash on Delivery';
+                            } else if (pMethod === 'wallet') {
+                                readablePayment = 'SNEACKS Wallet';
+                            } else if (pMethod === 'razorpay') {
+                                readablePayment = 'Credit Card / UPI';
+                            }
+                        %>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Order Date</span>
+                            <span class="info-value"><%= dateFormatted %></span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Payment Method</span>
+                            <span class="info-value"><%= readablePayment %></span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Estimated Delivery</span>
+                            <span class="info-value highlight-delivery"><%= estimatedDelivery %></span>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address Card -->
+                    <% 
+                        // Safe fallback for address/shippingAddress fields
+                        const addrObj = order.address || order.shippingAddress || {};
+                    %>
+                    <div class="luxury-card mb-4">
+                        <h3 class="card-title">Shipping Address</h3>
+                        <div class="card-divider"></div>
+                        <div class="address-details">
+                            <strong class="address-name"><%= addrObj.name || 'Valued Customer' %></strong>
+                            <p class="address-text"><%= addrObj.address_line || 'No address provided' %></p>
+                            <% if (addrObj.landmark) { %>
+                                <p class="address-text"><%= addrObj.landmark %></p>
+                            <% } %>
+                            <p class="address-text">
+                                <%= addrObj.city || '' %><%= (addrObj.city && addrObj.state) ? ', ' : '' %><%= addrObj.state || '' %> <%= addrObj.pincode || '' %>
+                            </p>
+                            <% if (addrObj.phone) { %>
+                                <p class="address-phone">
+                                    <i class="fas fa-phone-alt"></i> <%= addrObj.phone %>
+                                </p>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="/shop" class="btn btn-accent btn-full mb-2">Continue Shopping</a>
+                        <a href="/orders" class="btn btn-secondary btn-full">View Orders</a>
+                    </div>
+                    
+                </div>
+
+                <!-- RIGHT COLUMN: Purchase Details -->
+                <div class="purchase-details-column">
+                    <div class="luxury-card">
+                        <h3 class="card-title">Purchase Details</h3>
+                        <div class="card-divider"></div>
+                        
+                        <!-- List Ordered Products -->
+                        <div class="ordered-items">
+                            <% 
+                                // Dynamic helper to guess or parse color for premium styling matching mockup
+                                const guessColor = (pName) => {
+                                    const name = (pName || '').toLowerCase();
+                                    if (name.includes('canvas low-top') || name.includes('canvas')) return 'Parchment White';
+                                    if (name.includes('atelier') || name.includes('runner')) return 'Sage Moss';
+                                    if (name.includes('white')) return 'White';
+                                    if (name.includes('black')) return 'Black';
+                                    if (name.includes('beige')) return 'Beige';
+                                    if (name.includes('olive') || name.includes('green')) return 'Olive';
+                                    return 'Parchment White'; // Default luxury color
+                                };
+
+                                const items = order.items || [];
+                                items.forEach(item => { 
+                            %>
+                                <div class="product-item">
+                                    <div class="product-img-box">
+                                        <img src="/uploads/products/<%= item.productImage %>" alt="<%= item.productName %>" onerror="this.src='/images/placeholder-shoe.png'">
+                                    </div>
+                                    <div class="product-info">
+                                        <h4 class="product-name"><%= item.productName %></h4>
+                                        <p class="product-meta">
+                                            <span class="meta-label">Color:</span> <span class="meta-val"><%= guessColor(item.productName) %></span>
+                                            <span class="meta-divider">|</span>
+                                            <span class="meta-label">Size:</span> <span class="meta-val"><%= item.size %></span>
+                                            <span class="meta-divider">|</span>
+                                            <span class="meta-label">Qty:</span> <span class="meta-val"><%= item.quantity %></span>
+                                        </p>
+                                    </div>
+                                    <div class="product-price">
+                                        ₹<%= (item.price * item.quantity).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                        
+                        <!-- Totals Section -->
+                        <div class="totals-section">
+                            <div class="totals-row">
+                                <span class="totals-label">Subtotal</span>
+                                <span class="totals-val">₹<%= (order.subtotal || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                            
+                            <div class="totals-row">
+                                <span class="totals-label">Shipping</span>
+                                <span class="totals-val complimentary-badge">
+                                    <%= (order.shippingCharge === 0 || !order.shippingCharge) ? 'Complimentary' : '₹' + order.shippingCharge.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %>
+                                </span>
+                            </div>
+
+                            <% if (order.discount && order.discount > 0) { %>
+                                <div class="totals-row discount-row">
+                                    <span class="totals-label">Discount</span>
+                                    <span class="totals-val">-₹<%= order.discount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                                </div>
+                            <% } %>
+                            
+                            <div class="totals-row">
+                                <span class="totals-label">Estimated Tax</span>
+                                <span class="totals-val tax-included">Included</span>
+                            </div>
+
+                            <div class="totals-divider"></div>
+                            
+                            <% 
+                                const finalTotal = order.finalAmount || order.totalAmount || order.subtotal || 0;
+                            %>
+                            <div class="totals-row grand-total-row">
+                                <span class="grand-total-label">Total</span>
+                                <span class="grand-total-val">₹<%= finalTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('../partials/user/footer') %>
+
+</body>
+
+</html>

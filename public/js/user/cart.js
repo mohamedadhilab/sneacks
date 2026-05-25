@@ -99,17 +99,16 @@ async function updateQuantity(
 
         if (!data.success) {
 
-            Swal.fire({
-
-                icon: 'warning',
-
-                title: 'Oops',
-
-                text: data.message,
-
-                confirmButtonColor: '#111'
-
-            });
+            if (window.Toast) {
+                window.Toast.warning(data.message);
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops',
+                    text: data.message,
+                    confirmButtonColor: '#111'
+                });
+            }
 
             return;
 
@@ -155,17 +154,16 @@ async function updateQuantity(
 
         console.log(error);
 
-        Swal.fire({
-
-            icon: 'error',
-
-            title: 'Error',
-
-            text: 'Something went wrong',
-
-            confirmButtonColor: '#111'
-
-        });
+        if (window.Toast) {
+            window.Toast.error('Something went wrong');
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong',
+                confirmButtonColor: '#111'
+            });
+        }
 
     }
 
@@ -208,17 +206,16 @@ async function removeCartItem(itemId) {
 
         if (!data.success) {
 
-            Swal.fire({
-
-                icon: 'error',
-
-                title: 'Oops',
-
-                text: data.message,
-
-                confirmButtonColor: '#111'
-
-            });
+            if (window.Toast) {
+                window.Toast.error(data.message);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops',
+                    text: data.message,
+                    confirmButtonColor: '#111'
+                });
+            }
 
             return;
 
@@ -292,19 +289,17 @@ async function removeCartItem(itemId) {
 
      
 
-        Swal.fire({
-
-            icon: 'success',
-
-            title: 'Removed',
-
-            text: data.message,
-
-            timer: 1200,
-
-            showConfirmButton: false
-
-        });
+        if (window.Toast) {
+            window.Toast.success(data.message || 'Item removed from cart.');
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Removed',
+                text: data.message,
+                timer: 1200,
+                showConfirmButton: false
+            });
+        }
 
     }
 
@@ -312,17 +307,16 @@ async function removeCartItem(itemId) {
 
         console.log(error);
 
-        Swal.fire({
-
-            icon: 'error',
-
-            title: 'Error',
-
-            text: 'Something went wrong',
-
-            confirmButtonColor: '#111'
-
-        });
+        if (window.Toast) {
+            window.Toast.error('Something went wrong');
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong',
+                confirmButtonColor: '#111'
+            });
+        }
 
     }
 

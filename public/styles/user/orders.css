@@ -1,0 +1,513 @@
+/* ============================================================
+   SNEACKS - USER ORDERS LIST PAGE STYLES
+   ============================================================ */
+
+/* Page Wrapper and Base Containers */
+.orders-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.account-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 3.5rem;
+    align-items: start;
+    margin-top: var(--space-md);
+}
+
+/* ============================================================
+   LEFT ACCOUNT SIDEBAR
+   ============================================================ */
+.account-sidebar {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid rgba(216, 212, 200, 0.4);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    position: sticky;
+    top: 100px;
+}
+
+.sidebar-heading {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary);
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-link i {
+    font-size: 0.95rem;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    color: var(--color-text-primary);
+    background-color: rgba(216, 212, 200, 0.4);
+    font-weight: 500;
+}
+
+/* ============================================================
+   RIGHT ORDERS CONTENT AREA
+   ============================================================ */
+.orders-content {
+    flex-grow: 1;
+}
+
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+}
+
+.orders-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+}
+
+.orders-subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    font-weight: 300;
+}
+
+.orders-count-badge {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.badge-count {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+/* Search Bar styling */
+.orders-search-box {
+    position: relative;
+    margin-bottom: 2.25rem;
+}
+
+.orders-search-box .form-input {
+    padding-left: 2.75rem;
+    border-radius: 4px;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.orders-search-box .form-input:focus {
+    background-color: var(--color-white);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.orders-search-box .search-icon {
+    position: absolute;
+    left: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+/* ============================================================
+   ORDER CARDS LIST
+   ============================================================ */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.order-card {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-white);
+    border: 1px solid rgba(216, 212, 200, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    gap: 2rem;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.order-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-hover);
+}
+
+.order-card-img {
+    width: 90px;
+    height: 100px;
+    background-color: var(--color-bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.order-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.order-card-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.order-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.meta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.meta-header {
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--color-text-secondary);
+}
+
+.meta-body {
+    font-size: 0.88rem;
+    color: var(--color-text-primary);
+}
+
+.font-mono {
+    font-family: monospace;
+    letter-spacing: 0.02em;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 50px;
+    width: fit-content;
+}
+
+.status-pending {
+    background-color: rgba(168, 159, 145, 0.12);
+    color: #8c8172;
+}
+
+.status-processing {
+    background-color: rgba(224, 168, 0, 0.1);
+    color: #b8860b;
+}
+
+.status-shipped {
+    background-color: rgba(74, 114, 145, 0.1);
+    color: #4a7291;
+}
+
+.status-delivered {
+    background-color: rgba(107, 122, 69, 0.1);
+    color: var(--color-accent);
+}
+
+.status-cancelled {
+    background-color: rgba(217, 83, 79, 0.08);
+    color: var(--color-error);
+}
+
+.status-returned {
+    background-color: rgba(110, 110, 110, 0.1);
+    color: #555555;
+}
+
+/* Items Preview styling */
+.order-items-preview {
+    font-size: 0.85rem;
+    color: var(--color-text-primary);
+    border-top: 1px solid rgba(216, 212, 200, 0.4);
+    padding-top: 0.65rem;
+}
+
+.preview-spec {
+    color: var(--color-text-secondary);
+    font-weight: 300;
+    margin-left: 0.5rem;
+}
+
+/* View Details link button */
+.order-card-action {
+    flex-shrink: 0;
+}
+
+.btn-order-action {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    background-color: transparent;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-order-action i {
+    transition: transform 0.3s ease;
+}
+
+.btn-order-action:hover {
+    border-color: var(--color-text-primary);
+    background-color: var(--color-text-primary);
+    color: var(--color-bg-primary);
+}
+
+.btn-order-action:hover i {
+    transform: translateX(3px);
+}
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+.orders-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.pagination-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    transition: color 0.3s ease;
+}
+
+.pagination-arrow:hover:not(.disabled) {
+    color: var(--color-accent);
+}
+
+.pagination-arrow.disabled {
+    color: var(--color-border);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.pagination-pages {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination-number {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.pagination-number:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-secondary);
+}
+
+.pagination-number.active {
+    color: var(--color-text-primary);
+    background-color: rgba(216, 212, 200, 0.5);
+    font-weight: 600;
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.orders-empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: var(--shadow-soft);
+}
+
+.empty-icon-box {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: var(--color-bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: var(--color-border);
+    font-size: 1.75rem;
+}
+
+.empty-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+.empty-subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    max-width: 420px;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (max-width: 992px) {
+    .account-layout {
+        grid-template-columns: 1fr; /* Stack sidebar and contents */
+        gap: 2.5rem;
+    }
+    
+    .account-sidebar {
+        position: static;
+        padding: 1.25rem;
+    }
+
+    .sidebar-heading {
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .sidebar-link {
+        padding: 0.65rem 1rem;
+        font-size: 0.78rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .order-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    .order-card-img {
+        width: 100%;
+        height: 160px;
+    }
+
+    .order-card-img img {
+        object-position: center center;
+    }
+
+    .order-meta-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem 1.5rem;
+    }
+
+    .order-card-action {
+        width: 100%;
+    }
+
+    .btn-order-action {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .orders-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .orders-title {
+        font-size: 1.85rem;
+    }
+
+    .orders-count-badge {
+        align-self: flex-start;
+    }
+
+    .order-meta-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .orders-pagination {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}

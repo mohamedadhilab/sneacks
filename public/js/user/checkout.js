@@ -10,7 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (continueToPaymentBtn) {
         continueToPaymentBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            // Validate address selection/form here in real app
+            
+            // Validate address selection/form
+            if (addressForm && !addressForm.classList.contains('hidden')) {
+                if (!window.Validator.validateForm(addressForm)) {
+                    return;
+                }
+            } else {
+                const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
+                if (!selectedAddress) {
+                    if (window.Toast) {
+                        window.Toast.error('Please select a shipping address or add a new one.');
+                    } else {
+                        alert('Please select a shipping address or add a new one.');
+                    }
+                    return;
+                }
+            }
             
             // Hide Address Step Content
             stepAddress.querySelector('.step-content').classList.add('hidden');
@@ -106,3 +122,97 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
+const placeOrderBtn =
+    document.getElementById(
+        'placeOrderBtn'
+    );
+
+if (placeOrderBtn) {
+
+    placeOrderBtn.addEventListener(
+        'click',
+        async () => {
+
+            const address =
+                document.querySelector(
+                    'input[name="selectedAddress"]:checked'
+                );
+
+            const paymentMethod =
+                document.querySelector(
+                    'input[name="paymentMethod"]:checked'
+                );
+
+            if (!address) {
+                if (window.Toast) {
+                    window.Toast.error('Please select a shipping address.');
+                } else {
+                    alert('Please select a shipping address.');
+                }
+                return;
+            }
+
+            if (!paymentMethod) {
+                if (window.Toast) {
+                    window.Toast.error('Please select a payment method.');
+                } else {
+                    alert('Please select a payment method.');
+                }
+                return;
+            }
+
+            const response =
+                await fetch(
+
+                    '/place-order',
+
+                    {
+
+                        method: 'POST',
+
+                        headers: {
+
+                            'Content-Type':
+                                'application/json'
+
+                        },
+
+                        body: JSON.stringify({
+
+                            addressId:
+                                address.value,
+
+                            paymentMethod:
+                                paymentMethod.value
+
+                        })
+
+                    }
+
+                );
+
+            const data =
+                await response.json();
+
+            if (data.success) {
+
+                window.location.href =
+
+                    `/order-success/${data.orderId}`;
+
+            }
+
+            else {
+                if (window.Toast) {
+                    window.Toast.error(data.message || 'Failed to place order.');
+                } else {
+                    alert(data.message || 'Failed to place order.');
+                }
+            }
+
+        }
+
+    );
+
+}

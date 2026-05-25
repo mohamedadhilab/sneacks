@@ -12,10 +12,8 @@ exports.getAddressPage = async (req, res) => {
         }
 
         const addresses = await Address.find({
-
-            userId: req.session.user.id
-
-        });
+    user_id: req.session.user.id
+});
 
         res.render('user/address', {
 
@@ -67,9 +65,7 @@ exports.addAddress = async (req, res) => {
 
                 {
 
-                    userId:
-                        req.session.user.id
-
+                user_id: req.session.user.id
                 },
 
                 {
@@ -114,8 +110,7 @@ exports.addAddress = async (req, res) => {
             is_default:
                 isDefault,
 
-            userId:
-                req.session.user.id
+            user_id: req.session.user.id
 
         });
 
@@ -174,8 +169,7 @@ exports.updateAddress = async (req, res) => {
 
                 {
 
-                    userId:
-                        req.session.user.id
+                   user_id: req.session.user.id
 
                 },
 
@@ -201,8 +195,7 @@ exports.updateAddress = async (req, res) => {
 
                 _id: id,
 
-                userId:
-                    req.session.user.id
+                user_id: req.session.user.id
 
             },
 
@@ -287,8 +280,7 @@ exports.deleteAddress = async (req, res) => {
 
                 _id: id,
 
-                userId:
-                    req.session.user.id
+                user_id: req.session.user.id
 
             });
 
@@ -304,8 +296,7 @@ exports.deleteAddress = async (req, res) => {
             const firstAddress =
                 await Address.findOne({
 
-                    userId:
-                        req.session.user.id
+                   user_id: req.session.user.id
 
                 });
 

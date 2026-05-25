@@ -211,7 +211,10 @@
 
                                         <input
                                             type="text"
+                                            name="first_name"
                                             class="form-input"
+                                            required
+                                            minlength="2"
                                         >
 
                                     </div>
@@ -226,7 +229,10 @@
 
                                         <input
                                             type="text"
+                                            name="last_name"
                                             class="form-input"
+                                            required
+                                            minlength="1"
                                         >
 
                                     </div>
@@ -243,7 +249,9 @@
 
                                     <input
                                         type="email"
+                                        name="email"
                                         class="form-input"
+                                        required
                                     >
 
                                 </div>
@@ -258,7 +266,10 @@
 
                                     <input
                                         type="text"
+                                        name="address"
                                         class="form-input"
+                                        required
+                                        minlength="5"
                                     >
 
                                 </div>
@@ -275,7 +286,9 @@
 
                                         <input
                                             type="text"
+                                            name="city"
                                             class="form-input"
+                                            required
                                         >
 
                                     </div>
@@ -290,7 +303,9 @@
 
                                         <input
                                             type="text"
+                                            name="state"
                                             class="form-input"
+                                            required
                                         >
 
                                     </div>
@@ -309,7 +324,11 @@
 
                                         <input
                                             type="text"
+                                            name="pincode"
                                             class="form-input"
+                                            required
+                                            minlength="6"
+                                            maxlength="6"
                                         >
 
                                     </div>
@@ -324,7 +343,11 @@
 
                                         <input
                                             type="text"
+                                            name="phone_number"
                                             class="form-input"
+                                            required
+                                            minlength="10"
+                                            maxlength="10"
                                         >
 
                                     </div>
@@ -730,6 +753,7 @@
     <!-- JS -->
 
     <script src="/js/user/checkout.js"></script>
+    <%- include("../partials/toast") %>
 
 </body>
 
