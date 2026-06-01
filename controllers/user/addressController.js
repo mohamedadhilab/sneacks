@@ -1,155 +1,339 @@
 const Address = require('../../models/addressModel');
 
+
 exports.getAddressPage = async (req, res) => {
-  try {
-    if (!req.session.user) {
-      return res.redirect('/login');
+
+    try {
+
+        if (!req.session.user) {
+
+            return res.redirect('/login');
+
+        }
+
+        const addresses = await Address.find({
+    user_id: req.session.user.id
+});
+
+        res.render('user/address', {
+
+            addresses,
+
+            user: req.session.user
+
+        });
+
     }
 
-    const addresses = await Address.find({
-      user_id: req.session.user.id
-    });
+    catch (error) {
 
-    res.render('user/address', {
-      addresses,
-      user: req.session.user
-    });
+        console.log(error);
 
-  } catch (error) {
-    console.log(error);
-req.session.message = {
-    type: 'error',
-    text: 'error loading address page'
-  };  }
+        req.session.message = {
+
+            type: 'error',
+
+            text: 'Error loading address page'
+
+        };
+
+    }
+
 };
+
 
 
 exports.addAddress = async (req, res) => {
-  try {
-    if (!req.session.user) {
-      return res.redirect('/login');
+
+    try {
+
+        if (!req.session.user) {
+
+            return res.redirect('/login');
+
+        }
+
+        const data = req.body;
+
+        const isDefault =
+            data.is_default === 'true';
+
+
+        if (isDefault) {
+
+            await Address.updateMany(
+
+                {
+
+                user_id: req.session.user.id
+                },
+
+                {
+
+                    $set: {
+
+                        is_default: false
+
+                    }
+
+                }
+
+            );
+
+        }
+
+     
+
+        await Address.create({
+
+            full_name:
+                data.full_name,
+
+            address:
+                data.address,
+
+            city:
+                data.city,
+
+            state:
+                data.state,
+
+            pincode:
+                data.pincode,
+
+            phone_number:
+                data.phone_number,
+
+            type:
+                data.type,
+
+            is_default:
+                isDefault,
+
+            user_id: req.session.user.id
+
+        });
+
+        return res.json({
+
+            success: true,
+
+            message:
+                'Address added successfully.'
+
+        });
+
     }
 
-    const data = req.body;
-    const isDefault = data.is_default === 'true';
+    catch (error) {
 
-    if (isDefault) {
-      await Address.updateMany(
-        { user_id: req.session.user.id },
-        { $set: { is_default: false } }
-      );
+        console.log(error);
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                'Add address failed'
+
+        });
+
     }
 
-    await Address.create({
-      full_name: data.full_name,
-      address: data.address,
-      city: data.city,
-      state: data.state,
-      pincode: data.pincode,
-      phone_number: data.phone_number,
-      type : data.type,
-      is_default: isDefault,
-      user_id: req.session.user.id
-    });
-
-return res.json({
-  success: true,
-  message: 'Address added successfully.'
-});  
-
-  } catch (error) {
-    console.log(error);
-return res.status(500).json({
-  success: false,
-  message: 'Add address failed'
-}); }
 };
+
 
 
 exports.updateAddress = async (req, res) => {
-  try {
-    if (!req.session.user) {
-      return res.redirect('/login');
-    }
 
-    const { id } = req.params;
-    const data = req.body;
-    const isDefault = data.is_default === 'true';
+    try {
 
-    if (isDefault) {
-      await Address.updateMany(
-        { user_id: req.session.user.id },
-        { $set: { is_default: false } }
-      );
-    }
+        if (!req.session.user) {
 
-    await Address.updateOne(
-      { _id: id, user_id: req.session.user.id },
-      {
-        $set: {
-          full_name: data.full_name,
-          address: data.address,
-          city: data.city,
-          state: data.state,
-          pincode: data.pincode,
-          phone_number: data.phone_number,
-         type : data.type,
-          is_default: isDefault
+            return res.redirect('/login');
+
         }
-      }
-    );
 
-  return res.json({
-  success: true,
-  message: 'Address updated successfully.'
-});
+        const { id } = req.params;
 
-  } catch (error) {
-    console.log(error);
-return res.status(500).json({
-  success: false,
-  message: 'Update address failed'
-});  }
+        const data = req.body;
+
+        const isDefault =
+            data.is_default === 'true';
+
+      
+
+        if (isDefault) {
+
+            await Address.updateMany(
+
+                {
+
+                   user_id: req.session.user.id
+
+                },
+
+                {
+
+                    $set: {
+
+                        is_default: false
+
+                    }
+
+                }
+
+            );
+
+        }
+
+       
+
+        await Address.updateOne(
+
+            {
+
+                _id: id,
+
+                user_id: req.session.user.id
+
+            },
+
+            {
+
+                $set: {
+
+                    full_name:
+                        data.full_name,
+
+                    address:
+                        data.address,
+
+                    city:
+                        data.city,
+
+                    state:
+                        data.state,
+
+                    pincode:
+                        data.pincode,
+
+                    phone_number:
+                        data.phone_number,
+
+                    type:
+                        data.type,
+
+                    is_default:
+                        isDefault
+
+                }
+
+            }
+
+        );
+
+        return res.json({
+
+            success: true,
+
+            message:
+                'Address updated successfully.'
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                'Update address failed'
+
+        });
+
+    }
+
 };
 
 
+
 exports.deleteAddress = async (req, res) => {
-  try {
-    if (!req.session.user) {
-      return res.redirect('/login');
+
+    try {
+
+        if (!req.session.user) {
+
+            return res.redirect('/login');
+
+        }
+
+        const { id } = req.params;
+
+        const deleted =
+            await Address.findOneAndDelete({
+
+                _id: id,
+
+                user_id: req.session.user.id
+
+            });
+
+  
+
+        if (
+
+            deleted &&
+            deleted.is_default
+
+        ) {
+
+            const firstAddress =
+                await Address.findOne({
+
+                   user_id: req.session.user.id
+
+                });
+
+            if (firstAddress) {
+
+                firstAddress.is_default = true;
+
+                await firstAddress.save();
+
+            }
+
+        }
+
+        return res.json({
+
+            success: true,
+
+            message:
+                'Address deleted successfully.'
+
+        });
+
     }
 
-    const { id } = req.params;
+    catch (error) {
 
-    const deleted = await Address.findOneAndDelete({
-      _id: id,
-      user_id: req.session.user.id
-    });
+        console.log(error);
 
-    if (deleted && deleted.is_default) {
-      const firstAddress = await Address.findOne({
-        user_id: req.session.user.id
-      });
+        return res.status(500).json({
 
-      if (firstAddress) {
-        firstAddress.is_default = true;
-        await firstAddress.save();
-      }
+            success: false,
+
+            message:
+                'Delete address failed'
+
+        });
+
     }
 
-return res.json({
-  success: true,
-  message: 'Address deleted successfully.'
-});
-
-  }catch (error) {
-
-  console.log(error);
-
-  return res.status(500).json({
-    success: false,
-    message: 'Delete address failed'
-  });
-
- }
 };

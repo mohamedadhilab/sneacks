@@ -12,9 +12,11 @@ exports.getCategories = async (req, res) => {
 
     const search = req.query.search || '';
 
+    const trash = req.query.trash === 'true';
+
     const searchQuery = {
 
-      is_deleted: false,
+      is_deleted:trash,
 
       category_name: {
         $regex: search,
@@ -59,7 +61,8 @@ exports.getCategories = async (req, res) => {
 
       totalPages,
 
-      search
+      search,
+      trash
 
     });
 
@@ -75,11 +78,9 @@ exports.addCategory = async (req, res) => {
 
   try {
 
-    const {
-      category_name,
-      description
-    } = req.body;
+const category_name = req.body.category_name.trim();
 
+const description = req.body.description;
     const existingCategory = await Category.findOne({
 
       category_name: {
@@ -125,20 +126,30 @@ exports.addCategory = async (req, res) => {
 
     res.redirect('/admin/categories');
 
-  } catch (error) {
+ } catch (error) {
 
-    console.log(error);
+  console.log(error);
+
+  if (error.code === 11000) {
 
     req.session.message = {
       type: 'error',
-      text: 'Failed to add category'
+      text: 'Category already exists'
     };
 
-    res.redirect('/admin/categories');
-
+    return res.redirect('/admin/categories');
   }
 
-};
+  req.session.message = {
+    type: 'error',
+    text: 'Failed to add category'
+  };
+
+  res.redirect('/admin/categories');
+
+ }
+}
+
 
 exports.editCategory = async (req, res) => {
 
@@ -292,6 +303,47 @@ exports.deleteCategory = async (req, res) => {
     };
 
     res.redirect('/admin/categories');
+
+  }
+
+};
+exports.restoreCategory = async (req, res) => {
+
+  try {
+
+    const id = req.params.id;
+
+    await Category.findByIdAndUpdate(id, {
+
+      is_deleted: false
+
+    });
+
+    req.session.message = {
+
+      type: 'success',
+
+      text: 'Category restored successfully'
+
+    };
+
+    res.redirect('/admin/categories?trash=true');
+
+  }
+
+  catch (error) {
+
+    console.log(error);
+
+    req.session.message = {
+
+      type: 'error',
+
+      text: 'Failed to restore category'
+
+    };
+
+    res.redirect('/admin/categories?trash=true');
 
   }
 

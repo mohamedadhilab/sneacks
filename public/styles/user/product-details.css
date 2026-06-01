@@ -1,0 +1,551 @@
+/* ============================================================
+   SNEACKS - PRODUCT DETAILS STYLES
+   ============================================================ */
+
+.breadcrumbs {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.breadcrumbs a {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.product-details-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+}
+
+/* Gallery */
+.product-gallery {
+    position: sticky;
+    top: 100px;
+    z-index: 100; /* Forces the stacking context above the info column */
+}
+
+.main-image-wrapper {
+    background: var(--color-bg-secondary);
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    margin-bottom: var(--space-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-in;
+}
+
+.main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail-gallery {
+    display: flex;
+    gap: var(--space-sm);
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    background: var(--color-bg-secondary);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail:hover, .thumbnail.active {
+    opacity: 1;
+    border-color: var(--color-text-primary);
+}
+
+/* Product Info */
+.product-info-column {
+    padding: var(--space-md) 0;
+}
+
+.product-title {
+    margin-bottom: var(--space-xs);
+    font-size: clamp(2rem, 3vw, 2.5rem);
+}
+
+.product-price-large {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 40px;
+    letter-spacing: -1px;
+    color: var(--color-text-secondary);
+}
+
+.product-desc {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-top: 10px;
+line-height: 1.9;
+max-width: 560px;
+}
+
+/* Size Selector */
+.size-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 0.5rem;
+}
+
+.size-btn {
+    border: 1px solid var(--color-border);
+    background: transparent;
+    padding: 0.8rem 0;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+    color: var(--color-text-primary);
+}
+
+.size-btn:hover:not(.out-of-stock) {
+    border-color: var(--color-text-primary);
+}
+
+.size-btn.active {
+    background: var(--color-text-primary);
+    color: var(--color-white);
+    border-color: var(--color-text-primary);
+}
+.size-btn:hover {
+
+    border-color: #111;
+}
+
+.size-btn.out-of-stock {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(0,0,0,0.03) 10px,
+        rgba(0,0,0,0.03) 20px
+    );
+}
+
+.text-sm {
+    font-size: 0.85rem;
+}
+
+/* Add to Cart */
+.add-to-cart-form {
+    margin-top: var(--space-md);
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* Highlights */
+.border-top {
+    border-top: 1px solid var(--color-border);
+}
+
+.pt-4 {
+    padding-top: var(--space-lg);
+}
+
+.mt-4 {
+    margin-top: var(--space-lg);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .product-details-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+    
+    .product-gallery {
+        position: static;
+    }
+    
+    .main-image-wrapper {
+        aspect-ratio: 1 / 1;
+    }
+}
+.out-stock-banner {
+
+    display: inline-block;
+
+    margin-bottom: 20px;
+
+    padding: 10px 18px;
+
+    background: #111;
+
+    color: #fff;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+/* =========================================================
+   PRODUCT RATING
+========================================================= */
+
+.product-rating-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 34px;
+}
+
+.rating-stars {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    color: #d4a017;
+
+    font-size: 13px;
+}
+
+.rating-value {
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: var(--color-text-primary);
+}
+
+.review-count {
+
+    font-size: 14px;
+
+    color: var(--color-text-secondary);
+}
+/* =========================================================
+   REVIEWS SECTION
+========================================================= */
+
+.reviews-section {
+
+    margin-top: 50px;
+
+    padding-top: 70px;
+
+    border-top: 1px solid var(--color-border);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.reviews-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 45px;
+
+    gap: 40px;
+}
+
+.reviews-label {
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    color: var(--color-text-secondary);
+
+    margin-bottom: 12px;
+
+    display: block;
+}
+
+.reviews-title {
+
+    font-size: clamp(34px, 4vw, 56px);
+
+    line-height: 1.05;
+
+    margin: 0;
+}
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.reviews-summary {
+
+    text-align: right;
+
+    min-width: 180px;
+}
+
+.summary-rating {
+
+    font-size: 52px;
+
+    font-weight: 600;
+
+    line-height: 1;
+
+    margin-bottom: 10px;
+}
+
+.summary-stars {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 4px;
+
+    color: #d4a017;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+}
+
+.summary-text {
+
+    font-size: 13px;
+
+    color: var(--color-text-secondary);
+}
+
+/* =========================================================
+   REVIEW LIST
+========================================================= */
+
+.review-list {
+
+    display: flex;
+
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 18px;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.review-card {
+
+    border: 1px solid var(--color-border);
+
+    padding: 28px 30px;
+
+    background: #fff;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+.review-card:hover {
+
+    transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.review-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 14px;
+}
+
+.review-user {
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    margin-bottom: 8px;
+}
+
+.review-stars {
+
+    display: flex;
+
+    gap: 3px;
+
+    color: #d4a017;
+
+    font-size: 12px;
+}
+
+.review-date {
+
+    font-size: 13px;
+
+    color: var(--color-text-secondary);
+}
+
+.review-text {
+
+    font-size: 15px;
+
+    line-height: 1.8;
+
+    color: var(--color-text-secondary);
+
+    max-width: 900px;
+
+    margin: 0;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width: 768px){
+
+    .reviews-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .reviews-summary {
+
+        text-align: left;
+    }
+
+    .summary-stars {
+
+        justify-content: flex-start;
+    }
+
+    .reviews-title {
+
+        font-size: 42px;
+    }
+
+    .review-card {
+
+        padding: 24px;
+    }
+
+}
+.related-products-section {
+    padding-top: 70px;
+}
+.related-products-section h2 {
+
+    margin-bottom: 50px;
+
+    font-size: clamp(42px, 5vw, 72px);
+
+    line-height: 1;
+}
+/* ======================================================
+   PROFESSIONAL IMAGE ZOOM
+   ====================================================== */
+
+.zoom-container {
+    position: relative;
+    border-radius: 12px;
+    background: var(--color-bg-secondary);
+    cursor: crosshair;
+    overflow: hidden; 
+}
+
+.zoom-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* LENS */
+.zoom-lens {
+    position: absolute;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.4);
+    /* Lens size will be set via JS based on ratio, or fixed initially */
+    width: 150px; 
+    height: 150px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Mouse events pass through to container */
+    transition: opacity 0.2s ease-in-out;
+}
+
+.zoom-container:hover .zoom-lens {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* RESULT PANE */
+.zoom-result {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 20px); /* Right of gallery */
+    width: 500px;
+    height: 600px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-secondary);
+    background-repeat: no-repeat;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Keep visible while hovering container */
+.zoom-container:hover ~ .zoom-result {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Keep visible if hover somehow transfers to result (though pointer-events is none) */
+.zoom-result.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* RESPONSIVE: Disable on smaller screens */
+@media (max-width: 992px) {
+    .zoom-result, .zoom-lens {
+        display: none !important;
+    }
+    .zoom-container {
+        pointer-events: none; /* Disable zoom interaction */
+    }
+}

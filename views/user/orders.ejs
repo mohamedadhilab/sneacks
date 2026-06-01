@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage and track your premium SNEACKS acquisitions.">
+    <title>Your Orders | SNEACKS</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/user/base.css">
+    <link rel="stylesheet" href="/styles/user/layout.css">
+    <link rel="stylesheet" href="/styles/user/components.css">
+    <link rel="stylesheet" href="/styles/user/animations.css">
+    <link rel="stylesheet" href="/styles/user/orders.css">
+    <link rel="stylesheet" href="/styles/user/responsive.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <%- include('../partials/user/navbar', { page: 'profile' }) %>
+
+    <%
+      // Safe dynamic data initialization with premium design mock placeholders
+      if (typeof orders === 'undefined') {
+          orders = [
+              {
+                  _id: "66504a535b434e208759f676",
+                  orderId: "SNK-92841-LM",
+                  createdAt: "2026-05-18T10:30:00.000Z",
+                  orderStatus: "Shipped",
+                  finalAmount: 420.00,
+                  paymentMethod: "Razorpay",
+                  items: [
+                      {
+                          productName: "The Canvas Low-Top",
+                          productImage: "product-1778818514732-113902028.jpg",
+                          quantity: 1,
+                          price: 420.00,
+                          size: "42 (EU)"
+                      }
+                  ]
+              },
+              {
+                  _id: "66504a605b434e208759f677",
+                  orderId: "SNK-91002-KS",
+                  createdAt: "2026-04-12T14:15:00.000Z",
+                  orderStatus: "Delivered",
+                  finalAmount: 285.00,
+                  paymentMethod: "COD",
+                  items: [
+                      {
+                          productName: "Atelier Runner '01",
+                          productImage: "product-1778818514732-113902028.jpg",
+                          quantity: 1,
+                          price: 285.00,
+                          size: "41 (EU)"
+                      }
+                  ]
+              },
+              {
+                  _id: "66504a6f5b434e208759f678",
+                  orderId: "SNK-88591-OP",
+                  createdAt: "2026-03-05T09:45:00.000Z",
+                  orderStatus: "Delivered",
+                  finalAmount: 550.00,
+                  paymentMethod: "Wallet",
+                  items: [
+                      {
+                          productName: "The Court High-Top",
+                          productImage: "product-1778818514732-113902028.jpg",
+                          quantity: 2,
+                          price: 275.00,
+                          size: "43 (EU)"
+                      }
+                  ]
+              }
+          ];
+      }
+      
+      const totalOrdersCount = orders.length;
+    %>
+
+    <main class="page-wrapper">
+        <div class="container orders-page-container section">
+            
+            <div class="account-layout animate-fade-up">
+                
+                <!-- LEFT SIDEBAR -->
+                <aside class="account-sidebar">
+                    <div class="sidebar-user-info">
+                        <h4 class="sidebar-heading">My Account</h4>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a href="/profile" class="sidebar-link">
+                                <i class="far fa-user"></i> Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/orders" class="sidebar-link active">
+                                <i class="fas fa-shopping-bag"></i> Orders
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/address" class="sidebar-link">
+                                <i class="far fa-address-book"></i> Address
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/wallet" class="sidebar-link">
+                                <i class="far fa-credit-card"></i> Wallet
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+
+                <!-- RIGHT ORDERS CONTENT AREA -->
+                <section class="orders-content">
+                    
+                    <div class="orders-header">
+                        <div>
+                            <h1 class="orders-title">Your Orders</h1>
+                            <p class="orders-subtitle">Manage and track your recent acquisitions.</p>
+                        </div>
+                        <div class="orders-count-badge">
+                            Total Orders: <span class="badge-count"><%= totalOrdersCount %></span>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="orders-search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="orderSearchInput" class="form-input" placeholder="Search your orders by Order ID or Product Name..." />
+                    </div>
+
+                    <!-- Orders Cards Listing -->
+                    <% if (orders && orders.length > 0) { %>
+                        <div class="orders-list" id="ordersList">
+                            <% orders.forEach(order => { 
+                                // Fetch first item details for quick summary representation
+                                const firstItem = order.items && order.items.length > 0 ? order.items[0] : {};
+                                const dateFormatted = new Date(order.createdAt).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                });
+                                
+                                // Status classes mapping
+                                let statusClass = 'status-pending';
+                                const oStatus = (order.orderStatus || 'Pending').toLowerCase();
+                                if (oStatus === 'processing') statusClass = 'status-processing';
+                                else if (oStatus === 'shipped') statusClass = 'status-shipped';
+                                else if (oStatus === 'delivered') statusClass = 'status-delivered';
+                                else if (oStatus === 'cancelled') statusClass = 'status-cancelled';
+                                else if (oStatus === 'returned') statusClass = 'status-returned';
+                            %>
+                                <div class="order-card" data-order-id="<%= order.orderId %>" data-product-name="<%= firstItem.productName || '' %>">
+                                    <div class="order-card-img">
+                                        <img src="/uploads/products/<%= firstItem.productImage %>" alt="<%= firstItem.productName %>" onerror="this.src='/images/placeholder-shoe.png'">
+                                    </div>
+                                    <div class="order-card-info">
+                                        <div class="order-meta-grid">
+                                            <div class="meta-col">
+                                                <span class="meta-header">Order ID</span>
+                                                <span class="meta-body font-mono">#<%= order.orderId %></span>
+                                            </div>
+                                            <div class="meta-col">
+                                                <span class="meta-header">Date</span>
+                                                <span class="meta-body"><%= dateFormatted %></span>
+                                            </div>
+                                            <div class="meta-col">
+                                                <span class="meta-header">Status</span>
+                                                <span class="status-badge <%= statusClass %>">
+                                                    <%= order.orderStatus %>
+                                                </span>
+                                            </div>
+                                            <div class="meta-col">
+                                                <span class="meta-header">Total</span>
+                                                <span class="meta-body font-semibold">₹<%= order.finalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Order Items Summary Text -->
+                                        <div class="order-items-preview">
+                                            <p class="preview-text">
+                                                <%= firstItem.productName %> 
+                                                <% if (order.items.length > 1) { %>
+                                                    and <%= order.items.length - 1 %> other item(s)
+                                                <% } %>
+                                                <span class="preview-spec">| Size <%= firstItem.size || 'N/A' %> | Qty <%= firstItem.quantity %></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="order-card-action">
+                                        <!-- Frontend Only Router Link -->
+                                        <a href="/order-details/<%= order._id %>"class="btn btn-secondary btn-order-action">
+                                            View Details <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="orders-pagination">
+                            <a href="#" class="pagination-arrow prev-page disabled"><i class="fas fa-chevron-left"></i> Previous</a>
+                            <div class="pagination-pages">
+                                <a href="#" class="pagination-number active">01</a>
+                                <a href="#" class="pagination-number">02</a>
+                                <a href="#" class="pagination-number">03</a>
+                            </div>
+                            <a href="#" class="pagination-arrow next-page">Next <i class="fas fa-chevron-right"></i></a>
+                        </div>
+                    <% } else { %>
+                        <!-- Empty State -->
+                        <div class="orders-empty-state">
+                            <div class="empty-icon-box">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <h2 class="empty-title">No Orders Yet</h2>
+                            <p class="empty-subtitle">You have not placed any orders yet. Discover our curated collections and upgrade your steps.</p>
+                            <a href="/shop" class="btn btn-accent">Continue Shopping</a>
+                        </div>
+                    <% } %>
+
+                </section>
+                
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('../partials/user/footer') %>
+
+    <!-- JavaScript Interactions -->
+    <script src="/js/user/orders.js"></script>
+</body>
+
+</html>

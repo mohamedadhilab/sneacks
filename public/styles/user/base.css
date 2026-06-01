@@ -1,0 +1,138 @@
+/* ============================================================
+   SNEACKS - BASE STYLES & VARIABLES
+   ============================================================ */
+
+/* Import Google Fonts:
+   Playfair Display for luxury serif headings
+   Inter for clean sans-serif body
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+:root {
+    /* Color Palette (Matched to global.css) */
+    --color-bg-primary: #f0ece4;
+    --color-bg-secondary: #f5f2ec;
+    --color-text-primary: #2c2c1e;
+    --color-text-secondary: #4a4a38;
+    --color-accent: #6b7a45;
+    --color-accent-hover: #4a5530;
+    --color-border: #d8d4c8;
+    --color-white: #FFFFFF;
+    --color-error: #D9534F;
+    --color-success: #5CB85C;
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Spacing System */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 2rem;
+    --space-lg: 4rem;
+    --space-xl: 8rem;
+
+    /* Borders */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 16px;
+    --border-radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* CSS Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* Typography Base */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); }
+h2 { font-size: clamp(2rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+h4 { font-size: 1.25rem; font-family: var(--font-body); font-weight: 500; }
+
+p {
+    margin-bottom: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-weight: 300;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+ul, ol {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+button {
+    font-family: var(--font-body);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+input, textarea, select {
+    font-family: var(--font-body);
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-muted { color: var(--color-text-secondary); }
+.font-serif { font-family: var(--font-heading); }
+.font-sans { font-family: var(--font-body); }
+.uppercase-label {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+.m-0 { margin: 0; }
+.mb-1 { margin-bottom: var(--space-xs); }
+.mb-2 { margin-bottom: var(--space-sm); }
+.mb-3 { margin-bottom: var(--space-md); }
+.mb-4 { margin-bottom: var(--space-lg); }
+.mt-4 { margin-top: var(--space-lg); }
+.w-100 { width: 100%; }

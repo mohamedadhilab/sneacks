@@ -1,0 +1,664 @@
+/* ============================================================
+   SNEACKS - USER ORDER DETAILS PAGE STYLES
+   ============================================================ */
+
+.order-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   HEADER SECTION
+   ============================================================ */
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.detail-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 400;
+    margin-bottom: 0.35rem;
+}
+
+.detail-meta {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 300;
+}
+
+.detail-id {
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.meta-dot {
+    opacity: 0.5;
+}
+
+.download-invoice-btn {
+    border-radius: 4px;
+    padding: 0.9rem 1.75rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background-color: var(--color-text-primary);
+    border: 1px solid var(--color-text-primary);
+    color: var(--color-bg-primary);
+}
+
+.download-invoice-btn:hover {
+    background-color: transparent;
+    color: var(--color-text-primary);
+}
+
+/* ============================================================
+   ORDER PROGRESS TRACKER (Glow nodes)
+   ============================================================ */
+.tracker-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid rgba(216, 212, 200, 0.4);
+    border-radius: 8px;
+    padding: 3rem 2rem 2.5rem 2rem;
+    margin-bottom: 3.5rem;
+    position: relative;
+    box-shadow: var(--shadow-soft);
+}
+
+.tracker-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Base horizontal tracking lines */
+.tracker-bar::before {
+    content: '';
+    position: absolute;
+    height: 2px;
+    background-color: var(--color-border);
+    left: 0;
+    right: 0;
+    top: 24px;
+    z-index: 1;
+}
+
+.tracker-line-fill {
+    position: absolute;
+    height: 2px;
+    background-color: var(--color-accent);
+    left: 0;
+    top: 24px;
+    z-index: 2;
+    transition: width 0.8s ease;
+}
+
+.tracker-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 3;
+    width: 120px;
+}
+
+.step-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.85rem;
+    transition: all 0.4s ease;
+}
+
+.step-icon-box i {
+    font-size: 0.95rem;
+}
+
+.step-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.15rem;
+    transition: color 0.4s ease;
+}
+
+.step-sub {
+    font-size: 0.68rem;
+    color: var(--color-text-secondary);
+    opacity: 0.75;
+}
+
+/* Completed and active trackers (with glow) */
+.tracker-step.completed .step-icon-box {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
+    box-shadow: 0 0 15px rgba(107, 122, 111, 0.4); /* soft glow */
+}
+
+.tracker-step.completed .step-label {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.tracker-step.active .step-icon-box {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background-color: var(--color-bg-primary);
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(107, 122, 69, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(107, 122, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(107, 122, 69, 0);
+    }
+}
+
+/* ============================================================
+   MAIN TWO-COLUMN DETAILS GRID
+   ============================================================ */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 3.5rem;
+    align-items: start;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--color-text-primary);
+}
+
+.product-item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Product Card */
+.product-detail-card {
+    display: flex;
+    background-color: var(--color-white);
+    border: 1px solid rgba(216, 212, 200, 0.3);
+    border-radius: 8px;
+    padding: 1.75rem;
+    gap: 2rem;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-detail-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.prod-img {
+    width: 100px;
+    height: 110px;
+    background-color: var(--color-bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prod-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.prod-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.prod-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.prod-name {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--color-text-primary);
+    margin-bottom: 0.15rem;
+}
+
+.prod-brand {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.prod-price-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+}
+
+.prod-price {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.prod-status-inline {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.prod-status-inline.status-processing {
+    background-color: rgba(224, 168, 0, 0.08);
+    color: #b8860b;
+}
+
+.prod-status-inline.status-delivered {
+    background-color: rgba(107, 122, 69, 0.08);
+    color: var(--color-accent);
+}
+
+.prod-status-inline.status-cancelled {
+    background-color: rgba(217, 83, 79, 0.08);
+    color: var(--color-error);
+}
+
+.prod-meta-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid rgba(216, 212, 200, 0.4);
+    padding-top: 0.85rem;
+    margin-top: 0.85rem;
+}
+
+.meta-qty-size {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    font-weight: 300;
+}
+
+.meta-divider {
+    margin: 0 0.4rem;
+    color: var(--color-border);
+}
+
+/* Card Actions */
+.prod-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.prod-actions .btn {
+    padding: 0.55rem 1rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+}
+
+.btn-cancel-item {
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    background-color: transparent;
+}
+
+.btn-cancel-item:hover {
+    border-color: var(--color-error);
+    background-color: var(--color-error);
+    color: var(--color-white);
+}
+
+.btn-return-item {
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-secondary);
+}
+
+.btn-return-item:hover {
+    border-color: var(--color-text-primary);
+    background-color: var(--color-text-primary);
+    color: var(--color-bg-primary);
+}
+
+.btn-review-item {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    border: 1px solid var(--color-accent);
+}
+
+.btn-review-item:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+}
+
+/* Muted state tag */
+.badge-cancelled-tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.05em;
+}
+
+/* Muted style for cancelled item */
+.item-muted {
+    opacity: 0.65;
+    background-color: #faf9f6;
+}
+
+/* ============================================================
+   RIGHT COLUMN DETAILS AND CONCIERGE CARDS
+   ============================================================ */
+.meta-billing-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.luxury-info-card {
+    background-color: var(--color-white);
+    border: 1px solid rgba(216, 212, 200, 0.3);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+}
+
+.info-card-heading {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-primary);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(216, 212, 200, 0.4);
+}
+
+.info-card-body {
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.recipient-name {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.recipient-address, .recipient-city {
+    color: var(--color-text-secondary);
+}
+
+.recipient-phone {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+/* Payment description flex */
+.payment-card-flex {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.payment-icon {
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    opacity: 0.8;
+}
+
+.payment-method-desc {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+/* Totals styling */
+.totals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.totals-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.92rem;
+}
+
+.totals-label {
+    color: var(--color-text-secondary);
+    font-weight: 300;
+}
+
+.totals-value {
+    color: var(--color-text-primary);
+    font-weight: 400;
+}
+
+.discount-row {
+    color: var(--color-error);
+}
+
+.discount-row .totals-value {
+    color: var(--color-error);
+    font-weight: 500;
+}
+
+.totals-divider {
+    height: 1px;
+    background-color: var(--color-border);
+    margin: 0.5rem 0;
+}
+
+.grand-total {
+    margin-top: 0.25rem;
+}
+
+.grand-total-label {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 400;
+}
+
+.grand-total-value {
+    font-size: 1.35rem;
+    font-weight: 600;
+}
+
+/* Support concierge card */
+.support-concierge-card {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    border-radius: 8px;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 4px 15px rgba(107, 122, 69, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.support-concierge-card:hover {
+    transform: translateY(-2px);
+}
+
+.support-heading {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-bottom: 0.35rem;
+}
+
+.support-subtitle {
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.support-btn-text {
+    background-color: var(--color-white);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-white);
+    width: 100%;
+    text-align: center;
+    border-radius: 4px;
+    padding: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+.support-btn-text:hover {
+    background-color: transparent;
+    color: var(--color-white);
+    border-color: var(--color-white);
+}
+
+/* ============================================================
+   RESPONSIVE LAYOUTS
+   ============================================================ */
+
+@media (max-width: 992px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    .header-action {
+        width: 100%;
+    }
+
+    .download-invoice-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tracker-card {
+        padding: 2.5rem 1rem 1.5rem 1rem;
+    }
+
+    /* Convert horizontal tracker to a grid on mobile */
+    .tracker-bar {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+        padding-left: 2.5rem;
+    }
+
+    .tracker-bar::before {
+        width: 2px;
+        height: 100%;
+        left: 36px;
+        top: 0;
+    }
+
+    .tracker-line-fill {
+        width: 2px !important;
+        left: 36px;
+        top: 0;
+        /* Line progress height indicator */
+        height: 75%;
+    }
+
+    .tracker-step {
+        flex-direction: row;
+        width: 100%;
+        text-align: left;
+        gap: 1.25rem;
+        align-items: center;
+    }
+
+    .step-icon-box {
+        margin-bottom: 0;
+        width: 38px;
+        height: 38px;
+    }
+
+    .product-detail-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+        padding: 1.5rem;
+    }
+
+    .prod-img {
+        width: 100%;
+        height: 160px;
+    }
+
+    .prod-info-header {
+        width: 100%;
+    }
+
+    .prod-meta-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .prod-actions {
+        width: 100%;
+    }
+
+    .prod-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

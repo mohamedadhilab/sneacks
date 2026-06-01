@@ -1,47 +1,36 @@
 <!-- Toastify CSS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
+<!-- Custom Premium Validation & Toast Styles -->
+<link rel="stylesheet" type="text/css" href="/styles/validation.css">
+
 <!-- Toastify JS -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
+<!-- Custom Premium Validation & Toast Logic -->
+<script type="text/javascript" src="/js/toast.js"></script>
+<script type="text/javascript" src="/js/validation.js"></script>
+
 <script>
     /**
-     * Reusable showToast function
+     * Backward-compatible reusable showToast wrapper
      * @param {string} text - Message content
-     * @param {string} type - "success" or "error"
+     * @param {string} type - "success" | "error" | "warning" | "info"
      */
     function showToast(text, type) {
-        let backgroundColor;
-        
-        switch (type) {
-            case 'success':
-                backgroundColor = "linear-gradient(to right, #00b09b, #96c93d)";
-                break;
-            case 'error':
-                backgroundColor = "linear-gradient(to right, #ff5f6d, #ffc371)";
-                break;
-            default:
-                backgroundColor = "linear-gradient(to right, #2c3e50, #000000)";
+        if (window.Toast && typeof window.Toast[type] === 'function') {
+            window.Toast[type](text);
+        } else if (window.Toast && typeof window.Toast.info === 'function') {
+            window.Toast.info(text);
+        } else {
+            console.warn('Toast utility not fully initialized. Text:', text);
         }
-
-        Toastify({
-            text: text,
-            duration: 3000,
-            close: true,
-            gravity: "top", // `top` or `bottom`
-            position: "right", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            style: {
-                background: backgroundColor,
-                borderRadius: "10px",
-                boxShadow: "0 4px 15px rgba(0,0,0,0.2)"
-            },
-            onClick: function(){} // Callback after click
-        }).showToast();
     }
-
-    // Automatically trigger toast if message exists from res.locals.message
-    <% if (locals.message) { %>
-        showToast("<%= message.text %>", "<%= message.type %>");
-    <% } %>
 </script>
+
+<!-- Automatically trigger toast if message exists from res.locals.message -->
+<% if (locals.message) { %>
+<script>
+    showToast(<%- JSON.stringify(locals.message.text) %>, <%- JSON.stringify(locals.message.type) %>);
+</script>
+<% } %>

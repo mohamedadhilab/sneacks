@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View comprehensive tracking info and invoices for your SNEACKS order.">
+    <title>Order Details | SNEACKS</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/user/base.css">
+    <link rel="stylesheet" href="/styles/user/layout.css">
+    <link rel="stylesheet" href="/styles/user/components.css">
+    <link rel="stylesheet" href="/styles/user/animations.css">
+    <link rel="stylesheet" href="/styles/user/order-details.css">
+    <link rel="stylesheet" href="/styles/user/responsive.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <%- include('../partials/user/navbar', { page: 'profile' }) %>
+
+    <%
+      // Premium user-side details mock data matching your reference mockup exactly
+      if (typeof order === 'undefined') {
+          order = {
+              _id: "66504a535b434e208759f676",
+              orderId: "SNK-88291044",
+              createdAt: "2026-05-18T10:30:00.000Z",
+              orderStatus: "Processing", // Overall order state
+              subtotal: 425.00,
+              shippingCharge: 24.00,
+              discount: 0,
+              tax: 34.12,
+              finalAmount: 483.12,
+              paymentMethod: "Mastercard ending in 4492",
+              address: {
+                  name: "Julian Thorne",
+                  address_line: "1422 West Oak Avenue, Suite 4B",
+                  city: "Portland",
+                  state: "OR",
+                  pincode: "97209",
+                  phone: "+1 (503) 555-0192"
+              },
+              items: [
+                  {
+                      _id: "item-1",
+                      productId: "p1",
+                      productName: "The Artisan Low",
+                      brand: "SUEDE • BONE WHITE",
+                      productImage: "product-1778818514732-113902028.jpg",
+                      size: "42",
+                      quantity: 1,
+                      price: 245.00,
+                      status: "Processing"
+                  },
+                  {
+                      _id: "item-2",
+                      productId: "p2",
+                      productName: "Terra High-Top",
+                      brand: "CANVAS • OLIVE DRAB",
+                      productImage: "product-1778818514732-113902028.jpg",
+                      size: "42",
+                      quantity: 1,
+                      price: 180.00,
+                      status: "Delivered"
+                  },
+                  {
+                      _id: "item-3",
+                      productId: "p3",
+                      productName: "The Cloud Runner",
+                      brand: "MESH • NIMBUS GREY",
+                      productImage: "product-1778818514732-113902028.jpg",
+                      size: "42",
+                      quantity: 1,
+                      price: 160.00,
+                      status: "Cancelled"
+                  }
+              ]
+          };
+      }
+
+      // Compute step levels for progress tracker
+      const statusSteps = ['confirmed', 'processing', 'shipped', 'delivered'];
+      const currentStatusIndex = statusSteps.indexOf((order.orderStatus || 'Pending').toLowerCase());
+      
+      const dateFormatted = new Date(order.createdAt).toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+      });
+    %>
+
+    <main class="page-wrapper">
+        <div class="container order-detail-container section">
+            
+            <!-- HEADER SECTION -->
+            <div class="detail-header animate-fade-up">
+                <div class="header-main">
+                    <h1 class="detail-title">Order Details</h1>
+                    <p class="detail-meta">
+                        <span class="detail-id">#<%= order.orderId %></span>
+                        <span class="meta-dot">•</span>
+                        <span class="detail-date">Placed <%= dateFormatted %></span>
+                    </p>
+                </div>
+                <div class="header-action">
+                    <button id="downloadInvoiceBtn" class="btn btn-secondary download-invoice-btn">
+                        <i class="fas fa-file-invoice"></i> Download Invoice
+                    </button>
+                </div>
+            </div>
+
+            <!-- ORDER PROGRESS TRACKER -->
+            <div class="tracker-card animate-fade-up delay-100">
+                <div class="tracker-bar">
+                    <!-- Progress line fill -->
+                    <% 
+                      let progressPercent = 0;
+                      if (currentStatusIndex >= 0) {
+                          progressPercent = (currentStatusIndex / (statusSteps.length - 1)) * 100;
+                      }
+                    %>
+                    <div class="tracker-line-fill" style="width: <%= progressPercent %>%;"></div>
+
+                    <!-- Step 1: Confirmed -->
+                    <div class="tracker-step <%= currentStatusIndex >= 0 ? 'completed' : '' %>">
+                        <div class="step-icon-box">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <span class="step-label">Confirmed</span>
+                        <span class="step-sub">Oct 24, 10:30 AM</span>
+                    </div>
+
+                    <!-- Step 2: Processing -->
+                    <div class="tracker-step <%= currentStatusIndex >= 1 ? 'completed' : '' %> <%= currentStatusIndex === 1 ? 'active' : '' %>">
+                        <div class="step-icon-box">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <span class="step-label">Processing</span>
+                        <span class="step-sub">Oct 25, 02:15 PM</span>
+                    </div>
+
+                    <!-- Step 3: Shipped -->
+                    <div class="tracker-step <%= currentStatusIndex >= 2 ? 'completed' : '' %> <%= currentStatusIndex === 2 ? 'active' : '' %>">
+                        <div class="step-icon-box">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <span class="step-label">In Transit</span>
+                        <span class="step-sub">Estimated Oct 28</span>
+                    </div>
+
+                    <!-- Step 4: Delivered -->
+                    <div class="tracker-step <%= currentStatusIndex >= 3 ? 'completed' : '' %> <%= currentStatusIndex === 3 ? 'active' : '' %>">
+                        <div class="step-icon-box">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <span class="step-label">Delivered</span>
+                        <span class="step-sub">Pending</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAIN TWO COLUMN GRID -->
+            <div class="detail-grid animate-fade-up delay-200">
+                
+                <!-- LEFT COLUMN: Ordered Products List -->
+                <div class="ordered-pieces-section">
+                    <h2 class="section-title mb-4">Selected Pieces</h2>
+                    
+                    <div class="product-item-list">
+                        <% order.items.forEach(item => { 
+                            const isCancelled = item.status.toLowerCase() === 'cancelled';
+                            const isDelivered = item.status.toLowerCase() === 'delivered';
+                            const isProcessing = item.status.toLowerCase() === 'processing' || item.status.toLowerCase() === 'pending';
+                        %>
+                            <div class="product-detail-card <%= isCancelled ? 'item-muted' : '' %>" data-item-id="<%= item._id %>" data-item-name="<%= item.productName %>">
+                                <div class="prod-img">
+                                    <img src="/uploads/products/<%= item.productImage %>" alt="<%= item.productName %>" onerror="this.src='/images/placeholder-shoe.png'">
+                                </div>
+                                <div class="prod-info">
+                                    <div class="prod-info-header">
+                                        <div>
+                                            <h4 class="prod-name"><%= item.productName %></h4>
+                                            <p class="prod-brand"><%= item.brand %></p>
+                                        </div>
+                                        <div class="prod-price-box">
+                                            <span class="prod-price">₹<%= item.price.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                                            <span class="prod-status-inline status-<%= item.status.toLowerCase() %>"><%= item.status %></span>
+                                        </div>
+                                    </div>
+                                    <div class="prod-meta-footer">
+                                        <div class="meta-qty-size">
+                                            <span>QTY: <%= item.quantity %></span>
+                                            <span class="meta-divider">•</span>
+                                            <span>SIZE: <%= item.size %></span>
+                                        </div>
+
+                                        <!-- Conditional Action Buttons based on status -->
+                                        <div class="prod-actions">
+                                            <% if (isProcessing) { %>
+                                                <button class="btn btn-secondary btn-cancel-item" onclick="triggerCancelItem('<%= item._id %>', '<%= item.productName %>')">
+                                                    <i class="fas fa-times"></i> Cancel This Item
+                                                </button>
+                                            <% } else if (isDelivered) { %>
+                                                <button class="btn btn-secondary btn-return-item mr-2" onclick="triggerReturnItem('<%= item._id %>', '<%= item.productName %>')">
+                                                    <i class="fas fa-undo"></i> Return This Item
+                                                </button>
+                                                <button class="btn btn-secondary btn-review-item" onclick="triggerWriteReview('<%= item.productId %>', '<%= item.productName %>')">
+                                                    <i class="far fa-edit"></i> Write Review
+                                                </button>
+                                            <% } else if (isCancelled) { %>
+                                                <span class="badge-cancelled-tag">Cancelled</span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: Order Meta & Financial Summary -->
+                <div class="meta-billing-section">
+                    
+                    <!-- Delivery Address Card -->
+                    <% const address = order.address || {}; %>
+                    <div class="luxury-info-card mb-4">
+                        <h3 class="info-card-heading">Delivery Address</h3>
+                        <div class="info-card-body">
+                            <strong class="recipient-name"><%= address.name %></strong>
+                            <p class="recipient-address"><%= address.address_line %></p>
+                            <p class="recipient-city"><%= address.city %>, <%= address.state %> <%= address.pincode %></p>
+                            <% if (address.phone) { %>
+                                <p class="recipient-phone"><i class="fas fa-phone-alt"></i> <%= address.phone %></p>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Card -->
+                    <div class="luxury-info-card mb-4">
+                        <h3 class="info-card-heading">Payment Method</h3>
+                        <div class="info-card-body payment-card-flex">
+                            <i class="fas fa-credit-card payment-icon"></i>
+                            <div>
+                                <p class="payment-method-desc"><%= order.paymentMethod %></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Summary Card -->
+                    <div class="luxury-info-card mb-4">
+                        <h3 class="info-card-heading">Financial Summary</h3>
+                        <div class="info-card-body totals-list">
+                            <div class="totals-row">
+                                <span class="totals-label">Subtotal</span>
+                                <span class="totals-value">₹<%= (order.subtotal || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                            <div class="totals-row">
+                                <span class="totals-label">Shipping (Express)</span>
+                                <span class="totals-value">₹<%= (order.shippingCharge || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                            <div class="totals-row">
+                                <span class="totals-label">Estimated Tax</span>
+                                <span class="totals-value">₹<%= (order.tax || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                            <% if (order.discount && order.discount > 0) { %>
+                                <div class="totals-row discount-row">
+                                    <span class="totals-label">Discount</span>
+                                    <span class="totals-value">-₹<%= order.discount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                                </div>
+                            <% } %>
+                            
+                            <div class="totals-divider"></div>
+                            
+                            <div class="totals-row grand-total">
+                                <span class="grand-total-label">Total</span>
+                                <span class="grand-total-value">₹<%= (order.finalAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support Card -->
+                    <div class="support-concierge-card">
+                        <div class="support-header">
+                            <h3 class="support-heading">Need assistance?</h3>
+                            <p class="support-subtitle">Our concierge is available for any questions regarding your shipment or product care.</p>
+                        </div>
+                        <a href="mailto:concierge@sneacks.com?subject=Inquiry regarding order <%= order.orderId %>" class="btn btn-accent support-btn-text">
+                            Chat With An Expert
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('../partials/user/footer') %>
+
+    <!-- Javascript Actions -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/user/order-details.js"></script>
+</body>
+
+</html>

@@ -10,6 +10,23 @@ const {
   verifyOTP
 } = require('../../utils/otpService');
 
+exports.getLoginPage = (req, res) => {
+
+    res.render('user/login');
+
+};
+
+exports.getSignupPage = (req, res) => {
+
+    res.render('user/signup');
+
+};
+
+exports.getForgotPasswordPage = (req, res) => {
+
+    res.render('user/forgot-password');
+
+};
 
 exports.signup = async (req, res) => {
 
@@ -65,7 +82,7 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password} = req.body;
 
     const user = await User.findOne({ email });
 

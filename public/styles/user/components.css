@@ -1,0 +1,236 @@
+/* ============================================================
+   SNEACKS - COMPONENTS
+   ============================================================ */
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    border-radius: 0;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--color-text-primary);
+    color: var(--color-bg-primary);
+    border: 1px solid var(--color-text-primary);
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--color-text-primary);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-text-primary);
+}
+
+.btn-accent {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    border: 1px solid var(--color-accent);
+}
+
+.btn-accent:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    transition: all var(--transition-fast);
+}
+
+.btn-icon:hover {
+    border-color: var(--color-text-primary);
+    transform: scale(1.05);
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Forms & Inputs */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-secondary);
+}
+
+.form-input {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    transition: border-color var(--transition-fast);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-text-primary);
+}
+
+.form-input::placeholder {
+    color: #A09E9A;
+    font-weight: 300;
+}
+
+/* Custom Select */
+.custom-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231A1A1A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    border-radius: var(--border-radius-sm);
+}
+
+.badge-outline {
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+.badge-accent {
+    background: var(--color-accent);
+    color: var(--color-white);
+}
+
+/* Quantity Selector */
+.quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    height: 44px;
+}
+
+.qty-btn {
+    width: 40px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.qty-btn:hover {
+    color: var(--color-text-primary);
+}
+
+.qty-input {
+    width: 40px;
+    height: 100%;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    font-weight: 500;
+    -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Empty State */
+.empty-state {
+    padding: var(--space-xl) 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    color: var(--color-border);
+    margin-bottom: var(--space-md);
+}
+
+.empty-state-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: var(--space-lg);
+}
+
+.page-item {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.page-item:hover, .page-item.active {
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+.page-item.active {
+    font-weight: 500;
+}

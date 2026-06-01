@@ -7,7 +7,13 @@ const upload = require('../middleware/upload');
 const authController = require('../controllers/user/authController');
 const profileController = require('../controllers/user/profileController');
 const addressController = require('../controllers/user/addressController');
-
+const shopController=require('../controllers/user/shopController')
+const productController =require('../controllers/user/productController');
+const cartController =require('../controllers/user/cartController');
+const wishlistController =require('../controllers/user/wishlistController');
+const checkoutController =require('../controllers/user/checkoutController');
+const homeController =require('../controllers/user/homeController');
+const orderController = require('../controllers/user/orderController');
 const {
   isLoggedIn,
   isLoggedOut
@@ -20,36 +26,44 @@ const validate = require('../middleware/validateMiddleware');
 const userValidation = require('../validations/userValidation');
 
 
+
+
 router.get('/', (req, res) => {
-  res.redirect('/home');
+
+    res.redirect('/home');
+
 });
 
 
+
+router.get(
+
+    '/home',
+
+    noCache,
+
+    homeController.loadHome
+
+);
 router.get(
   '/login',
   isLoggedOut,
   noCache,
-  (req, res) => {
-    res.render('user/login');
-  }
+  authController.getLoginPage
 );
 
 router.get(
   '/signup',
   isLoggedOut,
   noCache,
-  (req, res) => {
-    res.render('user/signup');
-  }
-);
+  authController.getSignupPage
+);;
 
 router.get(
   '/forgot-password',
   isLoggedOut,
   noCache,
-  (req, res) => {
-    res.render('user/forgot-password');
-  }
+  authController.getForgotPasswordPage
 );
 
 
@@ -195,4 +209,112 @@ router.delete(
 );
 
 
+router.get('/shop', shopController.loadShopPage);
+router.get(
+    '/product/:id',
+    productController.loadProductDetails
+);
+router.post(
+
+    '/add-to-cart',
+
+    isLoggedIn,
+
+    cartController.addToCart
+
+);
+router.get(
+    '/cart',
+    isLoggedIn,
+    cartController.loadCart
+);
+router.patch(
+    '/update-cart-quantity',
+    isLoggedIn,
+    cartController.updateCartQuantity
+);
+
+router.delete(
+    '/remove-cart-item',
+    isLoggedIn,
+    cartController.removeCartItem
+);
+
+
+router.post(
+
+    '/add-to-wishlist',
+
+    isLoggedIn,
+
+    wishlistController.addToWishlist
+
+);
+
+router.get(
+
+    '/wishlist',
+
+    isLoggedIn,
+
+    wishlistController.loadWishlist
+
+);
+
+router.delete(
+
+    '/remove-wishlist-item',
+
+    isLoggedIn,
+
+    wishlistController.removeWishlistItem
+
+);
+router.get(
+
+    '/checkout',
+
+    isLoggedIn,
+
+    checkoutController.loadCheckout
+
+);
+
+router.post(
+
+    '/place-order',
+
+    isLoggedIn,
+
+    checkoutController.placeOrder
+
+);
+router.get(
+
+    '/order-success/:id',
+
+    isLoggedIn,
+
+    checkoutController.loadSuccessPage
+
+);
+
+router.get(
+
+    '/orders',
+
+    isLoggedIn,
+
+    orderController.loadOrders
+
+);
+router.get(
+
+    '/order-details/:id',
+
+    isLoggedIn,
+
+    orderController.loadOrderDetails
+
+);
 module.exports = router;

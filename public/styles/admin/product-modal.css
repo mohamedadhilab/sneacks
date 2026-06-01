@@ -1,0 +1,808 @@
+/*Consolidated Modal Styles for SNEACKS Admin */
+
+/* Common Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0) scale(1);
+}
+
+/* Add Product Modal Specifics */
+.add-product-modal-card {
+    max-width: 900px;
+    width: 95%;
+    max-height: 90vh;
+}
+
+.scrollable-body {
+    overflow-y: auto;
+    max-height: calc(90vh - 160px);
+    padding: 2rem;
+}
+
+.form-grid-modal {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+}
+
+.premium-title-sm {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    color: #fff;
+}
+
+.premium-subtitle-sm {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0.2rem 0 0 0;
+}
+
+.form-section-modal {
+    position: relative;
+    padding-left: 1.2rem;
+}
+
+.section-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 2px;
+}
+
+.image-upload-grid-sm {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 100px);
+    gap: 0.8rem;
+}
+.edit-img-actions {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.6);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    opacity: 0;
+
+    transition: 0.3s;
+
+}
+
+.edit-img-slot:hover .edit-img-actions {
+
+    opacity: 1;
+
+}
+
+.upload-slot-sm {
+    background: #141414;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.hero-slot-sm {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.upload-slot-sm.has-image .preview-img {
+    opacity: 1;
+}
+
+.upload-slot-sm .preview-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+}
+
+.slot-actions {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.upload-slot-sm:hover.has-image .slot-actions {
+    opacity: 1;
+}
+
+.mini-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+}
+
+.mini-btn:hover {
+    background: #00E5FF;
+    color: #111;
+}
+
+.mini-btn.remove:hover {
+    background: #FF4A4A;
+    color: #fff;
+}
+
+.variants-list-sm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.variant-item-sm {
+    background: #111;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.v-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+}
+
+.v-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.v-stock {
+    width: 45px;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 4px;
+    padding: 0.2rem;
+    text-align: center;
+    font-size: 0.75rem;
+}
+
+.v-remove {
+    background: transparent;
+    border: none;
+    color: #444;
+    cursor: pointer;
+}
+
+.btn-outline-dashed-sm {
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    color: #666;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.auto-save-sm {
+    font-size: 0.65rem;
+    color: #FF6B4A;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-right: auto;
+}
+
+/* Size Variant Row */
+.variant-row-sm {
+    background: #111;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mini-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.btn-remove-variant {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 74, 74, 0.1);
+    color: #FF4A4A;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    margin-top: 18px;
+}
+
+.btn-remove-variant:hover {
+    background: #FF4A4A;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* Edit Modal Specifics */
+.edit-product-card {
+
+    max-width: 850px;
+
+    width: 95%;
+
+    max-height: 90vh;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background: rgba(30, 30, 30, 0.98);
+
+    backdrop-filter: blur(20px);
+
+}
+#productEditModal .modal-content {
+
+    animation: fadeUp 0.3s ease;
+
+}
+
+.edit-images-row {
+
+    display: flex;
+
+    gap: 1rem;
+
+    flex-wrap: wrap;
+
+}
+
+.edit-img-slot {
+
+    width: 110px;
+
+    height: 110px;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    background: #111;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    position: relative;
+
+}
+
+.edit-img-slot img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+.variant-row-sm {
+
+    background: #0f0f0f;
+
+    border: 1px solid rgba(255,255,255,0.05);
+
+    padding: 1rem;
+
+    border-radius: 14px;
+
+}
+
+.edit-body {
+
+    padding: 2rem;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1.5rem;
+
+    overflow-y: auto;
+
+    max-height: calc(90vh - 140px);
+
+}
+
+.edit-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* Crop Modal Specifics */
+.crop-modal-card {
+    max-width: 800px;
+    width: 90%;
+}
+
+.crop-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.crop-container {
+    width: 100%;
+    height: 400px;
+    background: #111;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.crop-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: #141414;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.control-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn:hover {
+    background: #00E5FF;
+    color: #111;
+    transform: translateY(-2px);
+}
+
+.aspect-ratio-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 2rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 2rem;
+}
+
+.aspect-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #888;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.aspect-btn.active {
+    background: rgba(255, 107, 74, 0.1);
+    color: #FF6B4A;
+    border-color: #FF6B4A;
+}
+
+/* =========================================
+   COMMON MODAL LAYOUT
+========================================= */
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    bottom: 0;
+    background: #1a1a1a;
+    z-index: 10;
+}
+
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
+.close-modal {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-modal:hover {
+    background: #FF6B4A;
+    transform: rotate(90deg);
+}
+
+/* =========================================
+   FORM GROUPS
+========================================= */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ddd;
+    letter-spacing: 0.5px;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-2 {
+    flex: 2;
+}
+
+.half {
+    width: 100%;
+}
+
+/* =========================================
+   INPUTS
+========================================= */
+
+.premium-input,
+.premium-select-input,
+.premium-textarea {
+    width: 100%;
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #fff;
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.premium-input:focus,
+.premium-select-input:focus,
+.premium-textarea:focus {
+    border-color: #FF6B4A;
+    box-shadow: 0 0 0 3px rgba(255,107,74,0.15);
+}
+
+.premium-select-input {
+    cursor: pointer;
+}
+
+.premium-textarea {
+    resize: none;
+}
+
+/* =========================================
+   ICON INPUT
+========================================= */
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+}
+
+.pl-4 {
+    padding-left: 2.2rem;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #aaa;
+    padding: 0.9rem 1.4rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 600;
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+}
+
+.btn-premium-glow {
+    background: linear-gradient(135deg, #FF6B4A, #FF845C);
+    color: #111;
+    border: none;
+    padding: 1rem 1.8rem;
+    border-radius: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 10px 30px rgba(255,107,74,0.35);
+}
+
+.btn-premium-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px rgba(255,107,74,0.45);
+}
+
+/* =========================================
+   EDIT IMAGE SLOT
+========================================= */
+
+.edit-images-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.edit-img-slot {
+    width: 120px;
+    height: 120px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #111;
+    border: 1px dashed rgba(255,255,255,0.1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-img-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-img-actions {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.edit-img-slot:hover .edit-img-actions {
+    opacity: 1;
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    cursor: pointer;
+}
+
+/* =========================================
+   TOGGLE
+========================================= */
+
+.toggle-wrapper-sm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #ddd;
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .form-grid-modal {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row,
+    .edit-row {
+        flex-direction: column;
+    }
+
+    .image-upload-grid-sm {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+/* ===================================== */
+/* CROPPER MODAL */
+/* ===================================== */
+
+.cropper-modal{
+
+    width: 800px;
+
+    max-width: 95%;
+
+    max-height: 90vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+}
+
+/* CROPPER BODY */
+
+.cropper-body{
+
+    height: 500px;
+
+    overflow: hidden;
+
+    background: #111;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+}
+
+/* IMAGE */
+
+#cropperImage{
+
+    max-width: 100%;
+
+    max-height: 100%;
+
+    display: block;
+
+}
+
+/* FOOTER BUTTONS */
+
+.cropper-actions{
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    padding: 20px;
+
+    border-top: 1px solid rgba(255,255,255,0.08);
+
+    background: #161616;
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .cropper-body{
+
+        height: 350px;
+
+    }
+
+}

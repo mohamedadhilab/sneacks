@@ -10,6 +10,12 @@ const validate = require('../middleware/validateMiddleware');
 const adminValidation = require('../validations/adminValidation');
 const categoryController = require('../controllers/admin/categoryController');
 const categoryUpload = require('../middleware/upload');
+const productController =
+require('../controllers/admin/productController');
+
+const productUpload =
+require('../middleware/productUpload');
+const orderController = require('../controllers/admin/orderController');
 const {
   isAdminLoggedIn,
   isAdminLoggedOut
@@ -136,6 +142,77 @@ router.get(
   '/delete-category/:id',
   isAdminLoggedIn,
   categoryController.deleteCategory
+);
+
+router.get(
+
+  '/restore-category/:id',
+  isAdminLoggedIn,
+  categoryController.restoreCategory
+
+);
+
+router.get(
+  '/products',
+  isAdminLoggedIn,
+  productController.getProducts
+);
+
+router.post(
+  '/add-product',
+  isAdminLoggedIn,
+  productUpload.array('productImage', 5),
+  productController.addProduct
+);
+
+router.post(
+  '/edit-product/:id',
+  isAdminLoggedIn,
+  productUpload.array('productImage', 5),
+  productController.editProduct
+);
+
+router.get(
+  '/delete-product/:id',
+  isAdminLoggedIn,
+  productController.deleteProduct
+);
+
+router.get(
+  '/product-details/:id',
+  isAdminLoggedIn,
+  productController.getProductDetails
+);
+router.get(
+    '/toggle-product/:id',
+    productController.toggleProduct
+);
+
+router.get(
+    '/restore-product/:id',
+    productController.restoreProduct
+);
+
+router.get(
+    '/permanent-delete-product/:id',
+    productController.permanentDeleteProduct
+);
+router.get(
+    '/orders',
+    isAdminLoggedIn,
+    orderController.loadOrders
+);
+
+router.get(
+    '/order-details/:id',
+    isAdminLoggedIn,
+    orderController.loadOrderDetails
+);
+
+router.patch(
+    '/update-order-status/:id',
+    isAdminLoggedIn,
+    orderController.updateOrderStatus
 );
 
 module.exports = router;

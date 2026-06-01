@@ -1,0 +1,162 @@
+/* ==========================================================================
+   SNEACKS - Premium Luxury Ecommerce Validation & Toast Stylesheet
+   ========================================================================== */
+
+/* Validation Design Tokens */
+:root {
+  --color-error: #cf4444;
+  --color-success: #4aa37a;
+  --color-warning: #e0a96d;
+  --color-info: #3498db;
+  
+  --bg-error-subtle: rgba(207, 68, 68, 0.03);
+  --bg-success-subtle: rgba(74, 163, 122, 0.03);
+  
+  --border-error: #e6a5a5;
+  --border-success: #a3d4bd;
+  
+  --shadow-premium: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Inline Error Message Container */
+.validation-error-message {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-error);
+  margin-top: 6px;
+  margin-bottom: 2px;
+  opacity: 0;
+  transform: translateY(-4px);
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.validation-error-message.active {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 40px; /* Safe height to prevent layout break */
+}
+
+/* Invalid Field Styling */
+.validation-invalid-input {
+  border-color: var(--color-error) !important;
+  border-bottom-color: var(--color-error) !important;
+  background-color: var(--bg-error-subtle) !important;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+/* Focused Invalid Field Styling */
+.validation-invalid-input:focus {
+  border-color: var(--color-error) !important;
+  border-bottom-color: var(--color-error) !important;
+  box-shadow: 0 1px 0 0 var(--color-error), 0 0 0 3px rgba(207, 68, 68, 0.08) !important;
+}
+
+/* Valid Field Transitions (Subtle confirmation border) */
+.validation-valid-input {
+  border-color: var(--border-success) !important;
+  background-color: var(--bg-success-subtle) !important;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+/* ==========================================================================
+   Toastify Custom Premium Overrides - Luxury Dark/Minimalist Theme
+   ========================================================================== */
+
+/* Hide default Toastify gradients, apply premium minimal luxury card styling */
+.toastify {
+  background: #1c1c1c !important; /* Premium sleek black */
+  color: #f5f2ec !important; /* Premium warm cream text */
+  padding: 14px 20px !important;
+  border-radius: 0px !important; /* Sharp, high-fashion edges like Nike and Zara */
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4) !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 11px !important; /* Small uppercase minimal lettering */
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  display: flex !important;
+  align-items: center !important;
+  min-width: 320px !important;
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Animation on display */
+.toastify.on {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Custom Inner Layout */
+.premium-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.toast-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+/* Success Type Override */
+.toastify.toast-success {
+  border-left: 3px solid #6b7a45 !important; /* SNEACKS Olive brand color */
+}
+.toastify.toast-success .toast-icon-wrap {
+  color: #6b7a45;
+}
+
+/* Error Type Override */
+.toastify.toast-error {
+  border-left: 3px solid var(--color-error) !important;
+}
+.toastify.toast-error .toast-icon-wrap {
+  color: var(--color-error);
+}
+
+/* Warning Type Override */
+.toastify.toast-warning {
+  border-left: 3px solid var(--color-warning) !important;
+}
+.toastify.toast-warning .toast-icon-wrap {
+  color: var(--color-warning);
+}
+
+/* Info Type Override */
+.toastify.toast-info {
+  border-left: 3px solid var(--color-info) !important;
+}
+.toastify.toast-info .toast-icon-wrap {
+  color: var(--color-info);
+}
+
+/* Close button style */
+.toastify .toast-close {
+  opacity: 0.4;
+  font-size: 14px;
+  color: #f5f2ec !important;
+  font-weight: 300;
+  margin-left: auto;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+}
+
+.toastify .toast-close:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}

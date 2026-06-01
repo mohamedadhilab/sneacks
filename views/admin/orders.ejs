@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Management | SNEACKS Admin</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/admin/layout.css">
+    <link rel="stylesheet" href="/styles/admin/orders.css">
+</head>
+
+<body>
+
+    <!-- Sidebar Partial -->
+    <%- include('../partials/admin/sidebar', { page: 'orders' }) %>
+
+    <%
+      // Safe initialization of dynamic orders array with exact mockup details
+      if (typeof orders === 'undefined') {
+          orders = [
+              {
+                  _id: "66504a535b434e208759f676",
+                  orderId: "SNK-82941",
+                  createdAt: "2026-05-18T10:30:00.000Z",
+                  orderStatus: "Delivered",
+                  finalAmount: 245.00,
+                  paymentMethod: "Razorpay",
+                  paymentStatus: "Paid",
+                  userId: {
+                      name: "Jordan D.",
+                      email: "jordan@velocity.com",
+                      avatarColor: "#9c27b0"
+                  }
+              },
+              {
+                  _id: "66504a605b434e208759f677",
+                  orderId: "SNK-82942",
+                  createdAt: "2026-05-18T12:15:00.000Z",
+                  orderStatus: "Shipped",
+                  finalAmount: 1120.50,
+                  paymentMethod: "COD",
+                  paymentStatus: "Pending",
+                  userId: {
+                      name: "Marcus Wright",
+                      email: "m.wright@gmail.com",
+                      avatarColor: "#ff9800"
+                  }
+              },
+              {
+                  _id: "66504a6f5b434e208759f678",
+                  orderId: "SNK-82943",
+                  createdAt: "2026-05-17T09:45:00.000Z",
+                  orderStatus: "Pending",
+                  finalAmount: 450.00,
+                  paymentMethod: "Wallet",
+                  paymentStatus: "Paid",
+                  userId: {
+                      name: "Sarah Connor",
+                      email: "s.connor@sky.net",
+                      avatarColor: "#e91e63"
+                  }
+              },
+              {
+                  _id: "66504a7a5b434e208759f679",
+                  orderId: "SNK-82944",
+                  createdAt: "2026-05-16T15:20:00.000Z",
+                  orderStatus: "Cancelled",
+                  finalAmount: 120.00,
+                  paymentMethod: "Razorpay",
+                  paymentStatus: "Refunded",
+                  userId: {
+                      name: "Alex Kim",
+                      email: "alexk@outlook.com",
+                      avatarColor: "#f44336"
+                  }
+              },
+              {
+                  _id: "66504a855b434e208759f680",
+                  orderId: "SNK-82945",
+                  createdAt: "2026-05-16T11:10:00.000Z",
+                  orderStatus: "Delivered",
+                  finalAmount: 890.00,
+                  paymentMethod: "Razorpay",
+                  paymentStatus: "Paid",
+                  userId: {
+                      name: "Elena Lopez",
+                      email: "elopez@creative.agency",
+                      avatarColor: "#00bcd4"
+                  }
+              }
+          ];
+      }
+    %>
+
+    <div class="main-content">
+        <!-- Topbar Partial -->
+        <%- include('../partials/admin/topbar', { searchPlaceholder: 'Search orders, transaction ID, or customers...' }) %>
+
+        <div class="page-container animate-fade-up">
+            
+            <!-- HEADER -->
+            <div class="orders-admin-header">
+                <div>
+                    <h1 class="admin-page-title">ORDERS</h1>
+                    <p class="admin-page-subtitle">1,284 active orders this month <span class="bullet">•</span> <span class="trend-text">+12.4% volume increase</span></p>
+                </div>
+            </div>
+
+            <!-- TOP STATS CARDS -->
+            <div class="admin-stats-grid">
+                
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Pending Dispatch</span>
+                        <i class="fas fa-clock stat-icon"></i>
+                    </div>
+                    <div class="stat-value">42</div>
+                    <div class="stat-meta">
+                        <span class="stat-change negative">+5 overdue</span>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">In Transit</span>
+                        <i class="fas fa-shipping-fast stat-icon"></i>
+                    </div>
+                    <div class="stat-value">186</div>
+                    <div class="stat-meta">
+                        <span class="stat-change positive">84% on time</span>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Revenue (24H)</span>
+                        <i class="fas fa-wallet stat-icon"></i>
+                    </div>
+                    <div class="stat-value">₹12,482</div>
+                    <div class="stat-meta">
+                        <span class="stat-change positive">+8%</span>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Return Rate</span>
+                        <i class="fas fa-undo-alt stat-icon"></i>
+                    </div>
+                    <div class="stat-value">1.2%</div>
+                    <div class="stat-meta">
+                        <span class="stat-subtext">Industry avg: 4%</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FILTER TABS & TOP ACTIONS -->
+            <div class="table-controls-card card mb-4">
+                
+                <div class="controls-header">
+                    <!-- Filter Tabs -->
+                    <div class="filter-tabs">
+                        <button class="tab-btn active" data-filter="all">All Orders</button>
+                        <button class="tab-btn" data-filter="pending">Pending</button>
+                        <button class="tab-btn" data-filter="processing">Processing</button>
+                        <button class="tab-btn" data-filter="shipped">Shipped</button>
+                        <button class="tab-btn" data-filter="delivered">Delivered</button>
+                        <button class="tab-btn" data-filter="cancelled">Cancelled</button>
+                        <button class="tab-btn" data-filter="returned">Returned</button>
+                    </div>
+
+                    <!-- Search, Export & Filter Actions -->
+                    <div class="action-buttons-group">
+                        <div class="admin-search-wrapper">
+                            <i class="fas fa-search search-inner-icon"></i>
+                            <input type="text" id="tableSearch" class="search-input" placeholder="Search orders table..." />
+                        </div>
+                        <button class="btn-action-outline" id="exportBtn">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN TABLE -->
+                <div class="table-responsive">
+                    <% if (orders && orders.length > 0) { %>
+                        <table class="custom-table" id="adminOrdersTable">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Payment</th>
+                                    <th>Total Price</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orders.forEach(order => { 
+                                    const dateFormatted = new Date(order.createdAt).toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric'
+                                    });
+
+                                    // Badge definitions
+                                    let statusClass = 'badge-pending';
+                                    const oStatus = (order.orderStatus || 'Pending').toLowerCase();
+                                    if (oStatus === 'processing') statusClass = 'badge-processing';
+                                    else if (oStatus === 'shipped') statusClass = 'badge-shipped';
+                                    else if (oStatus === 'delivered') statusClass = 'badge-delivered';
+                                    else if (oStatus === 'cancelled') statusClass = 'badge-cancelled';
+                                    else if (oStatus === 'returned') statusClass = 'badge-returned';
+                                    
+                                    // Avatar initials
+                                    const initials = order.userId && order.userId.name ? order.userId.name.split(' ').map(n=>n[0]).join('').slice(0, 2).toUpperCase() : 'CU';
+                                %>
+                                    <tr data-status="<%= oStatus %>" data-order-id="<%= order.orderId %>" data-customer-name="<%= order.userId.name %>">
+                                        <td class="font-semibold text-orange">
+                                            #<%= order.orderId %>
+                                        </td>
+                                        <td>
+                                            <div class="customer-cell">
+                                                <div class="cust-avatar" style="background-color: <%= order.userId.avatarColor %>;">
+                                                    <%= initials %>
+                                                </div>
+                                                <div class="cust-info">
+                                                    <span class="cust-name"><%= order.userId.name %></span>
+                                                    <span class="cust-email"><%= order.userId.email %></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <%= dateFormatted %>
+                                        </td>
+                                        <td>
+                                            <span class="badge <%= statusClass %>">
+                                                <span class="badge-dot"></span>
+                                                <%= order.orderStatus %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="payment-cell">
+                                                <span class="payment-method-tag"><%= order.paymentMethod %></span>
+                                                <span class="payment-status-tag <%= order.paymentStatus.toLowerCase() === 'paid' ? 'text-success' : 'text-warning' %>">
+                                                    <%= order.paymentStatus %>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="font-semibold text-white">
+                                            ₹<%= order.finalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %>
+                                        </td>
+                                        <td class="text-right">
+                                            <div class="table-row-actions">
+                                                <a 
+                                                    href="/admin/order-details/<%= order._id %>" 
+                                                    class="btn-row-action"
+                                                    title="View Details"
+                                                >
+                                                    <i class="far fa-eye"></i>
+                                                </a>
+                                                <button class="btn-row-action text-orange" onclick="openStatusModal('<%= order.orderId %>', '<%= order.orderStatus %>', '<%= order.finalAmount %>')" title="Update Status">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <!-- Table Empty State -->
+                        <div class="admin-table-empty">
+                            <i class="fas fa-box-open empty-icon"></i>
+                            <h3>No Orders Recorded</h3>
+                            <p>All client purchases will appear in this database grid.</p>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="admin-table-pagination">
+                    <div class="pagination-info">
+                        Showing 1-<%= orders.length %> of <%= orders.length %> orders
+                    </div>
+                    <div class="pagination-buttons">
+                        <button class="btn-pag disabled"><i class="fas fa-chevron-left"></i></button>
+                        <button class="btn-pag active">1</button>
+                        <button class="btn-pag">2</button>
+                        <button class="btn-pag"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- UPDATE ORDER STATUS MODAL (Glassmorphism Popup overlay) -->
+    <div id="statusModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Update Order Status</h3>
+                <button class="close-modal-btn" onclick="closeStatusModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="statusUpdateForm" onsubmit="handleStatusSubmit(event)">
+                    
+                    <div class="modal-meta-row">
+                        <div class="meta-item">
+                            <span class="meta-label">Order ID</span>
+                            <span id="modalOrderId" class="meta-val text-orange">#SNK-82941</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Grand Total</span>
+                            <span id="modalOrderTotal" class="meta-val text-white">₹245.00</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label">Current Status</label>
+                        <span id="modalCurrentStatus" class="badge badge-processing">Processing</span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="newStatusSelect" class="form-label">New Status</label>
+                        <select id="newStatusSelect" class="form-input custom-select">
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="Returned">Returned</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="adminNotes" class="form-label">Internal Staff Notes</label>
+                        <textarea id="adminNotes" class="form-input" placeholder="Enter private staff logs regarding shipping delay, stock verification, or customer interaction..."></textarea>
+                    </div>
+
+                    <div class="modal-footer-actions">
+                        <button type="button" class="btn-modal btn-modal-cancel" onclick="closeStatusModal()">Cancel</button>
+                        <button type="submit" class="btn-modal btn-modal-save">Save Updates</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/admin/orders.js"></script>
+</body>
+
+</html>

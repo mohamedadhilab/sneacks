@@ -10,6 +10,9 @@ const session = require('express-session');
 const passport = require('passport');
 require('./config/passport');
 
+const cartCountMiddleware =
+require('./middleware/cartCountMiddleware');
+
 const app = express();
 
 
@@ -33,6 +36,8 @@ app.use(
     }
   })
 );
+app.use(cartCountMiddleware);
+
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.message = req.session.message || null;
@@ -45,6 +50,7 @@ app.use(passport.session());
 
 
 app.use('/admin', adminRoute);   
+app.use('/', userRoutes);
 
 
 
@@ -53,7 +59,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', userRoutes);
 
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');

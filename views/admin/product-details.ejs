@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Product Details | Sneacks Admin
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/admin/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/admin/product-details.css"
+    >
+
+</head>
+
+<body>
+
+<%
+const totalStock =
+product.variants.reduce(
+(acc, v) => acc + v.stock,
+0
+);
+
+const inventoryValue =
+product.price * totalStock;
+%>
+
+<%- include('../partials/admin/sidebar', { page: 'products' }) %>
+
+<div class="main-content">
+
+    <%- include('../partials/admin/topbar', {
+        searchPlaceholder: 'Search inventory...',
+        searchAction: '/admin/products',
+        search: ''
+    }) %>
+
+    <div class="page-container">
+
+        <!-- BREADCRUMBS -->
+
+        <div class="breadcrumbs">
+
+            <a href="/admin/products">
+                PRODUCTS
+            </a>
+
+            <i class="fas fa-chevron-right separator"></i>
+
+            <span class="current text-orange">
+
+                <%= product.product_name.toUpperCase() %>
+
+            </span>
+
+        </div>
+
+        <!-- HEADER -->
+
+        <header class="page-header">
+
+            <div>
+
+                <h1 class="premium-title">
+
+                    PRODUCT
+                    <span class="text-orange">
+                        DETAILS
+                    </span>
+
+                </h1>
+
+                <p class="premium-subtitle">
+
+                    Complete inventory overview and
+                    product asset management.
+
+                </p>
+
+            </div>
+
+            <a
+                href="/admin/products"
+                class="btn-secondary"
+            >
+                <i class="fas fa-arrow-left"></i>
+                BACK
+            </a>
+
+        </header>
+
+        <!-- LOW STOCK ALERT -->
+
+        <% if(totalStock <= 10){ %>
+
+            <div class="low-stock-alert">
+
+                <i class="fas fa-triangle-exclamation"></i>
+
+                LOW INVENTORY WARNING —
+                ONLY <%= totalStock %> ITEMS LEFT
+
+            </div>
+
+        <% } %>
+
+        <!-- MAIN GRID -->
+
+        <div class="product-details-grid">
+
+            <!-- LEFT -->
+
+            <div class="product-left-column">
+
+                <!-- IMAGE CARD -->
+
+                <div class="card product-hero-card">
+
+                    <div class="main-preview-wrapper">
+
+                        <!-- BRAND -->
+
+                        <span class="floating-brand">
+
+                            <%= product.brand %>
+
+                        </span>
+
+                        <!-- STATUS -->
+
+                        <span class="floating-status <%= product.is_blocked ? 'status-blocked' : 'status-active' %>">
+
+                            <%= product.is_blocked
+                                ? 'BLOCKED'
+                                : 'ACTIVE'
+                            %>
+
+                        </span>
+
+                        <!-- IMAGE COUNT -->
+
+                        <span class="image-count-badge">
+
+                            <i class="fas fa-images"></i>
+
+                            <%= product.productImage?.length || 0 %>
+
+                        </span>
+
+                        <img
+                            id="mainProductImage"
+                            src="<%= product.productImage?.length
+                                ? '/uploads/products/' + product.productImage[0]
+                                : '/images/placeholder-shoe.png'
+                            %>"
+                        >
+
+                    </div>
+
+                    <!-- THUMBNAILS -->
+
+                    <div class="thumbnail-gallery">
+
+                        <% if(product.productImage?.length){ %>
+
+                            <% product.productImage.forEach((img, index) => { %>
+
+                                <div
+                                    class="thumbnail-item <%= index === 0 ? 'active-thumb' : '' %>"
+                                    onclick="changeMainImage(this, '/uploads/products/<%= img %>')"
+                                >
+
+                                    <img
+                                        src="/uploads/products/<%= img %>"
+                                    >
+
+                                </div>
+
+                            <% }) %>
+
+                        <% } %>
+
+                    </div>
+
+                </div>
+
+                <!-- STOCK CARD -->
+
+                <div class="card stock-card">
+
+                    <div class="stock-top">
+
+                        <div>
+
+                            <h3 class="stock-title">
+
+                                SIZE INVENTORY
+
+                            </h3>
+
+                            <p class="stock-subtitle">
+
+                                Real-time stock distribution
+
+                            </p>
+
+                        </div>
+
+                        <div class="stock-total">
+
+                            <%= totalStock %>
+
+                        </div>
+
+                    </div>
+
+                    <table class="variant-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>SIZE</th>
+
+                                <th>STOCK</th>
+
+                                <th>STATUS</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <% product.variants.forEach(variant => { %>
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+                                            US <%= variant.size %>
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        <%= variant.stock %> Units
+
+                                    </td>
+
+                                    <td>
+
+                                        <% if(variant.stock > 10){ %>
+
+                                            <span class="stock-badge stock-green">
+
+                                                HEALTHY
+
+                                            </span>
+
+                                        <% } else if(variant.stock > 0){ %>
+
+                                            <span class="stock-badge stock-orange">
+
+                                                LOW STOCK
+
+                                            </span>
+
+                                        <% } else { %>
+
+                                            <span class="stock-badge stock-red">
+
+                                                OUT OF STOCK
+
+                                            </span>
+
+                                        <% } %>
+
+                                    </td>
+
+                                </tr>
+
+                            <% }) %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+
+            <div class="product-right-column">
+
+                <!-- PRODUCT INFO -->
+
+                <div class="card product-info-card">
+
+                    <div class="product-category">
+
+                        <%= product.category?.category_name || 'NO CATEGORY' %>
+
+                    </div>
+
+                    <h1 class="product-title">
+
+                        <%= product.product_name %>
+
+                    </h1>
+
+                    <div class="product-price">
+
+                        ₹<%= product.price.toLocaleString() %>
+
+                    </div>
+
+                    <p class="product-description">
+
+                        <%= product.description || 'No description available.' %>
+
+                    </p>
+
+                    <!-- META GRID -->
+
+                    <div class="product-meta-grid">
+
+                        <div class="meta-box">
+
+                            <div class="meta-label">
+                                BRAND
+                            </div>
+
+                            <div class="meta-value">
+                                <%= product.brand %>
+                            </div>
+
+                        </div>
+
+                        <div class="meta-box">
+
+                            <div class="meta-label">
+                                SKU
+                            </div>
+
+                            <div class="meta-value">
+                                <%= product.sku || 'N/A' %>
+                            </div>
+
+                        </div>
+
+                        <div class="meta-box">
+
+                            <div class="meta-label">
+                                TOTAL STOCK
+                            </div>
+
+                            <div class="meta-value">
+                                <%= totalStock %>
+                            </div>
+
+                        </div>
+
+                        <div class="meta-box">
+
+                            <div class="meta-label">
+                                VARIANTS
+                            </div>
+
+                            <div class="meta-value">
+                                <%= product.variants.length %>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ACTIONS -->
+
+                    <div class="product-actions">
+
+                        <a
+                            href="/admin/products"
+                            class="btn-secondary"
+                        >
+                            <i class="fas fa-arrow-left"></i>
+                            BACK
+                        </a>
+
+                        <a
+                            href="/admin/toggle-product/<%= product._id %>"
+                            class="btn-premium-glow"
+                        >
+
+                            <% if(product.is_blocked){ %>
+
+                                <i class="fas fa-eye"></i>
+                                LIST PRODUCT
+
+                            <% } else { %>
+
+                                <i class="fas fa-eye-slash"></i>
+                                UNLIST PRODUCT
+
+                            <% } %>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- QUICK STATS -->
+
+                <div class="quick-stats-grid">
+
+                    <div class="quick-stat-card">
+
+                        <div class="quick-stat-label">
+                            INVENTORY VALUE
+                        </div>
+
+                        <div class="quick-stat-value">
+
+                            ₹<%= inventoryValue.toLocaleString() %>
+
+                        </div>
+
+                    </div>
+
+                    <div class="quick-stat-card">
+
+                        <div class="quick-stat-label">
+                            TOTAL IMAGES
+                        </div>
+
+                        <div class="quick-stat-value">
+
+                            <%= product.productImage?.length || 0 %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- SYSTEM INFO -->
+
+                <div class="card meta-info-card">
+
+                    <div class="section-subtitle">
+
+                        PRODUCT METADATA
+
+                    </div>
+
+                    <h3 class="section-title">
+
+                        SYSTEM INFO
+
+                    </h3>
+
+                    <div class="meta-info-list">
+
+                        <div class="meta-info-row">
+
+                            <div class="meta-info-key">
+                                PRODUCT ID
+                            </div>
+
+                            <div class="meta-info-value">
+                                <%= product._id %>
+                            </div>
+
+                        </div>
+
+                        <div class="meta-info-row">
+
+                            <div class="meta-info-key">
+                                CREATED
+                            </div>
+
+                            <div class="meta-info-value">
+
+                                <%= new Date(product.createdAt)
+                                .toLocaleString() %>
+
+                            </div>
+
+                        </div>
+
+                        <div class="meta-info-row">
+
+                            <div class="meta-info-key">
+                                UPDATED
+                            </div>
+
+                            <div class="meta-info-value">
+
+                                <%= new Date(product.updatedAt)
+                                .toLocaleString() %>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function changeMainImage(element, src){
+
+    document
+    .getElementById('mainProductImage')
+    .src = src;
+
+    document
+    .querySelectorAll('.thumbnail-item')
+    .forEach(item => {
+
+        item.classList.remove('active-thumb');
+
+    });
+
+    element.classList.add('active-thumb');
+
+}
+
+</script>
+
+<%- include('../partials/toast') %>
+
+</body>
+</html>

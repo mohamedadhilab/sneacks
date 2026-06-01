@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Checkout | SNEACKS</title>
+
+    <!-- ICONS -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+    <!-- CSS -->
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/base.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/components.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/animations.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/checkout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/styles/user/responsive.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar checkout-navbar">
+
+        <div
+            class="container navbar-container"
+            style="justify-content: center;"
+        >
+
+            <a href="/" class="nav-logo">
+                SNEACKS
+            </a>
+
+        </div>
+
+    </nav>
+
+    <main class="page-wrapper">
+
+        <div class="container section">
+
+            <div
+                class="checkout-layout animate-fade-up"
+            >
+
+                <!-- ===================================== -->
+                <!-- LEFT SIDE -->
+                <!-- ===================================== -->
+
+                <div class="checkout-form-section">
+
+                    <h2 class="mb-4">
+
+                        Secure Checkout
+
+                    </h2>
+
+                    <!-- ================================= -->
+                    <!-- ADDRESS STEP -->
+                    <!-- ================================= -->
+
+                    <div
+                        class="checkout-step active"
+                        id="stepAddress"
+                    >
+
+                        <div class="step-header">
+
+                            <span class="step-number">
+
+                                1
+
+                            </span>
+
+                            <h3 class="step-title m-0">
+
+                                Shipping Information
+
+                            </h3>
+
+                        </div>
+
+                        <div class="step-content">
+
+                            <!-- SAVED ADDRESSES -->
+
+                            <% if(
+                                addresses &&
+                                addresses.length > 0
+                            ){ %>
+
+                                <div
+                                    class="saved-addresses grid grid-2 mb-4"
+                                >
+
+                                    <% addresses.forEach((addr,index)=>{ %>
+
+                                        <label
+                                            class="address-card <%= index === 0 ? 'selected' : '' %>"
+                                        >
+
+                                            <input
+                                                type="radio"
+                                                name="selectedAddress"
+                                                value="<%= addr._id %>"
+                                                <%= index === 0 ? 'checked' : '' %>
+                                            >
+
+                                            <div
+                                                class="address-card-inner"
+                                            >
+
+                                               <strong>
+    <%= addr.full_name %>
+</strong>
+
+<p>
+    <%= addr.address %>
+</p>
+
+<p>
+    <%= addr.city %>,
+    <%= addr.state %> -
+    <%= addr.pincode %>
+</p>
+
+<p>
+    <%= addr.phone_number %>
+</p>
+                                            </div>
+
+                                        </label>
+
+                                    <% }) %>
+
+                                </div>
+
+                                <button
+                                    class="btn btn-secondary mb-4"
+                                    id="addNewAddressBtn"
+                                >
+
+                                    + Add New Address
+
+                                </button>
+
+                            <% } %>
+
+                            <!-- NEW ADDRESS FORM -->
+
+                            <form
+                                id="addressForm"
+                                class="checkout-form <%= addresses && addresses.length > 0 ? 'hidden' : '' %>"
+                            >
+
+                                <div class="grid grid-2">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">
+
+                                            First Name
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="first_name"
+                                            class="form-input"
+                                            required
+                                            minlength="2"
+                                        >
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">
+
+                                            Last Name
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="last_name"
+                                            class="form-input"
+                                            required
+                                            minlength="1"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label class="form-label">
+
+                                        Email Address
+
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        class="form-input"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label class="form-label">
+
+                                        Street Address
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="address"
+                                        class="form-input"
+                                        required
+                                        minlength="5"
+                                    >
+
+                                </div>
+
+                                <div class="grid grid-2">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">
+
+                                            City
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="city"
+                                            class="form-input"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">
+
+                                            State
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="state"
+                                            class="form-input"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+                                <div class="grid grid-2">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">
+
+                                            Pincode
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="pincode"
+                                            class="form-input"
+                                            required
+                                            minlength="6"
+                                            maxlength="6"
+                                        >
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">
+
+                                            Phone Number
+
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="phone_number"
+                                            class="form-input"
+                                            required
+                                            minlength="10"
+                                            maxlength="10"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+                            <button
+                                class="btn btn-primary mt-2"
+                                id="continueToPaymentBtn"
+                            >
+
+                                Continue to Payment
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================================= -->
+                    <!-- PAYMENT STEP -->
+                    <!-- ================================= -->
+
+                    <div
+                        class="checkout-step"
+                        id="stepPayment"
+                    >
+
+                        <div class="step-header disabled">
+
+                            <span class="step-number">
+
+                                2
+
+                            </span>
+
+                            <h3 class="step-title m-0">
+
+                                Payment Method
+
+                            </h3>
+
+                        </div>
+
+                        <div class="step-content hidden">
+
+                            <div class="payment-methods">
+
+                                <!-- RAZORPAY -->
+
+                                <label
+                                    class="payment-card selected"
+                                >
+
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="razorpay"
+                                        checked
+                                    >
+
+                                    <div
+                                        class="payment-card-inner flex items-center gap-sm"
+                                    >
+
+                                        <i
+                                            class="fas fa-credit-card"
+                                        ></i>
+
+                                        <div>
+
+                                            <strong>
+
+                                                Credit/Debit Card, UPI
+
+                                            </strong>
+
+                                            <p
+                                                class="text-sm text-muted m-0"
+                                            >
+
+                                                Secure payment via Razorpay
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </label>
+
+                                <!-- WALLET -->
+
+                                <label
+                                    class="payment-card"
+                                >
+
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="wallet"
+                                    >
+
+                                    <div
+                                        class="payment-card-inner flex items-center gap-sm"
+                                    >
+
+                                        <i
+                                            class="fas fa-wallet"
+                                        ></i>
+
+                                        <div>
+
+                                            <strong>
+
+                                                Wallet
+
+                                            </strong>
+
+                                            <p
+                                                class="text-sm text-muted m-0"
+                                            >
+
+                                                Balance:
+
+                                                ₹<%= typeof walletBalance !== 'undefined' ? walletBalance.toLocaleString() : 0 %>
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </label>
+
+                                <!-- COD -->
+
+                                <label
+                                    class="payment-card"
+                                >
+
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="cod"
+                                    >
+
+                                    <div
+                                        class="payment-card-inner flex items-center gap-sm"
+                                    >
+
+                                        <i
+                                            class="fas fa-money-bill-wave"
+                                        ></i>
+
+                                        <div>
+
+                                            <strong>
+
+                                                Cash on Delivery
+
+                                            </strong>
+
+                                            <p
+                                                class="text-sm text-muted m-0"
+                                            >
+
+                                                Pay when delivered
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </label>
+
+                            </div>
+
+                            <div class="flex gap-sm mt-4">
+
+                                <button
+                                    class="btn btn-secondary"
+                                    id="backToAddressBtn"
+                                >
+
+                                    Back
+
+                                </button>
+
+                                <button
+                                    class="btn btn-primary flex-1"
+                                    id="placeOrderBtn"
+                                >
+
+                                    Place Order
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ===================================== -->
+                <!-- RIGHT SIDE -->
+                <!-- ===================================== -->
+
+                <div class="checkout-summary-section">
+
+                    <div class="summary-box">
+
+                        <h3 class="mb-3">
+
+                            Order Summary
+
+                        </h3>
+
+                        <!-- CART ITEMS -->
+
+                        <div class="summary-items mb-4">
+
+                            <% if(
+                                cart &&
+                                cart.items
+                            ){ %>
+
+                                <% cart.items.forEach(item => { %>
+
+                                    <% if(item.productId){ %>
+
+                                        <div
+                                            class="summary-item"
+                                        >
+
+                                            <div
+                                                class="s-item-img"
+                                            >
+
+                                                <img
+                                                    src="<%= item.productId.productImage && item.productId.productImage.length > 0 ? '/uploads/products/' + item.productId.productImage[0] : '/images/placeholder-shoe.png' %>"
+                                                >
+
+                                            </div>
+
+                                            <div
+                                                class="s-item-info"
+                                            >
+
+                                                <span
+                                                    class="s-item-name"
+                                                >
+
+                                                    <%= item.productId.product_name %>
+
+                                                </span>
+
+                                                <span
+                                                    class="text-sm text-muted block"
+                                                >
+
+                                                    Size:
+                                                    <%= item.size %>
+
+                                                    |
+
+                                                    Qty:
+                                                    <%= item.quantity %>
+
+                                                </span>
+
+                                            </div>
+
+                                            <div
+                                                class="s-item-price"
+                                            >
+
+                                                ₹<%= (
+                                                    item.productId.price *
+                                                    item.quantity
+                                                ).toLocaleString() %>
+
+                                            </div>
+
+                                        </div>
+
+                                    <% } %>
+
+                                <% }) %>
+
+                            <% } %>
+
+                        </div>
+
+                        <!-- COUPON -->
+
+                        <div
+                            class="coupon-section mb-4"
+                        >
+
+                            <label class="form-label">
+
+                                Discount Code
+
+                            </label>
+
+                            <div class="flex gap-sm">
+
+                                <input
+                                    type="text"
+                                    id="couponInput"
+                                    class="form-input"
+                                    placeholder="Enter code"
+                                >
+
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    id="applyCouponBtn"
+                                >
+
+                                    Apply
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- TOTALS -->
+
+                        <div class="summary-row">
+
+                            <span>
+
+                                Subtotal
+
+                            </span>
+
+                            <span>
+
+                                ₹<%= cartTotal.toLocaleString() %>
+
+                            </span>
+
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>
+
+                                Shipping
+
+                            </span>
+
+                            <span>
+
+                                Free
+
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="summary-divider"
+                        ></div>
+
+                        <div
+                            class="summary-row total-row"
+                        >
+
+                            <span>
+
+                                Total
+
+                            </span>
+
+                            <span
+                                id="finalTotal"
+                            >
+
+                                ₹<%= cartTotal.toLocaleString() %>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- JS -->
+
+    <script src="/js/user/checkout.js"></script>
+    <%- include("../partials/toast") %>
+
+</body>
+
+</html>

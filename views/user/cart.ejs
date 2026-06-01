@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | SNEACKS</title>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/user/base.css">
+    <link rel="stylesheet" href="/styles/user/layout.css">
+    <link rel="stylesheet" href="/styles/user/components.css">
+    <link rel="stylesheet" href="/styles/user/animations.css">
+    <link rel="stylesheet" href="/styles/user/cart.css">
+    <link rel="stylesheet" href="/styles/user/responsive.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <%- include('../partials/user/navbar', { page: 'cart' }) %>
+
+    <main class="page-wrapper">
+        
+        <div class="container section">
+            
+            <h1 class="text-center mb-4 animate-fade-up">Shopping Cart</h1>
+
+            <% if(typeof cart !== 'undefined' && cart.items && cart.items.length > 0) { %>
+            <div class="cart-layout animate-fade-in delay-100">
+                
+                <!-- LEFT: Cart Items -->
+                <div class="cart-items-section">
+                    <div class="cart-table-header mobile-hide">
+                        <div class="th-product">Product</div>
+                        <div class="th-quantity">Quantity</div>
+                        <div class="th-total">Total</div>
+                    </div>
+
+                    <div class="cart-items-list">
+                    <% cart.items.forEach(item => { %>
+
+                    <% if(item.productId){ %>                           
+     <div class="cart-item" data-id="<%= item.productId._id %>" data-size="<%= item.size %>">
+                                
+                                <div class="item-product-info">
+                                    <div class="item-img">
+                                        <img src="<%= item.productId.productImage && item.productId.productImage.length > 0 ? '/uploads/products/' + item.productId.productImage[0] : '/images/placeholder-shoe.png' %>" alt="<%= item.productId.product_name %>">
+                                    </div>
+                                    <div class="item-details">
+                                        <span class="uppercase-label text-muted block mb-1"><%= item.productId.brand %></span>
+                                        <a href="/product/<%= item.productId._id %>" class="item-name"><%= item.productId.product_name %></a>
+                                        <p class="item-variant">Size: US <%= item.size %></p>
+                                        <p class="item-price-mobile desktop-hide">₹<%= item.productId.price.toLocaleString() %></p>
+                                        <button class="btn-remove remove-item-btn" data-item-id="<%= item._id %>">Remove</button>
+                                    </div>
+                                </div>
+
+                                <div class="item-quantity">
+                                    <div class="quantity-selector">
+                                        <button type="button" class="qty-btn minus" data-item-id="<%= item._id %>">-</button>
+                                        <input type="number" class="qty-input" value="<%= item.quantity %>" min="1" max="5" readonly>
+                                        <button type="button" class="qty-btn plus" data-item-id="<%= item._id %>">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="item-total">
+                                    ₹<span class="item-total-price"><%= (item.productId.price * item.quantity).toLocaleString() %></span>
+                                </div>
+
+                            </div>
+                            <% } %>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Order Summary -->
+                <div class="cart-summary-section">
+                    <div class="summary-card">
+                        <h3 class="mb-3">Order Summary</h3>
+                        
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal">₹<%= typeof cartTotal !== 'undefined' ? cartTotal.toLocaleString() : 0 %></span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span>Calculated at checkout</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Taxes</span>
+                            <span>Included</span>
+                        </div>
+                        
+                        <div class="summary-divider"></div>
+                        
+                        <div class="summary-row total-row">
+                            <span>Total</span>
+                            <span id="cartTotal">₹<%= typeof cartTotal !== 'undefined' ? cartTotal.toLocaleString() : 0 %></span>
+                        </div>
+
+                        <a href="/checkout" class="btn btn-primary btn-full mt-4">Proceed to Checkout</a>
+                        
+                        <div class="secure-checkout-msg mt-3 text-center text-sm text-muted">
+                            <i class="fas fa-lock mr-1"></i> Secure Encrypted Checkout
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <% } else { %>
+                <%- include('../partials/user/empty-state', {
+                    iconClass: 'fas fa-shopping-bag',
+                    title: 'Your cart is empty',
+                    message: 'Looks like you haven\'t added any items to your cart yet.',
+                    actionText: 'Continue Shopping',
+                    actionLink: '/shop'
+                }) %>
+            <% } %>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('../partials/user/footer') %>
+
+    <!-- JS -->
+    <script src="/js/user/cart.js"></script>
+    <%- include("../partials/toast") %>
+
+</body>
+</html>

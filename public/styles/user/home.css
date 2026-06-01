@@ -1,0 +1,295 @@
+/* ============================================================
+   SNEACKS - HOME PAGE
+   ============================================================ */
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+
+.hero-section{
+
+    padding: 80px 0;
+
+    background: #f8f6f1;
+
+}
+
+.hero-grid{
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+
+    gap: 60px;
+
+}
+
+.hero-title{
+
+    font-size: 6rem;
+
+    line-height: 0.95;
+
+    margin-bottom: 24px;
+
+}
+
+.hero-subtitle{
+
+    font-size: 1.1rem;
+
+    color: #777;
+
+    max-width: 500px;
+
+    line-height: 1.8;
+
+}
+
+.hero-image{
+
+    width: 100%;
+
+    height: 700px;
+
+    object-fit: cover;
+
+    border-radius: 6px;
+
+}
+
+.hero-tag{
+
+    letter-spacing: 3px;
+
+    font-size: 0.8rem;
+
+    margin-bottom: 20px;
+
+    display: inline-block;
+
+}
+
+.hero-btn{
+
+    margin-top: 30px;
+
+}
+
+/* ============================================================
+   SECTION HEADER
+   ============================================================ */
+
+.section-header{
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 50px;
+
+}
+
+.section-label{
+
+    font-size: 0.8rem;
+
+    letter-spacing: 3px;
+
+    color: #777;
+
+}
+
+/* ============================================================
+   EDITORIAL SECTION
+   ============================================================ */
+
+.editorial-section{
+
+    padding: 120px 0;
+
+    background: #f8f6f1;
+
+}
+
+.editorial-grid{
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 70px;
+
+    align-items: center;
+
+}
+
+.editorial-image{
+
+    width: 100%;
+
+    height: 650px;
+
+    object-fit: cover;
+
+    border-radius: 6px;
+
+}
+
+.editorial-title{
+
+    font-size: 4rem;
+
+    line-height: 1.1;
+
+    margin: 20px 0;
+
+}
+
+/* ============================================================
+   PHILOSOPHY SECTION
+   ============================================================ */
+
+.philosophy-section{
+
+    padding: 120px 0;
+
+    text-align: center;
+
+}
+
+.philosophy-section h2{
+
+    font-size: 4rem;
+
+    margin: 20px 0;
+
+}
+
+.philosophy-section p{
+
+    max-width: 850px;
+
+    margin: auto;
+
+    color: #777;
+
+    line-height: 1.8;
+
+    font-size: 1.2rem;
+
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.empty-home-state{
+
+    padding: 80px 0;
+
+    text-align: center;
+
+    color: #777;
+
+}
+
+.empty-home-state i{
+
+    font-size: 3rem;
+
+    margin-bottom: 20px;
+
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 992px){
+
+    .hero-grid{
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .editorial-grid{
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .hero-title{
+
+        font-size: 4rem;
+
+    }
+
+    .editorial-title{
+
+        font-size: 3rem;
+
+    }
+
+    .hero-image{
+
+        height: 500px;
+
+    }
+
+    .editorial-image{
+
+        height: 500px;
+
+    }
+
+    .section-header{
+
+        flex-direction: column;
+
+        gap: 20px;
+
+        align-items: flex-start;
+
+    }
+
+}
+
+@media (max-width: 768px){
+
+    .hero-title{
+
+        font-size: 3rem;
+
+    }
+
+    .editorial-title{
+
+        font-size: 2.4rem;
+
+    }
+
+    .philosophy-section h2{
+
+        font-size: 2.5rem;
+
+    }
+
+    .hero-image{
+
+        height: 350px;
+
+    }
+
+    .editorial-image{
+
+        height: 350px;
+
+    }
+
+}

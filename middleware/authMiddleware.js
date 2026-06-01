@@ -2,17 +2,51 @@ const User = require('../models/userModel');
 exports.isLoggedIn = async (req, res, next) => {
 
   try {
+if (!req.session.user) {
 
-    if (!req.session.user) {
+    // =====================================
+    // AJAX / FETCH REQUEST
+    // =====================================
 
-      req.session.message = {
-        type: 'error',
-        text: 'Please login first'
-      };
+    if (
 
-      return res.redirect('/login');
+        req.xhr ||
+
+        (
+            req.headers.accept &&
+
+            req.headers.accept.includes(
+                'application/json'
+            )
+        )
+
+    ) {
+
+        return res.status(401).json({
+
+            success: false,
+
+            message: 'Please login first'
+
+        });
 
     }
+
+    // =====================================
+    // NORMAL REQUEST
+    // =====================================
+
+    req.session.message = {
+
+        type: 'error',
+
+        text: 'Please login first'
+
+    };
+
+    return res.redirect('/login');
+
+}
 
     const user = await User.findById(req.session.user.id);
 
