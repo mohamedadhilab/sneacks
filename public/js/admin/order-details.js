@@ -211,3 +211,119 @@ function handleStatusSubmit(event) {
         window.location.reload();
     }
 }
+async function handleStatusSubmit(event){
+
+    event.preventDefault();
+
+    try{
+
+        const form =
+            document.getElementById('statusUpdateForm');
+
+        const orderId =
+            form.dataset.orderId;
+
+        const status =
+            document.getElementById(
+                'newStatusSelect'
+            ).value;
+
+        const response = await fetch(
+
+            `/admin/update-order-status/${orderId}`,
+
+            {
+
+                method: 'PATCH',
+
+                headers: {
+
+                    'Content-Type': 'application/json'
+
+                },
+
+                body: JSON.stringify({
+
+                    status
+
+                })
+
+            }
+
+        );
+
+        const data = await response.json();
+
+        if(data.success){
+
+            Swal.fire({
+
+                icon: 'success',
+
+                title: 'Updated',
+
+                text: 'Order status updated successfully',
+
+                timer: 1500,
+
+                showConfirmButton: false
+
+            });
+
+            closeStatusModal();
+
+            setTimeout(() => {
+
+                location.reload();
+
+            }, 1500);
+
+        } else {
+
+            Swal.fire({
+
+                icon: 'error',
+
+                title: 'Failed',
+
+                text: data.message
+
+            });
+
+        }
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        Swal.fire({
+
+            icon: 'error',
+
+            title: 'Error',
+
+            text: 'Something went wrong'
+
+        });
+
+    }
+
+}
+
+function openStatusModalDirectly(){
+
+    document
+        .getElementById('statusModal')
+        .classList.add('active');
+
+}
+
+function closeStatusModal(){
+
+    document
+        .getElementById('statusModal')
+        .classList.remove('active');
+
+}

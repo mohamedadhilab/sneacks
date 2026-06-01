@@ -147,32 +147,23 @@
                                                 class="address-card-inner"
                                             >
 
-                                                <strong>
+                                               <strong>
+    <%= addr.full_name %>
+</strong>
 
-                                                    <%= addr.name %>
+<p>
+    <%= addr.address %>
+</p>
 
-                                                </strong>
+<p>
+    <%= addr.city %>,
+    <%= addr.state %> -
+    <%= addr.pincode %>
+</p>
 
-                                                <p>
-
-                                                    <%= addr.city %>,
-
-                                                    <%= addr.state %>
-
-                                                </p>
-
-                                                <p>
-
-                                                    <%= addr.pincode %>
-
-                                                </p>
-
-                                                <p>
-
-                                                    <%= addr.phone %>
-
-                                                </p>
-
+<p>
+    <%= addr.phone_number %>
+</p>
                                             </div>
 
                                         </label>

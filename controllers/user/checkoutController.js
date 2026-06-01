@@ -297,22 +297,21 @@ const placeOrder = async (req, res) => {
 
             items: orderItems,
 
-            address: {
+           address: {
 
-                name: address.name,
+    full_name: address.full_name,
 
-                phone: address.phone,
+    phone_number: address.phone_number,
 
-                city: address.city,
+    city: address.city,
 
-                state: address.state,
+    state: address.state,
 
-                pincode: address.pincode,
+    pincode: address.pincode,
 
-                address_line:
-                    address.address_line
+    address: address.address
 
-            },
+},
 
             paymentMethod,
 

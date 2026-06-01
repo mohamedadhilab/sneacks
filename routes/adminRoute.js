@@ -15,6 +15,7 @@ require('../controllers/admin/productController');
 
 const productUpload =
 require('../middleware/productUpload');
+const orderController = require('../controllers/admin/orderController');
 const {
   isAdminLoggedIn,
   isAdminLoggedOut
@@ -195,6 +196,23 @@ router.get(
 router.get(
     '/permanent-delete-product/:id',
     productController.permanentDeleteProduct
+);
+router.get(
+    '/orders',
+    isAdminLoggedIn,
+    orderController.loadOrders
+);
+
+router.get(
+    '/order-details/:id',
+    isAdminLoggedIn,
+    orderController.loadOrderDetails
+);
+
+router.patch(
+    '/update-order-status/:id',
+    isAdminLoggedIn,
+    orderController.updateOrderStatus
 );
 
 module.exports = router;

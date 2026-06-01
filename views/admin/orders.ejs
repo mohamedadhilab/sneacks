@@ -260,7 +260,11 @@
                                         </td>
                                         <td class="text-right">
                                             <div class="table-row-actions">
-                                                <a href="/admin/orders/<%= order._id || order.orderId %>" class="btn-row-action" title="View Details">
+                                                <a 
+                                                    href="/admin/order-details/<%= order._id %>" 
+                                                    class="btn-row-action"
+                                                    title="View Details"
+                                                >
                                                     <i class="far fa-eye"></i>
                                                 </a>
                                                 <button class="btn-row-action text-orange" onclick="openStatusModal('<%= order.orderId %>', '<%= order.orderStatus %>', '<%= order.finalAmount %>')" title="Update Status">

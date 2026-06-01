@@ -93,7 +93,7 @@
       });
       
       // Compute initials
-      const initials = order.customer ? order.customer.name.split(' ').map(n=>n[0]).join('').slice(0, 2).toUpperCase() : 'CU';
+      const initials = order.userId ? order.userId.name.split(' ').map(n=>n[0]).join('').slice(0, 2).toUpperCase() : 'CU';
     %>
 
     <div class="main-content">
@@ -215,30 +215,36 @@
                 <div class="customer-billing-column">
                     
                     <!-- Customer Card -->
-                    <div class="card card-admin-details mb-4">
-                        <h3>Customer</h3>
-                        <div class="card-divider"></div>
-                        <div class="customer-profile-card">
-                            <div class="cust-avatar-large" style="background-color: <%= order.customer.avatarColor %>;">
-                                <%= initials %>
-                            </div>
-                            <div class="cust-meta">
-                                <h4 class="cust-name-large"><%= order.customer.name %></h4>
-                                <span class="cust-email-large"><%= order.customer.email %></span>
-                            </div>
-                        </div>
-                        <div class="cust-tier-row mt-3">
-                            <span class="details-label">Customer Tier</span>
-                            <span class="badge-tier-elite"><%= order.customer.tier %></span>
-                        </div>
-                    </div>
+                 <div class="customer-profile-card">
+    <div class="cust-avatar-large" style="background-color: #ff6b35;">
+        <%= initials %>
+    </div>
+
+    <div class="cust-meta">
+        <h4 class="cust-name-large">
+            <%= order.userId.name %>
+        </h4>
+
+        <span class="cust-email-large">
+            <%= order.userId.email %>
+        </span>
+    </div>
+</div>
+
+<div class="cust-tier-row mt-3">
+    <span class="details-label">Customer Tier</span>
+
+    <span class="badge-tier-elite">
+        PREMIUM CUSTOMER
+    </span>
+</div>
 
                     <!-- Shipping Address Card -->
                     <div class="card card-admin-details mb-4">
                         <h3>Shipping Address</h3>
                         <div class="card-divider"></div>
                         <div class="shipping-address-details">
-                            <strong class="shipping-recipient"><%= order.customer.name %></strong>
+                            <strong class="shipping-recipient"><%= order.userId.name %></strong>
                             <p class="shipping-text"><%= order.address.address_line %></p>
                             <% if (order.address.landmark) { %>
                                 <p class="shipping-text"><%= order.address.landmark %></p>
@@ -293,58 +299,172 @@
         </div>
     </div>
 
-    <!-- UPDATE ORDER STATUS MODAL (Glassmorphism popup overlay) -->
-    <div id="statusModal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>Update Order Status</h3>
-                <button class="close-modal-btn" onclick="closeStatusModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="statusUpdateForm" onsubmit="handleStatusSubmit(event)">
-                    
-                    <div class="modal-meta-row">
-                        <div class="meta-item">
-                            <span class="meta-label">Order ID</span>
-                            <span id="modalOrderId" class="meta-val text-orange">#<%= order.orderId %></span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Grand Total</span>
-                            <span id="modalOrderTotal" class="meta-val text-white">₹<%= order.finalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
-                        </div>
-                    </div>
+    <!-- UPDATE STATUS MODAL -->
+<div id="statusModal" class="modal-overlay">
 
-                    <div class="form-group mb-4">
-                        <label class="form-label">Current Status</label>
-                        <span id="modalCurrentStatus" class="badge badge-processing">Processing</span>
-                    </div>
+    <div class="modal-card">
 
-                    <div class="form-group mb-4">
-                        <label for="newStatusSelect" class="form-label">New Status</label>
-                        <select id="newStatusSelect" class="form-input custom-select">
-                            <option value="Pending">Pending</option>
-                            <option value="Processing">Processing</option>
-                            <option value="Shipped">Shipped</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
-                            <option value="Returned">Returned</option>
-                        </select>
-                    </div>
+        <!-- HEADER -->
+        <div class="modal-header">
 
-                    <div class="form-group mb-4">
-                        <label for="adminNotes" class="form-label">Internal Staff Notes</label>
-                        <textarea id="adminNotes" class="form-input" placeholder="Enter private staff logs regarding shipping delay, stock verification, or customer interaction..."></textarea>
-                    </div>
+            <h2 class="modal-title">
+                Update Order Status
+            </h2>
 
-                    <div class="modal-footer-actions">
-                        <button type="button" class="btn-modal btn-modal-cancel" onclick="closeStatusModal()">Cancel</button>
-                        <button type="submit" class="btn-modal btn-modal-save">Save Updates</button>
-                    </div>
+            <button
+                class="close-modal-btn"
+                onclick="closeStatusModal()"
+            >
+                <i class="fas fa-times"></i>
+            </button>
 
-                </form>
-            </div>
         </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+
+            <form
+                id="statusUpdateForm"
+                data-order-id="<%= order._id %>"
+                onsubmit="handleStatusSubmit(event)"
+            >
+
+                <!-- INFO GRID -->
+                <div class="modal-info-grid">
+
+                    <div class="modal-info-box">
+
+                        <span class="modal-label">
+                            Order ID
+                        </span>
+
+                        <span class="modal-value text-orange">
+                            #<%= order.orderId %>
+                        </span>
+
+                    </div>
+
+                    <div class="modal-info-box">
+
+                        <span class="modal-label">
+                            Grand Total
+                        </span>
+
+                        <span class="modal-value">
+                            ₹<%= order.finalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %>
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- CURRENT STATUS -->
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Current Status
+                    </label>
+
+                    <div class="current-status-pill">
+                        <%= order.orderStatus %>
+                    </div>
+
+                </div>
+
+                <!-- NEW STATUS -->
+                <div class="form-group">
+
+                    <label
+                        for="newStatusSelect"
+                        class="form-label"
+                    >
+                        New Status
+                    </label>
+
+                    <select
+                        id="newStatusSelect"
+                        class="modal-select"
+                    >
+
+                        <option value="Pending"
+                            <%= order.orderStatus === 'Pending' ? 'selected' : '' %>>
+                            Pending
+                        </option>
+
+                        <option value="Processing"
+                            <%= order.orderStatus === 'Processing' ? 'selected' : '' %>>
+                            Processing
+                        </option>
+
+                        <option value="Shipped"
+                            <%= order.orderStatus === 'Shipped' ? 'selected' : '' %>>
+                            Shipped
+                        </option>
+
+                        <option value="Delivered"
+                            <%= order.orderStatus === 'Delivered' ? 'selected' : '' %>>
+                            Delivered
+                        </option>
+
+                        <option value="Cancelled"
+                            <%= order.orderStatus === 'Cancelled' ? 'selected' : '' %>>
+                            Cancelled
+                        </option>
+
+                        <option value="Returned"
+                            <%= order.orderStatus === 'Returned' ? 'selected' : '' %>>
+                            Returned
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- NOTES -->
+                <div class="form-group">
+
+                    <label
+                        for="adminNotes"
+                        class="form-label"
+                    >
+                        Internal Staff Notes
+                    </label>
+
+                    <textarea
+                        id="adminNotes"
+                        class="modal-textarea"
+                        placeholder="Add shipment, stock verification, or customer notes..."
+                    ></textarea>
+
+                </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn-modal-secondary"
+                        onclick="closeStatusModal()"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn-modal-primary"
+                    >
+                        Save Updates
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
+
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/admin/order-details.js"></script>

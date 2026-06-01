@@ -151,7 +151,7 @@ const loadShopPage = async (req, res) => {
         }
 
         
-        const limit = 3;
+        const limit = 6;
 
         const skip = (page - 1) * limit;
 
