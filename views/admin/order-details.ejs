@@ -283,10 +283,21 @@
                         </div>
 
                         <!-- Big action dispatcher button -->
-                        <button class="btn btn-dispatch-approve mt-4" id="dispatchApproveBtn">
+                        <% if(order.orderStatus === 'Processing'){ %>
+
+                            <button 
+                            class="btn btn-dispatch-approve mt-4" 
+                            id="dispatchApproveBtn"
+                            data-order-id="<%= order._id %>"
+                            >
+
                             <span>Approve For Dispatch</span>
+
                             <i class="fas fa-arrow-right"></i>
-                        </button>
+
+                            </button>
+
+                            <% } %>
                         <div class="fraud-risk-badge mt-2">
                             <i class="fas fa-shield-alt"></i> Fraud Risk Score: <span class="text-cyan">Low (0.02)</span>
                         </div>

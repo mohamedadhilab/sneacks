@@ -267,9 +267,23 @@
                                                 >
                                                     <i class="far fa-eye"></i>
                                                 </a>
-                                                <button class="btn-row-action text-orange" onclick="openStatusModal('<%= order.orderId %>', '<%= order.orderStatus %>', '<%= order.finalAmount %>')" title="Update Status">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
+                                               <button 
+class="btn-row-action text-orange"
+
+onclick="
+openStatusModal(
+'<%= order._id %>',
+'<%= order.orderId %>',
+'<%= order.orderStatus %>',
+'<%= order.finalAmount %>'
+)
+"
+
+title="Update Status">
+
+<i class="fas fa-edit"></i>
+
+</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -312,8 +326,10 @@
                 <button class="close-modal-btn" onclick="closeStatusModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="statusUpdateForm" onsubmit="handleStatusSubmit(event)">
-                    
+<form 
+id="statusUpdateForm"
+onsubmit="handleStatusSubmit(event)"
+>                    
                     <div class="modal-meta-row">
                         <div class="meta-item">
                             <span class="meta-label">Order ID</span>

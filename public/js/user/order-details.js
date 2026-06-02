@@ -188,3 +188,224 @@ function triggerWriteReview(productId, productName) {
         }
     }
 }
+
+async function cancelItem(orderId,itemId){
+
+
+const result =
+await Swal.fire({
+
+    title:'Cancel Item',
+
+    input:'text',
+
+    inputPlaceholder:'Reason (optional)',
+
+    showCancelButton:true,
+
+    confirmButtonText:'Cancel Item'
+
+});
+
+
+
+if(!result.isConfirmed){
+
+    return;
+
+}
+
+
+
+const response =
+await fetch(
+
+`/cancel-item/${orderId}/${itemId}`,
+
+{
+
+method:'PATCH',
+
+headers:{
+
+'Content-Type':'application/json'
+
+},
+
+body:JSON.stringify({
+
+reason:result.value
+
+})
+
+}
+
+);
+
+
+
+const data =
+await response.json();
+
+
+
+if(data.success){
+
+
+Swal.fire({
+
+icon:'success',
+
+title:'Cancelled',
+
+text:data.message
+
+
+}).then(()=>{
+
+
+location.reload();
+
+
+});
+
+
+}else{
+
+
+Swal.fire({
+
+icon:'error',
+
+title:'Failed',
+
+text:data.message
+
+});
+
+
+}
+
+
+}
+
+async function triggerReturnItem(itemId, productName){
+
+
+    const result = await Swal.fire({
+
+        title: 'Return Product?',
+
+        text: productName,
+
+        input: 'textarea',
+
+        inputPlaceholder: 'Enter return reason...',
+
+        inputValidator: (value)=>{
+
+            if(!value){
+
+                return 'Return reason is required';
+
+            }
+
+        },
+
+        showCancelButton: true,
+
+        confirmButtonText: 'Return Item'
+
+    });
+
+
+
+    if(result.isConfirmed){
+
+
+        const orderId = 
+        window.location.pathname.split('/').pop();
+
+
+
+        const response = await fetch(
+
+            `/return-item/${orderId}/${itemId}`,
+
+            {
+
+                method:'PATCH',
+
+                headers:{
+
+                    'Content-Type':'application/json'
+
+                },
+
+
+                body:JSON.stringify({
+
+                    reason:result.value
+
+                })
+
+            }
+
+        );
+
+
+
+        const data =
+        await response.json();
+
+
+
+        if(data.success){
+
+
+            Swal.fire({
+
+                icon:'success',
+
+                title:'Success',
+
+                text:data.message,
+
+                timer:1500,
+
+                showConfirmButton:false
+
+
+            }).then(()=>{
+
+
+                location.reload();
+
+
+            });
+
+
+        }
+
+
+        else{
+
+
+            Swal.fire({
+
+                icon:'error',
+
+                title:'Failed',
+
+                text:data.message
+
+            });
+
+
+        }
+
+
+    }
+
+
+}

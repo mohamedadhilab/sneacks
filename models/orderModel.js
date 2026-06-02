@@ -30,16 +30,45 @@ const orderItemSchema = new mongoose.Schema({
 
     status: {
 
-        type: String,
+    type: String,
 
-        default: 'Pending'
+    enum:[
 
-    },
+        'Pending',
 
-    cancelReason: String,
+        'Processing',
 
-    returnReason: String
+        'Shipped',
 
+        'Delivered',
+
+        'Cancelled',
+
+        'Returned'
+
+    ],
+
+    default:'Pending'
+
+},
+
+
+cancelReason: {
+
+    type:String,
+
+    default:null
+
+},
+
+
+returnReason: {
+
+    type:String,
+
+    default:null
+
+}
 });
 
 // =====================================
@@ -104,18 +133,40 @@ const orderSchema = new mongoose.Schema({
 
     orderStatus: {
 
-        type: String,
+    type:String,
 
-        default: 'Pending'
+    enum:[
 
-    },
+        'Pending',
+
+        'Processing',
+
+        'Shipped',
+
+        'Delivered',
+
+        'Cancelled',
+
+        'Returned'
+
+    ],
+
+    default:'Pending'
+
+},
 
     subtotal: Number,
 
     shippingCharge: Number,
 
     discount: Number,
+    tax:{
 
+    type:Number,
+
+    default:0
+
+},
     finalAmount: Number
 
 }, {

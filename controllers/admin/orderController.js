@@ -97,10 +97,12 @@ const updateOrderStatus = async (req, res) => {
 
         const { status } = req.body;
 
+
         const order =
             await Order.findById(req.params.id);
 
-        if(!order){
+
+        if (!order) {
 
             return res.json({
 
@@ -112,29 +114,144 @@ const updateOrderStatus = async (req, res) => {
 
         }
 
+
+
+        // current status from database
+        const currentStatus =
+            order.orderStatus;
+
+
+
+        // allowed ecommerce flow
+        const allowedStatus = {
+
+
+            Pending:[
+
+                'Processing',
+
+                'Cancelled'
+
+            ],
+
+
+            Processing:[
+
+                'Shipped',
+
+                'Cancelled'
+
+            ],
+
+
+            Shipped:[
+
+                'Delivered'
+
+            ],
+
+
+            Delivered:[
+
+                'Returned'
+
+            ],
+
+
+            Cancelled:[],
+
+
+            Returned:[]
+
+        };
+
+
+
+
+        // block invalid movement
+        if (
+
+            !allowedStatus[currentStatus]
+            .includes(status)
+
+        ) {
+
+
+            return res.json({
+
+                success:false,
+
+
+                message:
+                `Cannot change ${currentStatus} to ${status}`
+
+            });
+
+
+        }
+
+
+
+
+        // update order status
         order.orderStatus = status;
 
-        await order.save();
 
-        return res.json({
+        // update every product status also
+        order.items.forEach((item)=>{
 
-            success:true
+
+            if(
+                item.status !== 'Cancelled' &&
+                item.status !== 'Returned'
+            ){
+
+
+                item.status = status;
+
+
+            }
+
 
         });
 
+
+        await order.save();
+
+
+
+
+        return res.json({
+
+            success:true,
+
+
+            message:
+            'Order status updated successfully'
+
+        });
+
+
+
     }
+
 
     catch(error){
 
+
         console.log(error);
+
+
 
         return res.json({
 
             success:false,
 
+
             message:'Update failed'
 
         });
+
 
     }
 

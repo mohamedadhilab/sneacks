@@ -203,9 +203,19 @@
                                         <!-- Conditional Action Buttons based on status -->
                                         <div class="prod-actions">
                                             <% if (isProcessing) { %>
-                                                <button class="btn btn-secondary btn-cancel-item" onclick="triggerCancelItem('<%= item._id %>', '<%= item.productName %>')">
-                                                    <i class="fas fa-times"></i> Cancel This Item
-                                                </button>
+                                                <button 
+                                                class="btn btn-secondary btn-cancel-item"
+
+                                                onclick="cancelItem(
+                                                    '<%= order._id %>',
+                                                    '<%= item._id %>'
+                                                )"
+                                            >
+
+                                                <i class="fas fa-times"></i> 
+                                                Cancel This Item
+
+                                            </button>
                                             <% } else if (isDelivered) { %>
                                                 <button class="btn btn-secondary btn-return-item mr-2" onclick="triggerReturnItem('<%= item._id %>', '<%= item.productName %>')">
                                                     <i class="fas fa-undo"></i> Return This Item

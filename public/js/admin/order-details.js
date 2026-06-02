@@ -4,52 +4,132 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // Dispatch Approve action click simulator
-    const dispatchBtn = document.getElementById('dispatchApproveBtn');
-    if (dispatchBtn) {
-        dispatchBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Approve Dispatch?',
-                    text: 'Confirming fulfillment will verify product allocation and signal the logistics crew for transit packaging.',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ff6b4a', // Brand Orange
-                    cancelButtonColor: '#2a2a2a',
-                    confirmButtonText: 'Yes, Approve Dispatch',
-                    cancelButtonText: 'Cancel',
-                    background: '#1e1e1e',
-                    color: '#ffffff'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'Dispatch Approved',
-                            text: 'Order status updated to "Shipped". Tracking codes have been dispatched to client email log.',
-                            icon: 'success',
-                            confirmButtonColor: '#00e5ff', // Cyan success glow
-                            background: '#1e1e1e',
-                            color: '#ffffff'
-                        }).then(() => {
-                            // Update badge states on DOM
-                            const badge = document.getElementById('headerStatusBadge');
-                            if (badge) {
-                                badge.className = 'badge badge-shipped';
-                                badge.innerHTML = '<span class="badge-dot"></span> Shipped';
-                            }
-                            dispatchBtn.style.display = 'none';
-                        });
-                    }
-                });
-            } else {
-                if (confirm('Approve order for dispatch?')) {
-                    alert('Order approved.');
-                }
-            }
-        });
+   const dispatchBtn =
+document.getElementById('dispatchApproveBtn');
+
+
+if(dispatchBtn){
+
+
+dispatchBtn.addEventListener('click', async(e)=>{
+
+
+    e.preventDefault();
+
+
+
+    const confirm =
+    await Swal.fire({
+
+        title:'Approve Dispatch?',
+
+        text:'Move this order to Shipped status?',
+
+        icon:'question',
+
+        showCancelButton:true,
+
+        confirmButtonText:'Yes, Approve Dispatch',
+
+        confirmButtonColor:'#ff6b4a'
+
+    });
+
+
+
+    if(!confirm.isConfirmed){
+
+        return;
+
     }
+
+
+
+    const orderId =
+    dispatchBtn.dataset.orderId;
+
+
+
+    const response =
+    await fetch(
+
+        `/admin/update-order-status/${orderId}`,
+
+        {
+
+            method:'PATCH',
+
+
+            headers:{
+
+                'Content-Type':'application/json'
+
+            },
+
+
+            body:JSON.stringify({
+
+                status:'Shipped'
+
+            })
+
+        }
+
+    );
+
+
+
+    const data =
+    await response.json();
+
+
+
+    if(data.success){
+
+
+        Swal.fire({
+
+            icon:'success',
+
+            title:'Dispatch Approved',
+
+            text:data.message,
+
+            timer:1500,
+
+            showConfirmButton:false
+
+        })
+
+        .then(()=>{
+
+            location.reload();
+
+        });
+
+
+
+    }else{
+
+
+        Swal.fire({
+
+            icon:'error',
+
+            title:'Failed',
+
+            text:data.message
+
+        });
+
+
+    }
+
+
+});
+
+
+}
 
     // Modal click-outside and ESC key closers
     const modal = document.getElementById('statusModal');
@@ -63,9 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ESC key close listener
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('open')) {
-                closeStatusModal();
-            }
+           if (e.key === 'Escape' && modal.classList.contains('active')) {
+    closeStatusModal();
+     }
         });
     }
 });
@@ -102,115 +182,82 @@ function copyTransactionId() {
 /**
  * Update Status Modal from details view
  */
-function openStatusModalDirectly() {
-    const modal = document.getElementById('statusModal');
-    if (!modal) return;
-    
-    // Inject values dynamically
-    const orderTitle = document.querySelector('.admin-order-id-title').innerText.replace('ORDER #', '');
-    const currentStatus = document.getElementById('headerStatusBadge').innerText.trim();
-    const orderTotal = document.querySelector('.grand-total-val').innerText.trim();
-    
-    document.getElementById('modalOrderId').innerText = '#' + orderTitle;
-    document.getElementById('modalOrderTotal').innerText = orderTotal;
-    
-    const currentBadge = document.getElementById('modalCurrentStatus');
-    currentBadge.innerText = currentStatus;
-    
-    // Set matching classes
-    currentBadge.className = 'badge';
-    let statusClass = 'badge-pending';
-    const cleanStatus = currentStatus.toLowerCase();
-    if (cleanStatus === 'processing') statusClass = 'badge-processing';
-    else if (cleanStatus === 'shipped') statusClass = 'badge-shipped';
-    else if (cleanStatus === 'delivered') statusClass = 'badge-delivered';
-    else if (cleanStatus === 'cancelled') statusClass = 'badge-cancelled';
-    else if (cleanStatus === 'returned') statusClass = 'badge-returned';
-    currentBadge.classList.add(statusClass);
-    
-    // Pre-select dropdown value
-    const select = document.getElementById('newStatusSelect');
-    if (select) {
-        select.value = currentStatus;
+function openStatusModalDirectly(){
+
+
+    const modal =
+    document.getElementById('statusModal');
+
+
+    if(!modal){
+        return;
     }
-    
-    // Clear notes field
-    const textarea = document.getElementById('adminNotes');
-    if (textarea) {
-        textarea.value = '';
+
+
+    modal.classList.add('active');
+
+
+    const orderTitle =
+    document.querySelector('.admin-order-id-title');
+
+
+    const currentStatus =
+    document.getElementById('headerStatusBadge');
+
+
+    const orderTotal =
+    document.querySelector('.grand-total-val');
+
+
+
+    if(orderTitle){
+
+        document.getElementById('modalOrderId').innerText =
+        orderTitle.innerText.replace('ORDER ','');
+
     }
-    
-    // Open modal animation trigger
-    modal.classList.add('open');
+
+
+
+    if(orderTotal){
+
+        document.getElementById('modalOrderTotal').innerText =
+        orderTotal.innerText;
+
+    }
+
+
+
+    if(currentStatus){
+
+
+        const status =
+        currentStatus.innerText.trim();
+
+
+        document.getElementById('modalCurrentStatus')
+        .innerText = status;
+
+
+
+        const select =
+        document.getElementById('newStatusSelect');
+
+
+        if(select){
+
+            select.value = status;
+
+        }
+
+    }
+
+
 }
 
-function closeStatusModal() {
-    const modal = document.getElementById('statusModal');
-    if (modal) {
-        modal.classList.remove('open');
-    }
-}
 
-function handleStatusSubmit(event) {
-    event.preventDefault();
-    const orderId = document.getElementById('modalOrderId').innerText.replace('#', '');
-    const newStatus = document.getElementById('newStatusSelect').value;
-    const notes = document.getElementById('adminNotes').value;
-    
-    // Mock save update logic
-    if (typeof Swal !== 'undefined') {
-        Swal.fire({
-            title: 'Updating Status...',
-            text: `Saving order #${orderId} status as "${newStatus}"`,
-            icon: 'info',
-            background: '#1e1e1e',
-            color: '#ffffff',
-            showConfirmButton: false,
-            timer: 1200
-        }).then(() => {
-            Swal.fire({
-                title: 'Order Updated',
-                text: `Order #${orderId} has been updated to "${newStatus}".`,
-                icon: 'success',
-                confirmButtonColor: '#ff6b4a',
-                background: '#1e1e1e',
-                color: '#ffffff'
-            }).then(() => {
-                closeStatusModal();
-                
-                // Update badge states on details DOM
-                const badge = document.getElementById('headerStatusBadge');
-                if (badge) {
-                    badge.className = 'badge';
-                    let statusClass = 'badge-pending';
-                    const cleanStatus = newStatus.toLowerCase();
-                    if (cleanStatus === 'processing') statusClass = 'badge-processing';
-                    else if (cleanStatus === 'shipped') statusClass = 'badge-shipped';
-                    else if (cleanStatus === 'delivered') statusClass = 'badge-delivered';
-                    else if (cleanStatus === 'cancelled') statusClass = 'badge-cancelled';
-                    else if (cleanStatus === 'returned') statusClass = 'badge-returned';
-                    
-                    badge.classList.add(statusClass);
-                    badge.innerHTML = `<span class="badge-dot"></span> ${newStatus}`;
-                }
-                
-                // Toggle dispatch button visibility
-                const dispatchBtn = document.getElementById('dispatchApproveBtn');
-                if (dispatchBtn) {
-                    if (newStatus.toLowerCase() === 'processing' || newStatus.toLowerCase() === 'pending') {
-                        dispatchBtn.style.display = 'flex';
-                    } else {
-                        dispatchBtn.style.display = 'none';
-                    }
-                }
-            });
-        });
-    } else {
-        alert(`Order ${orderId} updated to ${newStatus}.`);
-        closeStatusModal();
-        window.location.reload();
-    }
-}
+
+
 async function handleStatusSubmit(event){
 
     event.preventDefault();
@@ -253,44 +300,64 @@ async function handleStatusSubmit(event){
         );
 
         const data = await response.json();
+if(data.success){
 
-        if(data.success){
 
-            Swal.fire({
+    closeStatusModal();
 
-                icon: 'success',
 
-                title: 'Updated',
+    setTimeout(()=>{
 
-                text: 'Order status updated successfully',
 
-                timer: 1500,
+        Swal.fire({
 
-                showConfirmButton: false
+            icon:'success',
 
-            });
+            title:'Updated',
 
-            closeStatusModal();
+            text:data.message,
 
-            setTimeout(() => {
+            timer:1500,
 
-                location.reload();
+            showConfirmButton:false
 
-            }, 1500);
 
-        } else {
+        }).then(()=>{
 
-            Swal.fire({
 
-                icon: 'error',
+            location.reload();
 
-                title: 'Failed',
 
-                text: data.message
+        });
 
-            });
 
-        }
+    },300);
+
+
+}else {
+
+
+    closeStatusModal();
+
+
+    setTimeout(()=>{
+
+
+        Swal.fire({
+
+            icon:'error',
+
+            title:'Failed',
+
+            text:data.message
+
+        });
+
+
+    },300);
+
+
+}
 
     }
 
@@ -312,13 +379,7 @@ async function handleStatusSubmit(event){
 
 }
 
-function openStatusModalDirectly(){
 
-    document
-        .getElementById('statusModal')
-        .classList.add('active');
-
-}
 
 function closeStatusModal(){
 

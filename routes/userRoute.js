@@ -317,4 +317,22 @@ router.get(
     orderController.loadOrderDetails
 
 );
+router.patch(
+
+    '/cancel-item/:orderId/:itemId',
+
+    isLoggedIn,
+
+    orderController.cancelItem
+
+);
+router.patch(
+
+    '/return-item/:orderId/:itemId',
+
+    isLoggedIn,
+
+    orderController.returnItem
+
+);
 module.exports = router;
