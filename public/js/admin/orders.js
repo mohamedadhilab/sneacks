@@ -155,6 +155,7 @@ form.dataset.orderId = mongoId;
     const cleanStatus = currentStatus.toLowerCase();
     if (cleanStatus === 'processing') statusClass = 'badge-processing';
     else if (cleanStatus === 'shipped') statusClass = 'badge-shipped';
+    else if (cleanStatus === 'out for delivery') statusClass = 'badge-out-delivery';
     else if (cleanStatus === 'delivered') statusClass = 'badge-delivered';
     else if (cleanStatus === 'cancelled') statusClass = 'badge-cancelled';
     else if (cleanStatus === 'returned') statusClass = 'badge-returned';

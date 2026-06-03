@@ -146,6 +146,13 @@ const updateOrderStatus = async (req, res) => {
 
             Shipped:[
 
+                'Out For Delivery'
+
+            ],
+
+
+            'Out For Delivery':[
+
                 'Delivered'
 
             ],

@@ -171,6 +171,7 @@
                         <button class="tab-btn" data-filter="pending">Pending</button>
                         <button class="tab-btn" data-filter="processing">Processing</button>
                         <button class="tab-btn" data-filter="shipped">Shipped</button>
+                        <button class="tab-btn" data-filter="out for delivery">Out For Delivery</button>
                         <button class="tab-btn" data-filter="delivered">Delivered</button>
                         <button class="tab-btn" data-filter="cancelled">Cancelled</button>
                         <button class="tab-btn" data-filter="returned">Returned</button>
@@ -216,6 +217,7 @@
                                     const oStatus = (order.orderStatus || 'Pending').toLowerCase();
                                     if (oStatus === 'processing') statusClass = 'badge-processing';
                                     else if (oStatus === 'shipped') statusClass = 'badge-shipped';
+                                    else if (oStatus === 'out for delivery') statusClass = 'badge-out-delivery';
                                     else if (oStatus === 'delivered') statusClass = 'badge-delivered';
                                     else if (oStatus === 'cancelled') statusClass = 'badge-cancelled';
                                     else if (oStatus === 'returned') statusClass = 'badge-returned';
@@ -349,12 +351,35 @@ onsubmit="handleStatusSubmit(event)"
                     <div class="form-group mb-4">
                         <label for="newStatusSelect" class="form-label">New Status</label>
                         <select id="newStatusSelect" class="form-input custom-select">
-                            <option value="Pending">Pending</option>
-                            <option value="Processing">Processing</option>
-                            <option value="Shipped">Shipped</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
-                            <option value="Returned">Returned</option>
+
+                            <option value="Pending">
+                            Pending
+                            </option>
+
+                            <option value="Processing">
+                            Processing
+                            </option>
+
+                            <option value="Shipped">
+                            Shipped
+                            </option>
+
+                            <option value="Out For Delivery">
+                            Out For Delivery
+                            </option>
+
+                            <option value="Delivered">
+                            Delivered
+                            </option>
+
+                            <option value="Cancelled">
+                            Cancelled
+                            </option>
+
+                            <option value="Returned">
+                            Returned
+                            </option>
+
                         </select>
                     </div>
 

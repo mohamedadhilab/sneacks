@@ -29,12 +29,49 @@
    
 
       // Compute step levels for progress tracker
+<%
+
 const statusSteps = [
-'pending',
-'processing',
-'shipped',
-'delivered'
-];      const currentStatusIndex = statusSteps.indexOf((order.orderStatus || 'Pending').toLowerCase());
+
+    {
+        name:'Pending',
+        icon:'fa-check'
+    },
+
+    {
+        name:'Processing',
+        icon:'fa-cog'
+    },
+
+    {
+        name:'Shipped',
+        icon:'fa-truck'
+    },
+
+    {
+        name:'Out For Delivery',
+        icon:'fa-shipping-fast'
+    },
+
+    {
+        name:'Delivered',
+        icon:'fa-box-open'
+    }
+
+];
+
+
+const currentStatusIndex = 
+statusSteps.findIndex(
+
+    step =>
+    step.name.toLowerCase() === 
+    order.orderStatus.toLowerCase()
+
+);
+
+
+%>     
       
       const dateFormatted = new Date(order.createdAt).toLocaleDateString('en-US', {
           month: 'long',
@@ -83,60 +120,80 @@ const statusSteps = [
                     %>
                     <div class="tracker-line-fill" style="width: <%= progressPercent %>%;"></div>
 
-                    <!-- Step 1: Confirmed -->
-                    <div class="tracker-step <%= currentStatusIndex >= 0 ? 'completed' : '' %>">
-                        <div class="step-icon-box">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <span class="step-label">Pending</span>
-                        <span class="step-sub">Oct 24, 10:30 AM</span>
+                    <% statusSteps.forEach((step,index)=>{ %>
+
+
+                    <div 
+                    class="
+                    tracker-step 
+
+                    <%= currentStatusIndex >= index 
+                    ? 'completed' 
+                    : '' %>
+
+
+                    <%= currentStatusIndex === index
+                    ? 'active'
+                    : '' %>
+
+                    "
+                    >
+
+
+                    <div class="step-icon-box">
+
+                    <i class="fas <%= step.icon %>"></i>
+
                     </div>
 
-                    <!-- Step 2: Processing -->
-                    <div class="tracker-step <%= currentStatusIndex >= 1 ? 'completed' : '' %> <%= currentStatusIndex === 1 ? 'active' : '' %>">
-                        <div class="step-icon-box">
-                            <i class="fas fa-cog"></i>
-                        </div>
-                        <span class="step-label">Processing</span>
-                        <span class="step-sub">Oct 25, 02:15 PM</span>
+
+                    <span class="step-label">
+
+                    <%= step.name %>
+
+                    </span>
+
+
+                    <span class="step-sub">
+
+
+                    <% if(currentStatusIndex >= index){ %>
+
+                    Completed
+
+                    <% } else { %>
+
+                    Pending
+
+                    <% } %>
+
+
+                    </span>
+
+
                     </div>
 
-                    <!-- Step 3: Shipped -->
-                    <div class="tracker-step <%= currentStatusIndex >= 2 ? 'completed' : '' %> <%= currentStatusIndex === 2 ? 'active' : '' %>">
-                        <div class="step-icon-box">
-                            <i class="fas fa-truck"></i>
-                        </div>
-                        <span class="step-label">In Transit</span>
-                        <span class="step-sub">Estimated Oct 28</span>
-                    </div>
 
-                    <!-- Step 4: Delivered -->
-                    <div class="tracker-step <%= currentStatusIndex >= 3 ? 'completed' : '' %> <%= currentStatusIndex === 3 ? 'active' : '' %>">
-                        <div class="step-icon-box">
-                            <i class="fas fa-box-open"></i>
-                        </div>
-                        <span class="step-label">Delivered</span>
-                        <span class="step-sub">Pending</span>
-                    </div>
+                    <% }) %>
                 </div>
             </div>
             <% } else { %>
 
 
-<div class="tracker-card animate-fade-up delay-100">
+            <div class="tracker-card animate-fade-up delay-100">
 
-    <h3>
-        Order Cancelled
-    </h3>
+                <h3>
+                    Order Cancelled
+                </h3>
 
-    <p>
-        Your order has been cancelled.
-    </p>
+                <p>
+                    Your order has been cancelled.
+                </p>
 
-</div>
+            </div>
 
 
-<% } %>
+            <% } %>
 
             <!-- MAIN TWO COLUMN GRID -->
             <div class="detail-grid animate-fade-up delay-200">

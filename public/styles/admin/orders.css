@@ -367,6 +367,13 @@
     background-color: rgba(0, 229, 255, 0.1);
     color: var(--accent-cyan);
 }
+.badge-out-delivery {
+
+    background:#e8f1ff;
+
+    color:#2563eb;
+
+}
 .badge-shipped .badge-dot { background-color: var(--accent-cyan); }
 
 .badge-delivered {
