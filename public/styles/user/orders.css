@@ -2,103 +2,8 @@
    SNEACKS - USER ORDERS LIST PAGE STYLES
    ============================================================ */
 
-/* Page Wrapper and Base Containers */
-.orders-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
+/* Page Wrapper and Base Containers handled by account-layout.css */
 
-.account-layout {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 3.5rem;
-    align-items: start;
-    margin-top: var(--space-md);
-}
-
-/* ============================================================
-   LEFT ACCOUNT SIDEBAR
-   ============================================================ */
-.account-sidebar {
-    background-color: var(--color-bg-secondary);
-    border: 1px solid rgba(216, 212, 200, 0.4);
-    border-radius: 8px;
-    padding: 2rem 1.5rem;
-    position: sticky;
-    top: 100px;
-}
-
-.sidebar-heading {
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.sidebar-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.sidebar-link {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.85rem 1rem;
-    font-size: 0.85rem;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-text-secondary);
-    border-radius: 4px;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.sidebar-link i {
-    font-size: 0.95rem;
-    width: 20px;
-    text-align: center;
-}
-
-.sidebar-link:hover,
-.sidebar-link.active {
-    color: var(--color-text-primary);
-    background-color: rgba(216, 212, 200, 0.4);
-    font-weight: 500;
-}
-
-/* ============================================================
-   RIGHT ORDERS CONTENT AREA
-   ============================================================ */
-.orders-content {
-    flex-grow: 1;
-}
-
-.orders-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 2rem;
-}
-
-.orders-title {
-    font-family: var(--font-heading);
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    font-weight: 400;
-    margin-bottom: 0.25rem;
-}
-
-.orders-subtitle {
-    font-size: 0.95rem;
-    color: var(--color-text-secondary);
-    font-weight: 300;
-}
 
 .orders-count-badge {
     font-size: 0.8rem;
@@ -428,32 +333,7 @@
    RESPONSIVE DESIGN
    ============================================================ */
 
-@media (max-width: 992px) {
-    .account-layout {
-        grid-template-columns: 1fr; /* Stack sidebar and contents */
-        gap: 2.5rem;
-    }
-    
-    .account-sidebar {
-        position: static;
-        padding: 1.25rem;
-    }
-
-    .sidebar-heading {
-        margin-bottom: 1rem;
-    }
-
-    .sidebar-menu {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-
-    .sidebar-link {
-        padding: 0.65rem 1rem;
-        font-size: 0.78rem;
-    }
-}
+/* Responsive account layout styles moved to account-layout.css */
 
 @media (max-width: 768px) {
     .order-card {

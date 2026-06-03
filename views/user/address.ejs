@@ -4,56 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manage Addresses — Sneacks</title>
-  <link rel="stylesheet" href="/styles/user/global.css" />
-  <link rel="stylesheet" href="/styles/user/address.css" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/styles/user/base.css">
+  <link rel="stylesheet" href="/styles/user/layout.css?v=12">
+  <link rel="stylesheet" href="/styles/user/components.css">
+  <link rel="stylesheet" href="/styles/user/animations.css">
+  <link rel="stylesheet" href="/styles/user/address.css?v=2">
+  <link rel="stylesheet" href="/styles/user/account-layout.css?v=12">
+  <link rel="stylesheet" href="/styles/user/responsive.css">
 </head>
 <body>
 
   <!-- ===== NAV ===== -->
-  <nav class="site-nav">
-    <a href="/home" class="nav-brand">Sneacks</a>
-    <ul class="nav-links">
-      <li><a href="/home">Home</a></li>
-      <li><a href="#">Store</a></li>
-      <li><a href="#">About Us</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-    <div class="nav-icons">
-      <!-- Search -->
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7" /><line x1="16.5" y1="16.5" x2="22" y2="22" /></svg>
-      <!-- Wishlist -->
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-      <!-- Account -->
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-      <!-- Cart -->
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>
-    </div>
-  </nav>
+  <%- include('../partials/user/navbar', { page: 'address' }) %>
 
-  <!-- ===== ACCOUNT LAYOUT ===== -->
-  <div class="account-layout">
-    <aside class="account-sidebar">
-      <h3 class="sidebar-title">MY ACCOUNT</h3>
-      <ul class="sidebar-menu">
-        <li><a href="/profile">PROFILE</a></li>
-        <li><a href="/orders">ORDERS</a></li>
-        <li><a href="/address" class="active">ADDRESS</a></li>
-        <li><a href="/wallet">WALLET</a></li>
-        <li class="logout-item">
-<a href="#" class="logout-link" onclick="event.preventDefault(); confirmLogout()">    <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-      <polyline points="16 17 21 12 16 7"></polyline>
-      <line x1="21" y1="12" x2="9" y2="12"></line>
-    </svg>
+  <main class="page-wrapper">
+    <div class="container account-page-container section">
+        <div class="account-layout animate-fade-up">
+            <%- include('../partials/user/account-sidebar', { page: 'address' }) %>
 
-    <span>LOGOUT</span>
-
-  </a>
-</li>
-      </ul>
-    </aside>
-
-    <main class="account-main">
+            <section class="account-content">
       <div class="account-header address-header">
         <div>
           <h1 class="account-heading">Manage Addresses</h1>
@@ -164,9 +138,10 @@
     <span>ADD NEW ADDRESS</span>
   </div>
 
-</div>
-    </main>
-  </div>
+            </section>
+        </div>
+    </div>
+  </main>
 
   <!-- ===== ADD ADDRESS MODAL ===== -->
   <div class="modal-overlay" id="addAddressModal">
@@ -327,41 +302,10 @@
   </div>
 
   <!-- ===== SITE FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand-name">THE ATELIER</div>
-        <p class="footer-brand-desc">
-          A CURATED SPACE FOR THOSE WHO VALUE THE ART OF THE STEP. ARCHITECTURAL FOOTWEAR DESIGNED FOR THE MODERN ICONOCLAST.
-        </p>
-      </div>
-      <div>
-        <div class="footer-col-title">DISCOVER</div>
-        <ul class="footer-col-links">
-          <li><a href="#">COLLECTIONS</a></li>
-          <li><a href="#">LIMITED EDITS</a></li>
-          <li><a href="#">THE PROCESS</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-col-title">SERVICE</div>
-        <ul class="footer-col-links">
-          <li><a href="#">SHIPPING</a></li>
-          <li><a href="#">RETURNS</a></li>
-          <li><a href="#">CARE GUIDE</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom" style="display:flex; justify-content:space-between; align-items:center;">
-      <span>© 2024 THE ATELIER. CRAFTED FOR THE CURATED FOOT.</span>
-      <div style="display:flex; gap:20px;">
-        <a href="#">PRIVACY POLICY</a>
-        <a href="#">TERMS OF SERVICE</a>
-      </div>
-    </div>
-  </footer>
+  <%- include('../partials/user/footer') %>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/js/user/common.js"></script>
   <%- include("../partials/toast") %>
 
   <script>

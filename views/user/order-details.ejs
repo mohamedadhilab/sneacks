@@ -12,7 +12,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="/styles/user/base.css">
-    <link rel="stylesheet" href="/styles/user/layout.css">
+    <link rel="stylesheet" href="/styles/user/layout.css?v=12">
     <link rel="stylesheet" href="/styles/user/components.css">
     <link rel="stylesheet" href="/styles/user/animations.css">
     <link rel="stylesheet" href="/styles/user/order-details.css">
@@ -22,71 +22,19 @@
 <body>
 
     <!-- NAVBAR -->
-    <%- include('../partials/user/navbar', { page: 'profile' }) %>
+    <%- include('../partials/user/navbar', { page: 'orders' }) %>
 
     <%
       // Premium user-side details mock data matching your reference mockup exactly
-      if (typeof order === 'undefined') {
-          order = {
-              _id: "66504a535b434e208759f676",
-              orderId: "SNK-88291044",
-              createdAt: "2026-05-18T10:30:00.000Z",
-              orderStatus: "Processing", // Overall order state
-              subtotal: 425.00,
-              shippingCharge: 24.00,
-              discount: 0,
-              tax: 34.12,
-              finalAmount: 483.12,
-              paymentMethod: "Mastercard ending in 4492",
-              address: {
-                  name: "Julian Thorne",
-                  address_line: "1422 West Oak Avenue, Suite 4B",
-                  city: "Portland",
-                  state: "OR",
-                  pincode: "97209",
-                  phone: "+1 (503) 555-0192"
-              },
-              items: [
-                  {
-                      _id: "item-1",
-                      productId: "p1",
-                      productName: "The Artisan Low",
-                      brand: "SUEDE • BONE WHITE",
-                      productImage: "product-1778818514732-113902028.jpg",
-                      size: "42",
-                      quantity: 1,
-                      price: 245.00,
-                      status: "Processing"
-                  },
-                  {
-                      _id: "item-2",
-                      productId: "p2",
-                      productName: "Terra High-Top",
-                      brand: "CANVAS • OLIVE DRAB",
-                      productImage: "product-1778818514732-113902028.jpg",
-                      size: "42",
-                      quantity: 1,
-                      price: 180.00,
-                      status: "Delivered"
-                  },
-                  {
-                      _id: "item-3",
-                      productId: "p3",
-                      productName: "The Cloud Runner",
-                      brand: "MESH • NIMBUS GREY",
-                      productImage: "product-1778818514732-113902028.jpg",
-                      size: "42",
-                      quantity: 1,
-                      price: 160.00,
-                      status: "Cancelled"
-                  }
-              ]
-          };
-      }
+   
 
       // Compute step levels for progress tracker
-      const statusSteps = ['confirmed', 'processing', 'shipped', 'delivered'];
-      const currentStatusIndex = statusSteps.indexOf((order.orderStatus || 'Pending').toLowerCase());
+const statusSteps = [
+'pending',
+'processing',
+'shipped',
+'delivered'
+];      const currentStatusIndex = statusSteps.indexOf((order.orderStatus || 'Pending').toLowerCase());
       
       const dateFormatted = new Date(order.createdAt).toLocaleDateString('en-US', {
           month: 'long',
@@ -109,13 +57,21 @@
                     </p>
                 </div>
                 <div class="header-action">
-                    <button id="downloadInvoiceBtn" class="btn btn-secondary download-invoice-btn">
-                        <i class="fas fa-file-invoice"></i> Download Invoice
-                    </button>
+                    <a 
+                    href="/download-invoice/<%= order._id %>"
+                    class="btn btn-secondary download-invoice-btn"
+                    >
+
+                    <i class="fas fa-file-invoice"></i>
+
+                    Download Invoice
+
+                    </a>                     
                 </div>
             </div>
 
             <!-- ORDER PROGRESS TRACKER -->
+             <% if(order.orderStatus !== 'Cancelled') { %>
             <div class="tracker-card animate-fade-up delay-100">
                 <div class="tracker-bar">
                     <!-- Progress line fill -->
@@ -132,7 +88,7 @@
                         <div class="step-icon-box">
                             <i class="fas fa-check"></i>
                         </div>
-                        <span class="step-label">Confirmed</span>
+                        <span class="step-label">Pending</span>
                         <span class="step-sub">Oct 24, 10:30 AM</span>
                     </div>
 
@@ -164,6 +120,23 @@
                     </div>
                 </div>
             </div>
+            <% } else { %>
+
+
+<div class="tracker-card animate-fade-up delay-100">
+
+    <h3>
+        Order Cancelled
+    </h3>
+
+    <p>
+        Your order has been cancelled.
+    </p>
+
+</div>
+
+
+<% } %>
 
             <!-- MAIN TWO COLUMN GRID -->
             <div class="detail-grid animate-fade-up delay-200">
@@ -189,7 +162,7 @@
                                             <p class="prod-brand"><%= item.brand %></p>
                                         </div>
                                         <div class="prod-price-box">
-                                            <span class="prod-price">₹<%= item.price.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                                            <span class="prod-price">₹<%= item.totalPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
                                             <span class="prod-status-inline status-<%= item.status.toLowerCase() %>"><%= item.status %></span>
                                         </div>
                                     </div>
@@ -217,9 +190,20 @@
 
                                             </button>
                                             <% } else if (isDelivered) { %>
-                                                <button class="btn btn-secondary btn-return-item mr-2" onclick="triggerReturnItem('<%= item._id %>', '<%= item.productName %>')">
-                                                    <i class="fas fa-undo"></i> Return This Item
-                                                </button>
+                                                <button 
+                                                class="btn btn-secondary btn-return-item mr-2"
+
+                                                onclick="returnItem(
+                                                    '<%= order._id %>',
+                                                    '<%= item._id %>'
+                                                )"
+                                                >
+
+                                                <i class="fas fa-undo"></i>
+
+                                                Return This Item
+
+                                                </button>                                                    <i class="fas fa-undo"></i> Return This Item
                                                 <button class="btn btn-secondary btn-review-item" onclick="triggerWriteReview('<%= item.productId %>', '<%= item.productName %>')">
                                                     <i class="far fa-edit"></i> Write Review
                                                 </button>

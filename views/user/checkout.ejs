@@ -28,7 +28,7 @@
 
     <link
         rel="stylesheet"
-        href="/styles/user/layout.css"
+        href="/styles/user/layout.css?v=12"
     >
 
     <link
@@ -56,21 +56,7 @@
 <body>
 
     <!-- NAVBAR -->
-
-    <nav class="navbar checkout-navbar">
-
-        <div
-            class="container navbar-container"
-            style="justify-content: center;"
-        >
-
-            <a href="/" class="nav-logo">
-                SNEACKS
-            </a>
-
-        </div>
-
-    </nav>
+    <%- include('../partials/user/navbar', { page: 'checkout' }) %>
 
     <main class="page-wrapper">
 

@@ -6,7 +6,7 @@
    Playfair Display for luxury serif headings
    Inter for clean sans-serif body
 */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 :root {
     /* Color Palette (Matched to global.css) */
@@ -20,6 +20,22 @@
     --color-white: #FFFFFF;
     --color-error: #D9534F;
     --color-success: #5CB85C;
+
+    /* Legacy/Global variables used by account layouts, profile, and address styles */
+    --cream: #f0ece4;
+    --cream-light: #f5f2ec;
+    --cream-card: #f7f4ee;
+    --olive: #6b7a45;
+    --olive-dark: #4a5530;
+    --olive-btn: #6b7a45;
+    --text-dark: #2c2c1e;
+    --text-mid: #4a4a38;
+    --text-light: #8a8a72;
+    --text-placeholder: #b0ad9e;
+    --border: #d8d4c8;
+    --border-input: #c5c0b0;
+    --white: #ffffff;
+    --black: #000000;
 
     /* Typography */
     --font-heading: 'Playfair Display', serif;

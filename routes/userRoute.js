@@ -335,4 +335,13 @@ router.patch(
     orderController.returnItem
 
 );
+router.get(
+
+    '/download-invoice/:id',
+
+    isLoggedIn,
+
+    orderController.downloadInvoice
+
+);
 module.exports = router;

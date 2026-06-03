@@ -1,0 +1,170 @@
+/* ============================================================
+   SNEACKS - ACCOUNT COMMON LAYOUT & SIDEBAR STYLES
+   ============================================================ */
+
+.account-page-container {
+    max-width:1200px;
+    margin:0 auto;
+}
+
+.account-layout {
+    display:flex;
+    gap:80px;
+    align-items:flex-start;
+    padding:0;
+    min-height:calc(100vh - 200px);
+}
+
+.account-sidebar {
+    width:200px;
+    min-width:200px;
+    flex-shrink:0;
+}
+
+.account-content {
+    flex:1;
+}
+
+.sidebar-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-menu a {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text-light);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.sidebar-menu a:hover {
+  color: var(--text-dark);
+}
+
+.sidebar-menu a.active {
+  color: var(--text-dark);
+  font-weight: 600;
+  border-bottom: 1px solid var(--text-dark);
+  padding-bottom: 2px;
+  width: fit-content;
+}
+
+/* ================= LOGOUT ================= */
+
+.logout-item {
+  margin-top: 42px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 24px;
+}
+
+.logout-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #8c4b4b;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.logout-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.logout-link:hover {
+  color: #b64f4f;
+  transform: translateX(4px);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+  .account-layout {
+    flex-direction: column;
+    gap: 40px;
+    padding: 40px 24px;
+  }
+  
+  .account-sidebar {
+    width: 100%;
+  }
+  
+  .sidebar-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+  }
+  
+  .logout-item {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+/* ============================================================
+   UNIFIED SETTINGS MAIN CONTENT & TYPOGRAPHY
+   ============================================================ */
+
+.account-main {
+  flex: 1;
+  max-width: 800px;
+}
+
+.account-header {
+  margin-bottom: 40px;
+}
+
+.account-tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-placeholder);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.account-heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: 2.8rem;
+  color: var(--text-dark);
+}
+
+.account-subheading {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  margin-top: 12px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.account-card {
+  background: var(--cream-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 40px;
+  margin-bottom: 24px;
+  position: relative;
+}
+

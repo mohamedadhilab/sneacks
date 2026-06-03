@@ -40,10 +40,10 @@
     /* Navbar Mobile */
     .nav-links {
         position: fixed;
-        top: 80px;
+        top: 52px;
         left: -100%;
         width: 100%;
-        height: calc(100vh - 80px);
+        height: calc(100vh - 52px);
         background: var(--color-bg-primary);
         flex-direction: column;
         align-items: center;

@@ -1,5 +1,5 @@
-<nav class="navbar">
-    <div class="container navbar-container">
+<nav class="site-nav">
+    <div class="site-nav-container">
         
         <!-- Mobile Hamburger -->
         <div class="hamburger" id="navbarHamburger">
@@ -9,42 +9,47 @@
         </div>
 
         <!-- Logo -->
-        <a href="/" class="nav-logo">SNEACKS</a>
+        <a href="/home" class="nav-brand">SNEACKS</a>
 
         <!-- Desktop Links -->
-        <div class="nav-links" id="navLinks">
-            <a href="/home" class="nav-link <%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>">Home</a>
-            <a href="/shop" class="nav-link <%= typeof page !== 'undefined' && page === 'shop' ? 'active' : '' %>">Store</a>
-            <a href="/about" class="nav-link <%= typeof page !== 'undefined' && page === 'about' ? 'active' : '' %>">About</a>
-            <a href="/contact" class="nav-link <%= typeof page !== 'undefined' && page === 'contact' ? 'active' : '' %>">Contact</a>
-        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/home" class="<%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>">Home</a></li>
+            <li><a href="/shop" class="<%= typeof page !== 'undefined' && page === 'shop' ? 'active' : '' %>">Store</a></li>
+            <li><a href="#" class="<%= typeof page !== 'undefined' && page === 'about' ? 'active' : '' %>">About Us</a></li>
+            <li><a href="#" class="<%= typeof page !== 'undefined' && page === 'contact' ? 'active' : '' %>">Contact</a></li>
+        </ul>
 
         <!-- Icons -->
         <div class="nav-icons">
-            <a href="/shop?search=open" class="nav-icon">
-                <i class="fas fa-search"></i>
+            <a href="/shop?search=open" class="nav-icon <%= typeof page !== 'undefined' && page === 'search' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <circle cx="11" cy="11" r="7" />
+                    <line x1="16.5" y1="16.5" x2="22" y2="22" />
+                </svg>
             </a>
-            <a href="/wishlist" class="nav-icon">
-                <i class="far fa-heart"></i>
+            <a href="/wishlist" class="nav-icon <%= typeof page !== 'undefined' && page === 'wishlist' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
             </a>
-            <a href="/profile" class="nav-icon">
-                <i class="far fa-user"></i>
+            <a href="/profile" class="nav-icon <%= typeof page !== 'undefined' && (page === 'profile' || page === 'orders' || page === 'address') ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
             </a>
-            <a href="/cart" class="nav-icon cart-wrapper">
-
-            <i class="fas fa-shopping-bag"></i>
-
-            <% if(cartCount > 0){ %>
-
-                <span class="cart-badge">
-
-                    <%= cartCount %>
-
-                </span>
-
-            <% } %>
-
-        </a>
+            <a href="/cart" class="nav-icon cart-wrapper <%= typeof page !== 'undefined' && page === 'cart' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+                <% if(typeof cartCount !== 'undefined' && cartCount > 0){ %>
+                    <span class="cart-badge">
+                        <%= cartCount %>
+                    </span>
+                <% } %>
+            </a>
         </div>
     </div>
 </nav>

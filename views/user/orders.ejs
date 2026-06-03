@@ -12,17 +12,18 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="/styles/user/base.css">
-    <link rel="stylesheet" href="/styles/user/layout.css">
+    <link rel="stylesheet" href="/styles/user/layout.css?v=12">
     <link rel="stylesheet" href="/styles/user/components.css">
     <link rel="stylesheet" href="/styles/user/animations.css">
     <link rel="stylesheet" href="/styles/user/orders.css">
+    <link rel="stylesheet" href="/styles/user/account-layout.css?v=12">
     <link rel="stylesheet" href="/styles/user/responsive.css">
 </head>
 
 <body>
 
     <!-- NAVBAR -->
-    <%- include('../partials/user/navbar', { page: 'profile' }) %>
+    <%- include('../partials/user/navbar', { page: 'orders' }) %>
 
     <%
       // Safe dynamic data initialization with premium design mock placeholders
@@ -86,51 +87,24 @@
     %>
 
     <main class="page-wrapper">
-        <div class="container orders-page-container section">
-            
+        <div class="container account-page-container section">
             <div class="account-layout animate-fade-up">
                 
                 <!-- LEFT SIDEBAR -->
-                <aside class="account-sidebar">
-                    <div class="sidebar-user-info">
-                        <h4 class="sidebar-heading">My Account</h4>
-                    </div>
-                    <ul class="sidebar-menu">
-                        <li>
-                            <a href="/profile" class="sidebar-link">
-                                <i class="far fa-user"></i> Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/orders" class="sidebar-link active">
-                                <i class="fas fa-shopping-bag"></i> Orders
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/address" class="sidebar-link">
-                                <i class="far fa-address-book"></i> Address
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/wallet" class="sidebar-link">
-                                <i class="far fa-credit-card"></i> Wallet
-                            </a>
-                        </li>
-                    </ul>
-                </aside>
+                <%- include('../partials/user/account-sidebar', { page: 'orders' }) %>
 
                 <!-- RIGHT ORDERS CONTENT AREA -->
-                <section class="orders-content">
-                    
-                    <div class="orders-header">
-                        <div>
-                            <h1 class="orders-title">Your Orders</h1>
-                            <p class="orders-subtitle">Manage and track your recent acquisitions.</p>
-                        </div>
-                        <div class="orders-count-badge">
-                            Total Orders: <span class="badge-count"><%= totalOrdersCount %></span>
-                        </div>
+                <section class="account-content">
+                
+                <div class="account-header address-header">
+                    <div>
+                        <h1 class="account-heading">Your Orders</h1>
+                        <p class="account-subheading">Manage and track your recent acquisitions.</p>
                     </div>
+                    <div class="orders-count-badge">
+                        Total Orders: <span class="badge-count"><%= totalOrdersCount %></span>
+                    </div>
+                </div>
 
                     <!-- Search Bar -->
                     <div class="orders-search-box">
@@ -231,7 +205,6 @@
                 </section>
                 
             </div>
-            
         </div>
     </main>
 
@@ -239,6 +212,8 @@
     <%- include('../partials/user/footer') %>
 
     <!-- JavaScript Interactions -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/user/common.js"></script>
     <script src="/js/user/orders.js"></script>
 </body>
 
