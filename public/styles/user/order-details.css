@@ -291,19 +291,66 @@
     font-weight: 600;
 }
 
+/* Pending */
+.prod-status-inline.status-pending {
+
+    background-color: rgba(180, 180, 180, 0.15);
+    color: #777;
+
+}
+
+
+/* Processing */
 .prod-status-inline.status-processing {
-    background-color: rgba(224, 168, 0, 0.08);
+
+    background-color: rgba(224, 168, 0, 0.12);
     color: #b8860b;
+
 }
 
-.prod-status-inline.status-delivered {
-    background-color: rgba(107, 122, 69, 0.08);
+
+/* Shipped */
+.prod-status-inline.status-shipped {
+
+    background-color: rgba(52, 152, 219, 0.12);
+    color: #2980b9;
+
+}
+
+
+/* Out For Delivery */
+.prod-status-inline.status-out-for-delivery {
+
+    background-color: rgba(107, 122, 69, 0.12);
     color: var(--color-accent);
+
 }
 
+
+/* Delivered */
+.prod-status-inline.status-delivered {
+
+    background-color: rgba(39, 174, 96, 0.12);
+    color: #27ae60;
+
+}
+
+
+/* Cancelled */
 .prod-status-inline.status-cancelled {
-    background-color: rgba(217, 83, 79, 0.08);
+
+    background-color: rgba(217, 83, 79, 0.12);
     color: var(--color-error);
+
+}
+
+
+/* Returned */
+.prod-status-inline.status-returned {
+
+    background-color: rgba(155, 89, 182, 0.12);
+    color: #8e44ad;
+
 }
 
 .prod-meta-footer {

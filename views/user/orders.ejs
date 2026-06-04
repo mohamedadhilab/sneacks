@@ -127,11 +127,41 @@
                                 // Status classes mapping
                                 let statusClass = 'status-pending';
                                 const oStatus = (order.orderStatus || 'Pending').toLowerCase();
-                                if (oStatus === 'processing') statusClass = 'status-processing';
-                                else if (oStatus === 'shipped') statusClass = 'status-shipped';
-                                else if (oStatus === 'delivered') statusClass = 'status-delivered';
-                                else if (oStatus === 'cancelled') statusClass = 'status-cancelled';
-                                else if (oStatus === 'returned') statusClass = 'status-returned';
+                                if (oStatus === 'processing') {
+
+    statusClass = 'status-processing';
+
+}
+
+else if (oStatus === 'shipped') {
+
+    statusClass = 'status-shipped';
+
+}
+
+else if (oStatus === 'out for delivery') {
+
+    statusClass = 'status-out-for-delivery';
+
+}
+
+else if (oStatus === 'delivered') {
+
+    statusClass = 'status-delivered';
+
+}
+
+else if (oStatus === 'cancelled') {
+
+    statusClass = 'status-cancelled';
+
+}
+
+else if (oStatus === 'returned') {
+
+    statusClass = 'status-returned';
+
+}
                             %>
                                 <div class="order-card" data-order-id="<%= order.orderId %>" data-product-name="<%= firstItem.productName || '' %>">
                                     <div class="order-card-img">

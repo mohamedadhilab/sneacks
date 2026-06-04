@@ -411,6 +411,10 @@
                             <%= order.orderStatus === 'Shipped' ? 'selected' : '' %>>
                             Shipped
                         </option>
+                        <option value="Out For Delivery"
+                            <%= order.orderStatus === 'Out For Delivery' ? 'selected' : '' %>>
+                            Out For Delivery
+                        </option>
 
                         <option value="Delivered"
                             <%= order.orderStatus === 'Delivered' ? 'selected' : '' %>>

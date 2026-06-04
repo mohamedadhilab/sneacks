@@ -24,11 +24,7 @@
     <!-- NAVBAR -->
     <%- include('../partials/user/navbar', { page: 'orders' }) %>
 
-    <%
-      // Premium user-side details mock data matching your reference mockup exactly
-   
-
-      // Compute step levels for progress tracker
+    
 <%
 
 const statusSteps = [
@@ -71,14 +67,22 @@ statusSteps.findIndex(
 );
 
 
-%>     
-      
-      const dateFormatted = new Date(order.createdAt).toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric'
-      });
-    %>
+const dateFormatted = 
+new Date(order.createdAt)
+.toLocaleDateString(
+'en-US',
+{
+
+    month:'long',
+
+    day:'numeric',
+
+    year:'numeric'
+
+});
+
+
+%>
 
     <main class="page-wrapper">
         <div class="container order-detail-container section">
@@ -174,7 +178,7 @@ statusSteps.findIndex(
                     </div>
 
 
-                    <% }) %>
+                <% }); %>
                 </div>
             </div>
             <% } else { %>
@@ -206,8 +210,7 @@ statusSteps.findIndex(
                         <% order.items.forEach(item => { 
                             const isCancelled = item.status.toLowerCase() === 'cancelled';
                             const isDelivered = item.status.toLowerCase() === 'delivered';
-                            const isProcessing = item.status.toLowerCase() === 'processing' || item.status.toLowerCase() === 'pending';
-                        %>
+                            const isProcessing = item.status.toLowerCase() === 'processing' || item.status.toLowerCase() === 'pending';                        %>
                             <div class="product-detail-card <%= isCancelled ? 'item-muted' : '' %>" data-item-id="<%= item._id %>" data-item-name="<%= item.productName %>">
                                 <div class="prod-img">
                                     <img src="/uploads/products/<%= item.productImage %>" alt="<%= item.productName %>" onerror="this.src='/images/placeholder-shoe.png'">
@@ -220,8 +223,13 @@ statusSteps.findIndex(
                                         </div>
                                         <div class="prod-price-box">
                                             <span class="prod-price">₹<%= item.totalPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
-                                            <span class="prod-status-inline status-<%= item.status.toLowerCase() %>"><%= item.status %></span>
-                                        </div>
+                                            <span 
+                                            class="prod-status-inline status-<%= item.status.toLowerCase().replaceAll(' ','-') %>"
+                                            >
+
+                                            <%= item.status %>
+
+                                            </span>                                        </div>
                                     </div>
                                     <div class="prod-meta-footer">
                                         <div class="meta-qty-size">
@@ -260,7 +268,7 @@ statusSteps.findIndex(
 
                                                 Return This Item
 
-                                                </button>                                                    <i class="fas fa-undo"></i> Return This Item
+                                                </button> 
                                                 <button class="btn btn-secondary btn-review-item" onclick="triggerWriteReview('<%= item.productId %>', '<%= item.productName %>')">
                                                     <i class="far fa-edit"></i> Write Review
                                                 </button>

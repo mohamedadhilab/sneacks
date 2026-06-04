@@ -160,10 +160,22 @@
     background-color: rgba(74, 114, 145, 0.1);
     color: #4a7291;
 }
+.status-out-for-delivery {
 
-.status-delivered {
-    background-color: rgba(107, 122, 69, 0.1);
+    background-color: rgba(107, 122, 69, 0.12);
+
     color: var(--color-accent);
+
+}
+
+.status-out-for-delivery {
+
+    background-color: rgba(107, 122, 69, 0.15);
+
+    color: #6b7a45;
+
+    border: 1px solid rgba(107,122,69,0.3);
+
 }
 
 .status-cancelled {
