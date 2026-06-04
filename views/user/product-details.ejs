@@ -152,13 +152,23 @@
 
                     </button>
                             
-<button
-    type="button"
-    class="btn-icon wishlist-btn"
-    id="wishlistBtn"
-    data-product-id="<%= product._id %>"
->                                <i class="far fa-heart"></i>
-                            </button>
+                    <button
+                        type="button"
+                        class="
+                            btn-icon 
+                            wishlist-btn
+                            <%= typeof inWishlist !== 'undefined' && inWishlist ? 'active' : '' %>
+                        "
+                        id="wishlistBtn"
+                        data-product-id="<%= product._id %>"
+                    >
+
+                        <i class="
+                            <%= typeof inWishlist !== 'undefined' && inWishlist ? 'fas' : 'far' %>
+                            fa-heart
+                        "></i>
+
+                    </button>
                         </div>
                     </form>
 

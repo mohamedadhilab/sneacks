@@ -9,13 +9,26 @@
         </a>
         
         <!-- Wishlist Icon Toggle -->
-        <button 
-            class="wishlist-toggle-btn <%= typeof inWishlist !== 'undefined' && inWishlist ? 'active' : '' %>" 
-            data-id="<%= product._id %>"
-            aria-label="Toggle Wishlist"
+       <button 
+       class="
+        wishlist-toggle-btn 
+        <%= typeof inWishlist !== 'undefined' && inWishlist ? 'active' : '' %>
+        "
+
+        data-id="<%= product._id %>"
+
+        onclick="toggleWishlist(
+        '<%= product._id %>',
+        this
+        )"
+
+        aria-label="Toggle Wishlist"
         >
-            <i class="<%= typeof inWishlist !== 'undefined' && inWishlist ? 'fas text-error' : 'far' %> fa-heart"></i>
-        </button>
+       <i class="
+        <%= typeof inWishlist !== 'undefined' && inWishlist ? 'fas text-error' : 'far' %>
+        fa-heart
+        "></i>
+    </button>
 
     </div>
 

@@ -469,11 +469,9 @@ Swal.fire({
 
 }
 
-
 const wishlistBtn =
-    document.getElementById(
-        'wishlistBtn'
-    );
+    document.getElementById('wishlistBtn');
+
 
 if (wishlistBtn) {
 
@@ -487,13 +485,25 @@ if (wishlistBtn) {
                     wishlistBtn.dataset.productId;
 
 
+                const isActive =
+                    wishlistBtn.classList.contains('active');
+
+
+                const url = isActive
+                    ? '/remove-wishlist-item'
+                    : '/add-to-wishlist';
+
+
+                const method = isActive
+                    ? 'DELETE'
+                    : 'POST';
+
+
                 const response = await fetch(
-
-                    '/add-to-wishlist',
-
+                    url,
                     {
 
-                        method: 'POST',
+                        method,
 
                         headers: {
 
@@ -509,54 +519,92 @@ if (wishlistBtn) {
                         })
 
                     }
-
                 );
+
 
                 let data;
 
-try {
 
-    data = await response.json();
+                try {
 
-} catch {
+                    data = await response.json();
 
-    Swal.fire({
+                }
 
-        icon: 'warning',
-
-        title: 'Login Required',
-
-        text: 'Please login first',
-
-        confirmButtonColor: '#111'
-
-    }).then(() => {
-
-        window.location.href = '/login';
-
-    });
-
-    return;
-
-}
-                
-
-                if (data.success) {
-
-                    wishlistBtn.innerHTML =
-                        '<i class="fas fa-heart"></i>';
+                catch {
 
                     Swal.fire({
 
+                        toast: true,
+
+                        position: 'top-end',
+
+                        icon: 'warning',
+
+                        title: 'Please login first',
+
+                        showConfirmButton: false,
+
+                        timer: 1500
+
+                    });
+
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            '/login';
+
+                    },1500);
+
+
+                    return;
+
+                }
+
+
+
+                if (data.success) {
+
+
+                    wishlistBtn.classList.toggle(
+                        'active'
+                    );
+
+
+                    if (
+                        wishlistBtn.classList.contains('active')
+                    ) {
+
+                        wishlistBtn.innerHTML =
+                            '<i class="fas fa-heart"></i>';
+
+                    }
+
+                    else {
+
+                        wishlistBtn.innerHTML =
+                            '<i class="far fa-heart"></i>';
+
+                    }
+
+
+
+                    Swal.fire({
+
+                        toast: true,
+
+                        position: 'top-end',
+
                         icon: 'success',
 
-                        title: 'Success',
+                        title: data.message,
 
-                        text: data.message,
+                        showConfirmButton: false,
 
                         timer: 1500,
 
-                        showConfirmButton: false
+                        timerProgressBar: true
 
                     });
 
@@ -565,37 +613,53 @@ try {
 
                 else {
 
+
                     Swal.fire({
+
+                        toast: true,
+
+                        position: 'top-end',
 
                         icon: 'warning',
 
-                        title: 'Oops',
+                        title: data.message,
 
-                        text: data.message,
+                        showConfirmButton: false,
 
-                        confirmButtonColor: '#111'
+                        timer: 1500,
+
+                        timerProgressBar: true
 
                     });
 
                 }
 
+
             }
 
-            catch (error) {
+
+            catch(error){
+
 
                 console.log(error);
 
+
                 Swal.fire({
+
+                    toast: true,
+
+                    position: 'top-end',
 
                     icon: 'error',
 
-                    title: 'Error',
+                    title: 'Something went wrong',
 
-                    text: 'Something went wrong',
+                    showConfirmButton:false,
 
-                    confirmButtonColor: '#111'
+                    timer:1500
 
                 });
+
 
             }
 

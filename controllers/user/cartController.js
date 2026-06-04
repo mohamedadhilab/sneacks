@@ -214,25 +214,24 @@ const addToCart = async (req, res) => {
         await cart.save();
       
 
-        await Wishlist.updateOne(
+       await Wishlist.updateOne(
 
-            { userId: req.session.user.id },
+    { userId },
 
-            {
+    {
+        $pull: {
 
-                $pull: {
+            items: {
 
-                    items: {
-
-                        productId: productId
-
-                    }
-
-                }
+                productId
 
             }
 
-        );
+        }
+
+    }
+
+);
 
 
         return res.status(200).json({

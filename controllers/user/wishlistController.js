@@ -75,16 +75,30 @@ const addToWishlist = async (req, res) => {
 
             );
 
-        if (alreadyExists) {
+             if (alreadyExists) {
+
+
+            wishlist.items =
+            wishlist.items.filter(item =>
+
+                item.productId.toString() !== productId
+
+            );
+
+
+            await wishlist.save();
+
 
             return res.json({
 
-                success: false,
+                success:true,
 
-                message:
-                    'Already in wishlist'
+                removed:true,
+
+                message:'Removed from wishlist'
 
             });
+
 
         }
 

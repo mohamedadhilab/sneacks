@@ -98,3 +98,164 @@ window.addEventListener('load', () => {
     }
 
 });
+
+async function toggleWishlist(productId, button){
+
+
+    const isActive =
+        button.classList.contains('active');
+
+
+    const url = isActive
+        ? '/remove-wishlist-item'
+        : '/add-to-wishlist';
+
+
+    const method = isActive
+        ? 'DELETE'
+        : 'POST';
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                url,
+                {
+
+                    method,
+
+                    headers: {
+
+                        'Content-Type':
+                        'application/json'
+
+                    },
+
+
+                    body: JSON.stringify({
+
+                        productId
+
+                    })
+
+                }
+            );
+
+
+
+        let data;
+
+
+        try {
+
+            data = await response.json();
+
+        }
+
+
+        catch {
+
+
+            Swal.fire({
+
+                toast:true,
+
+                position:'top-end',
+
+                icon:'warning',
+
+                title:'Please login first',
+
+                timer:1500,
+
+                showConfirmButton:false
+
+            });
+
+
+            setTimeout(()=>{
+
+                window.location.href =
+                    '/login';
+
+            },1500);
+
+
+            return;
+
+        }
+
+
+
+        if(data.success){
+
+
+            const icon =
+                button.querySelector('i');
+
+
+
+            if(isActive){
+
+
+                button.classList.remove(
+                    'active'
+                );
+
+
+                icon.className =
+                    'far fa-heart';
+
+
+            }
+
+
+            else {
+
+
+                button.classList.add(
+                    'active'
+                );
+
+
+                icon.className =
+                    'fas fa-heart text-error';
+
+            }
+
+
+
+
+            Swal.fire({
+
+                toast:true,
+
+                position:'top-end',
+
+                icon:'success',
+
+                title:data.message,
+
+                timer:1200,
+
+                showConfirmButton:false
+
+            });
+
+
+        }
+
+
+    }
+
+
+    catch(error){
+
+        console.log(error);
+
+    }
+
+
+}

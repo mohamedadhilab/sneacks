@@ -1,4 +1,5 @@
 const Product = require('../../models/productModel');
+const Wishlist = require('../../models/wishlistModel');
 
 const loadProductDetails = async (req, res) => {
 
@@ -65,6 +66,29 @@ const totalStock = product.variants.reduce(
 
         .limit(4);
 
+        let inWishlist = false;
+
+
+if (req.session.user) {
+
+
+    const wishlist =
+        await Wishlist.findOne({
+
+            userId: req.session.user.id,
+
+            "items.productId": product._id
+
+        });
+
+
+    if (wishlist) {
+
+        inWishlist = true;
+
+    }
+
+}
       
 
         res.render('user/product-details', {
@@ -72,7 +96,8 @@ const totalStock = product.variants.reduce(
             product,
 
             relatedProducts,
-            totalStock
+            totalStock,
+            inWishlist
 
         });
 

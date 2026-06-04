@@ -18,7 +18,7 @@ const loadCheckout = async (req, res) => {
         const userId =
             req.session.user.id;
 
-        
+    
 
         const addresses =
             await Address.find({

@@ -1,7 +1,7 @@
 const Product = require('../../models/productModel');
 const Category = require('../../models/categoryModel');
 const mongoose = require('mongoose');
-
+const Wishlist = require('../../models/wishlistModel');
 
 const loadShopPage = async (req, res) => {
 
@@ -237,13 +237,43 @@ const loadShopPage = async (req, res) => {
 
         const queryString = queryParams.toString();
 
+        let wishlistItems = [];
 
+
+        if(req.session.user){
+
+
+        const wishlist =
+        await Wishlist.findOne({
+
+        userId:req.session.user.id
+
+        });
+
+
+        if(wishlist){
+
+
+        wishlistItems =
+        wishlist.items.map(item =>
+
+        item.productId.toString()
+
+        );
+
+
+        }
+
+
+        }
 
         res.render('user/shop', {
 
             products: filteredProducts,
 
             categories,
+
+            wishlistItems,
 
             totalProducts,
 
