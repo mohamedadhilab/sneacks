@@ -1,6 +1,5 @@
 const Joi = require('joi');
 
-
 exports.signupSchema = Joi.object({
 
   name: Joi.string()
@@ -188,63 +187,55 @@ exports.changePasswordSchema = Joi.object({
     })
 });
 
-
 exports.addressSchema = Joi.object({
+
+  first_name: Joi.string()
+    .trim()
+    .min(2)
+    .optional(),
+
+  last_name: Joi.string()
+    .trim()
+    .optional(),
 
   full_name: Joi.string()
     .trim()
     .min(3)
-    .required()
-    .messages({
-      'string.empty': 'Full name is required',
-      'string.min': 'Full name must be at least 3 characters'
-    }),
+    .optional(),
 
+ email: Joi.string()
+  .email({ tlds:{ allow:false }})
+  .allow('')
+  .optional(),
   address: Joi.string()
     .trim()
     .min(5)
-    .required()
-    .messages({
-      'string.empty': 'Address is required',
-      'string.min': 'Address must be at least 5 characters'
-    }),
+    .required(),
 
   city: Joi.string()
     .trim()
-    .required()
-    .messages({
-      'string.empty': 'City is required'
-    }),
+    .required(),
 
   state: Joi.string()
     .trim()
-    .required()
-    .messages({
-      'string.empty': 'State is required'
-    }),
+    .required(),
 
   pincode: Joi.string()
     .pattern(/^[0-9]{6}$/)
-    .required()
-    .messages({
-      'string.empty': 'Pincode is required',
-      'string.pattern.base': 'Pincode must be 6 digits'
-    }),
+    .required(),
 
   phone_number: Joi.string()
     .pattern(/^[0-9]{10}$/)
-    .required()
-    .messages({
-      'string.empty': 'Phone number is required',
-      'string.pattern.base': 'Phone number must be 10 digits'
-    }),
-    type: Joi.string()
-  .valid('home', 'work', 'other')
-  .required()
-  .messages({
-    'any.only': 'Invalid address type',
-    'string.empty': 'Address type is required'
-  }),
+    .required(),
 
-  is_default: Joi.boolean().optional()
-})
+  type: Joi.string()
+    .valid('Home','home','work','other')
+    .optional(),
+
+  is_default: Joi.boolean()
+    .optional(),
+
+    addressId: Joi.string()
+    .allow('')
+    .optional()
+});

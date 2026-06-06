@@ -167,6 +167,15 @@
     color: var(--color-accent);
 
 }
+.font-mono {
+
+    white-space: nowrap;
+    display: block;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
 
 .status-out-for-delivery {
 

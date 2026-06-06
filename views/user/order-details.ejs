@@ -287,18 +287,52 @@ new Date(order.createdAt)
                 <div class="meta-billing-section">
                     
                     <!-- Delivery Address Card -->
-                    <% const address = order.address || {}; %>
-                    <div class="luxury-info-card mb-4">
-                        <h3 class="info-card-heading">Delivery Address</h3>
-                        <div class="info-card-body">
-                            <strong class="recipient-name"><%= address.name %></strong>
-                            <p class="recipient-address"><%= address.address_line %></p>
-                            <p class="recipient-city"><%= address.city %>, <%= address.state %> <%= address.pincode %></p>
-                            <% if (address.phone) { %>
-                                <p class="recipient-phone"><i class="fas fa-phone-alt"></i> <%= address.phone %></p>
-                            <% } %>
-                        </div>
-                    </div>
+                <% const address = order.address || {}; %>
+
+<div class="luxury-info-card mb-4">
+
+<h3 class="info-card-heading">
+Delivery Address
+</h3>
+
+<div class="info-card-body">
+
+
+<strong class="recipient-name">
+
+<%= address.full_name %>
+
+</strong>
+
+
+<p class="recipient-address">
+
+<%= address.address %>
+
+</p>
+
+
+<p class="recipient-city">
+
+<%= address.city %>,
+<%= address.state %> -
+<%= address.pincode %>
+
+</p>
+
+
+<p class="recipient-phone">
+
+<i class="fas fa-phone-alt"></i>
+
+<%= address.phone_number %>
+
+</p>
+
+
+</div>
+
+</div>
 
                     <!-- Payment Method Card -->
                     <div class="luxury-info-card mb-4">
@@ -306,7 +340,17 @@ new Date(order.createdAt)
                         <div class="info-card-body payment-card-flex">
                             <i class="fas fa-credit-card payment-icon"></i>
                             <div>
-                                <p class="payment-method-desc"><%= order.paymentMethod %></p>
+                                <p class="payment-method-desc">
+
+                                <%= 
+                                order.paymentMethod === 'cod'
+                                ? 'Cash On Delivery'
+                                : order.paymentMethod === 'razorpay'
+                                ? 'Online Payment'
+                                : 'Wallet'
+                                %>
+
+                                </p>                            
                             </div>
                         </div>
                     </div>

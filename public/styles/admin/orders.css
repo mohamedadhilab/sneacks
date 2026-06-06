@@ -789,3 +789,52 @@
         justify-content: center;
     }
 }
+.order-controls{
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+
+/* first row */
+.filter-tabs{
+
+width:100%;
+
+display:flex;
+
+gap:10px;
+
+}
+
+
+/* second row */
+.action-buttons-group{
+
+width:100%;
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+
+.action-buttons-group select{
+
+width:250px;
+
+}
+
+
+.btn-action-outline{
+
+width:auto;
+
+}

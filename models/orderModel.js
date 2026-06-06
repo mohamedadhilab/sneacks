@@ -100,22 +100,57 @@ const orderSchema = new mongoose.Schema({
     },
 
     items: [orderItemSchema],
+address: {
+
+    full_name: {
+
+        type: String,
+
+        required: true
+
+    },
+
+    phone_number: {
+
+        type: String,
+
+        required: true
+
+    },
 
     address: {
 
-        name: String,
+        type: String,
 
-        phone: String,
-
-        city: String,
-
-        state: String,
-
-        pincode: String,
-
-        address_line: String
+        required: true
 
     },
+
+    city: {
+
+        type: String,
+
+        required: true
+
+    },
+
+    state: {
+
+        type: String,
+
+        required: true
+
+    },
+
+    pincode: {
+
+        type: String,
+
+        required: true
+
+    }
+
+},
 
     paymentMethod: {
 

@@ -54,7 +54,10 @@ exports.addAddress = async (req, res) => {
         }
 
         const data = req.body;
-
+        console.log(
+'CHECKOUT ADDRESS BODY:',
+data
+);
         const isDefault =
             data.is_default === 'true';
 
@@ -84,40 +87,41 @@ exports.addAddress = async (req, res) => {
 
      
 
-        await Address.create({
+       const newAddress = await Address.create({
 
-            full_name:
-                data.full_name,
+    full_name:
+        data.full_name ||
+        (data.first_name+' '+data.last_name),
 
-            address:
-                data.address,
+    address:
+        data.address,
 
-            city:
-                data.city,
+    city:
+        data.city,
 
-            state:
-                data.state,
+    state:
+        data.state,
 
-            pincode:
-                data.pincode,
+    pincode:
+        data.pincode,
 
-            phone_number:
-                data.phone_number,
+    phone_number:
+        data.phone_number,
 
-            type:
-                data.type,
+    type:
+    data.type || 'home',
 
-            is_default:
-                isDefault,
+    is_default:
+        isDefault,
 
-            user_id: req.session.user.id
+    user_id: req.session.user.id
 
-        });
+});
 
         return res.json({
 
             success: true,
-
+            addressId:newAddress._id,
             message:
                 'Address added successfully.'
 
@@ -127,8 +131,10 @@ exports.addAddress = async (req, res) => {
 
     catch (error) {
 
-        console.log(error);
-
+console.log(
+'ADD ADDRESS ERROR:',
+error.message
+);
         return res.status(500).json({
 
             success: false,

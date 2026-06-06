@@ -195,7 +195,7 @@ router.post(
   addressController.addAddress
 );
 
-router.post(
+router.put(
   '/update-address/:id',
   isLoggedIn,
   validate(userValidation.addressSchema),

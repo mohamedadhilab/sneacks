@@ -26,64 +26,7 @@
     <%- include('../partials/user/navbar', { page: 'orders' }) %>
 
     <%
-      // Safe dynamic data initialization with premium design mock placeholders
-      if (typeof orders === 'undefined') {
-          orders = [
-              {
-                  _id: "66504a535b434e208759f676",
-                  orderId: "SNK-92841-LM",
-                  createdAt: "2026-05-18T10:30:00.000Z",
-                  orderStatus: "Shipped",
-                  finalAmount: 420.00,
-                  paymentMethod: "Razorpay",
-                  items: [
-                      {
-                          productName: "The Canvas Low-Top",
-                          productImage: "product-1778818514732-113902028.jpg",
-                          quantity: 1,
-                          price: 420.00,
-                          size: "42 (EU)"
-                      }
-                  ]
-              },
-              {
-                  _id: "66504a605b434e208759f677",
-                  orderId: "SNK-91002-KS",
-                  createdAt: "2026-04-12T14:15:00.000Z",
-                  orderStatus: "Delivered",
-                  finalAmount: 285.00,
-                  paymentMethod: "COD",
-                  items: [
-                      {
-                          productName: "Atelier Runner '01",
-                          productImage: "product-1778818514732-113902028.jpg",
-                          quantity: 1,
-                          price: 285.00,
-                          size: "41 (EU)"
-                      }
-                  ]
-              },
-              {
-                  _id: "66504a6f5b434e208759f678",
-                  orderId: "SNK-88591-OP",
-                  createdAt: "2026-03-05T09:45:00.000Z",
-                  orderStatus: "Delivered",
-                  finalAmount: 550.00,
-                  paymentMethod: "Wallet",
-                  items: [
-                      {
-                          productName: "The Court High-Top",
-                          productImage: "product-1778818514732-113902028.jpg",
-                          quantity: 2,
-                          price: 275.00,
-                          size: "43 (EU)"
-                      }
-                  ]
-              }
-          ];
-      }
-      
-      const totalOrdersCount = orders.length;
+      const totalOrdersCount = totalOrders;
     %>
 
     <main class="page-wrapper">
@@ -165,8 +108,13 @@ else if (oStatus === 'returned') {
                             %>
                                 <div class="order-card" data-order-id="<%= order.orderId %>" data-product-name="<%= firstItem.productName || '' %>">
                                     <div class="order-card-img">
-                                        <img src="/uploads/products/<%= firstItem.productImage %>" alt="<%= firstItem.productName %>" onerror="this.src='/images/placeholder-shoe.png'">
-                                    </div>
+<img 
+src="<%= firstItem.productImage 
+? '/uploads/products/' + firstItem.productImage 
+: '/images/placeholder-shoe.png' %>"
+alt="<%= firstItem.productName || 'Product' %>"
+onerror="this.onerror=null; this.src='/images/placeholder-shoe.png';"
+>                                    </div>
                                     <div class="order-card-info">
                                         <div class="order-meta-grid">
                                             <div class="meta-col">
@@ -211,15 +159,67 @@ else if (oStatus === 'returned') {
                         </div>
 
                         <!-- Pagination -->
-                        <div class="orders-pagination">
-                            <a href="#" class="pagination-arrow prev-page disabled"><i class="fas fa-chevron-left"></i> Previous</a>
-                            <div class="pagination-pages">
-                                <a href="#" class="pagination-number active">01</a>
-                                <a href="#" class="pagination-number">02</a>
-                                <a href="#" class="pagination-number">03</a>
-                            </div>
-                            <a href="#" class="pagination-arrow next-page">Next <i class="fas fa-chevron-right"></i></a>
-                        </div>
+                        <% if(totalPages > 1){ %>
+
+<div class="orders-pagination">
+
+
+<% if(currentPage > 1){ %>
+
+<a 
+href="/orders?page=<%= currentPage-1 %>"
+class="pagination-arrow">
+
+<i class="fas fa-chevron-left"></i>
+Previous
+
+</a>
+
+<% } %>
+
+
+
+<div class="pagination-pages">
+
+<% for(let i=1;i<=totalPages;i++){ %>
+
+
+<a
+href="/orders?page=<%= i %>"
+class="pagination-number <%= currentPage===i ? 'active':'' %>"
+>
+
+<%= i < 10 ? '0'+i : i %>
+
+</a>
+
+
+<% } %>
+
+</div>
+
+
+
+<% if(currentPage < totalPages){ %>
+
+
+<a
+href="/orders?page=<%= currentPage+1 %>"
+class="pagination-arrow">
+
+Next
+
+<i class="fas fa-chevron-right"></i>
+
+</a>
+
+
+<% } %>
+
+
+</div>
+
+<% } %>
                     <% } else { %>
                         <!-- Empty State -->
                         <div class="orders-empty-state">

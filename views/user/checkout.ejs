@@ -150,6 +150,20 @@
 <p>
     <%= addr.phone_number %>
 </p>
+<button
+type="button"
+class="editAddressBtn"
+onclick="event.stopPropagation();"
+data-id="<%= addr._id %>"
+data-name="<%= addr.full_name %>"
+data-address="<%= addr.address %>"
+data-city="<%= addr.city %>"
+data-state="<%= addr.state %>"
+data-pincode="<%= addr.pincode %>"
+data-phone="<%= addr.phone_number %>"
+>
+Edit
+</button>
                                             </div>
 
                                         </label>
@@ -172,9 +186,14 @@
                             <!-- NEW ADDRESS FORM -->
 
                             <form
+                               
                                 id="addressForm"
                                 class="checkout-form <%= addresses && addresses.length > 0 ? 'hidden' : '' %>"
-                            >
+                            > <input
+                                    type="hidden"
+                                    name="addressId"
+                                    id="addressId"
+                                    >
 
                                 <div class="grid grid-2">
 
@@ -333,14 +352,13 @@
 
                             </form>
 
-                            <button
-                                class="btn btn-primary mt-2"
-                                id="continueToPaymentBtn"
-                            >
-
-                                Continue to Payment
-
-                            </button>
+                           <button
+                            type="button"
+                            class="btn btn-primary mt-2"
+                            id="continueToPaymentBtn"
+                        >
+                            Continue to Payment
+                        </button>
 
                         </div>
 
@@ -729,8 +747,11 @@
 
     <!-- JS -->
 
-    <script src="/js/user/checkout.js"></script>
-    <%- include("../partials/toast") %>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="/js/user/checkout.js"></script>
+
+<%- include("../partials/toast") %>
 
 </body>
 

@@ -5,46 +5,64 @@ const PDFDocument = require('pdfkit');
 // LOAD ORDERS PAGE
 // =====================================
 
-const loadOrders = async (req, res) => {
+const loadOrders = async (req,res)=>{
 
-    try {
+try{
 
-        const userId =
-            req.session.user.id;
+const userId = req.session.user.id;
 
-        const orders =
-            await Order.find({
 
-                userId
+const page =
+parseInt(req.query.page) || 1;
 
-            })
 
-            .sort({
+const limit = 5;
 
-                createdAt: -1
 
-            });
+const skip =
+(page - 1) * limit;
 
-        res.render(
 
-            'user/orders',
+const totalOrders =
+await Order.countDocuments({
+userId
+});
 
-            { orders }
 
-        );
+const orders =
+await Order.find({
+userId
+})
+.sort({
+createdAt:-1
+})
+.skip(skip)
+.limit(limit);
 
-    }
 
-    catch (error) {
+res.render(
+'user/orders',
+{
+orders,
+currentPage:page,
+totalPages:Math.ceil(totalOrders / limit),
+totalOrders
+}
+);
 
-        console.log(
-            'LOAD ORDERS ERROR:',
-            error
-        );
 
-        res.redirect('/profile');
+}
 
-    }
+catch(error){
+
+console.log(
+'LOAD ORDERS ERROR:',
+error
+);
+
+res.redirect('/profile');
+
+}
 
 };
 const loadOrderDetails = async (req, res) => {

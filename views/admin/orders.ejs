@@ -100,8 +100,15 @@
 
     <div class="main-content">
         <!-- Topbar Partial -->
-        <%- include('../partials/admin/topbar', { searchPlaceholder: 'Search orders, transaction ID, or customers...' }) %>
+<%- include('../partials/admin/topbar', { 
 
+    searchPlaceholder: 'Search orders, transaction ID, or customers...',
+
+    searchAction:'/admin/orders',
+
+    search:search
+
+}) %>
         <div class="page-container animate-fade-up">
             
             <!-- HEADER -->
@@ -164,25 +171,100 @@
             <!-- FILTER TABS & TOP ACTIONS -->
             <div class="table-controls-card card mb-4">
                 
-                <div class="controls-header">
-                    <!-- Filter Tabs -->
-                    <div class="filter-tabs">
-                        <button class="tab-btn active" data-filter="all">All Orders</button>
-                        <button class="tab-btn" data-filter="pending">Pending</button>
-                        <button class="tab-btn" data-filter="processing">Processing</button>
-                        <button class="tab-btn" data-filter="shipped">Shipped</button>
-                        <button class="tab-btn" data-filter="out for delivery">Out For Delivery</button>
-                        <button class="tab-btn" data-filter="delivered">Delivered</button>
-                        <button class="tab-btn" data-filter="cancelled">Cancelled</button>
-                        <button class="tab-btn" data-filter="returned">Returned</button>
-                    </div>
+<div class="controls-header order-controls">   
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+
+
+            <a 
+            href="/admin/orders"
+            class="tab-btn <%= !status ? 'active' : '' %>"
+            >
+                All Orders
+            </a>
+
+
+            <a 
+            href="/admin/orders?status=Pending"
+            class="tab-btn <%= status==='Pending' ? 'active' : '' %>"
+            >
+                Pending
+            </a>
+
+
+            <a 
+            href="/admin/orders?status=Processing"
+            class="tab-btn <%= status==='Processing' ? 'active' : '' %>"
+            >
+                Processing
+            </a>
+
+
+            <a 
+            href="/admin/orders?status=Shipped"
+            class="tab-btn <%= status==='Shipped' ? 'active' : '' %>"
+            >
+                Shipped
+            </a>
+
+
+            <a 
+            href="/admin/orders?status=Out For Delivery"
+            class="tab-btn <%= status==='Out For Delivery' ? 'active' : '' %>"
+            >
+                Out For Delivery
+            </a>
+
+
+            <a 
+            href="/admin/orders?status=Delivered"
+            class="tab-btn <%= status==='Delivered' ? 'active' : '' %>"
+            >
+                Delivered
+            </a>
+
+
+            <a 
+            href="/admin/orders?status=Cancelled"
+            class="tab-btn <%= status==='Cancelled' ? 'active' : '' %>"
+            >
+                Cancelled
+            </a>
+
+
+            <a 
+            href="/admin/orders?status=Returned"
+            class="tab-btn <%= status==='Returned' ? 'active' : '' %>"
+            >
+                Returned
+            </a>
+
+
+        </div>
 
                     <!-- Search, Export & Filter Actions -->
                     <div class="action-buttons-group">
-                        <div class="admin-search-wrapper">
-                            <i class="fas fa-search search-inner-icon"></i>
-                            <input type="text" id="tableSearch" class="search-input" placeholder="Search orders table..." />
-                        </div>
+                        
+                        <select 
+                            class="search-input"
+                            onchange="window.location.href=this.value"
+                            >
+                            <option
+                            value="/admin/orders?status=<%= status %>&sort=new"
+                            <%= sort==='new'?'selected':'' %>>
+                            Newest First
+                            </option>
+
+
+                            <option
+                            value="/admin/orders?status=<%= status %>&sort=old"
+                            <%= sort==='old'?'selected':'' %>>
+                            Oldest First
+                            </option>
+
+
+                            </select>
                         <button class="btn-action-outline" id="exportBtn">
                             <i class="fas fa-download"></i> Export
                         </button>
@@ -303,17 +385,69 @@ title="Update Status">
                 </div>
 
                 <!-- PAGINATION -->
-                <div class="admin-table-pagination">
-                    <div class="pagination-info">
-                        Showing 1-<%= orders.length %> of <%= orders.length %> orders
-                    </div>
-                    <div class="pagination-buttons">
-                        <button class="btn-pag disabled"><i class="fas fa-chevron-left"></i></button>
-                        <button class="btn-pag active">1</button>
-                        <button class="btn-pag">2</button>
-                        <button class="btn-pag"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
+               <div class="admin-table-pagination">
+
+
+<div class="pagination-info">
+
+Page <%= currentPage %> of <%= totalPages %>
+
+</div>
+
+
+<div class="pagination-buttons">
+
+
+<% if(currentPage > 1){ %>
+
+<a 
+class="btn-pag"
+href="/admin/orders?page=<%= currentPage-1 %>&status=<%= status %>&sort=<%= sort %>"
+<i class="fas fa-chevron-left"></i>
+
+</a>
+
+<% } %>
+
+
+
+
+<% for(let i=1;i<=totalPages;i++){ %>
+
+
+<a 
+href="/admin/orders?page=<%= i %>&status=<%= status %>&sort=<%= sort %>"class="btn-pag <%= currentPage===i?'active':'' %>">
+
+<%= i %>
+
+</a>
+
+
+<% } %>
+
+
+
+
+<% if(currentPage < totalPages){ %>
+
+
+<a
+class="btn-pag"
+href="/admin/orders?page=<%= currentPage+1 %>&status=<%= status %>&sort=<%= sort %>"
+
+<i class="fas fa-chevron-right"></i>
+
+
+</a>
+
+
+<% } %>
+
+
+</div>
+
+
+</div>
 
             </div>
 
@@ -383,10 +517,7 @@ onsubmit="handleStatusSubmit(event)"
                         </select>
                     </div>
 
-                    <div class="form-group mb-4">
-                        <label for="adminNotes" class="form-label">Internal Staff Notes</label>
-                        <textarea id="adminNotes" class="form-input" placeholder="Enter private staff logs regarding shipping delay, stock verification, or customer interaction..."></textarea>
-                    </div>
+                  
 
                     <div class="modal-footer-actions">
                         <button type="button" class="btn-modal btn-modal-cancel" onclick="closeStatusModal()">Cancel</button>

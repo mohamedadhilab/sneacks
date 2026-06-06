@@ -1,5 +1,5 @@
 const Order = require('../../models/orderModel');
-
+const User = require('../../models/userModel');
 const loadOrders = async (req, res) => {
 
     try {
@@ -12,20 +12,103 @@ const loadOrders = async (req, res) => {
 
         const search = req.query.search || '';
 
+        const sort = req.query.sort || 'new';
+
         let searchQuery = {};
 
-        if (search) {
+
+            if(search){
+
+
+            const users =
+            await User.find({
+
+            $or:[
+
+            {
+            name:{
+            $regex:search,
+            $options:'i'
+            }
+            },
+
+            {
+            email:{
+            $regex:search,
+            $options:'i'
+            }
+            }
+
+            ]
+
+            }).select('_id');
+
+
 
             searchQuery = {
 
-                orderId: {
-                    $regex: search,
-                    $options: 'i'
-                }
+            $or:[
+
+            {
+
+            orderId:{
+
+            $regex:search,
+            $options:'i'
+
+            }
+
+            },
+
+
+            {
+
+            userId:{
+
+            $in:users.map(user=>user._id)
+
+            }
+
+            }
+
+
+            ]
+
 
             };
 
-        }
+
+            }
+            const status = req.query.status || '';
+
+
+
+            if(status){
+
+
+            searchQuery.orderStatus = status;
+
+
+            }
+            let sortOption = {
+
+            createdAt:-1
+
+            };
+
+
+
+            if(sort === 'old'){
+
+
+            sortOption = {
+
+            createdAt:1
+
+            };
+
+
+            }
 
         const totalOrders = await Order.countDocuments(searchQuery);
 
@@ -33,8 +116,7 @@ const loadOrders = async (req, res) => {
 
             .populate('userId')
 
-            .sort({ createdAt: -1 })
-
+            .sort(sortOption)
             .skip(skip)
 
             .limit(limit);
@@ -44,9 +126,12 @@ const loadOrders = async (req, res) => {
         res.render('admin/orders', {
 
             orders,
-            currentPage: page,
+            currentPage:page,
             totalPages,
-            search
+            search,
+            status,
+            sort,
+            totalOrders
 
         });
 

@@ -117,19 +117,36 @@
                         <h3 class="card-title">Shipping Address</h3>
                         <div class="card-divider"></div>
                         <div class="address-details">
-                            <strong class="address-name"><%= addrObj.name || 'Valued Customer' %></strong>
-                            <p class="address-text"><%= addrObj.address_line || 'No address provided' %></p>
-                            <% if (addrObj.landmark) { %>
-                                <p class="address-text"><%= addrObj.landmark %></p>
-                            <% } %>
-                            <p class="address-text">
-                                <%= addrObj.city || '' %><%= (addrObj.city && addrObj.state) ? ', ' : '' %><%= addrObj.state || '' %> <%= addrObj.pincode || '' %>
-                            </p>
-                            <% if (addrObj.phone) { %>
-                                <p class="address-phone">
-                                    <i class="fas fa-phone-alt"></i> <%= addrObj.phone %>
+                            <strong class="address-name">
+
+                                <%= addrObj.full_name %>
+
+                                </strong>
+
+
+                                <p class="address-text">
+
+                                <%= addrObj.address %>
+
                                 </p>
-                            <% } %>
+
+
+                                <p class="address-text">
+
+                                <%= addrObj.city %>,
+                                <%= addrObj.state %> -
+                                <%= addrObj.pincode %>
+
+                                </p>
+
+
+                                <p class="address-phone">
+
+                                <i class="fas fa-phone-alt"></i>
+
+                                <%= addrObj.phone_number %>
+
+                                </p>
                         </div>
                     </div>
 
@@ -148,43 +165,100 @@
                         <div class="card-divider"></div>
                         
                         <!-- List Ordered Products -->
-                        <div class="ordered-items">
-                            <% 
-                                // Dynamic helper to guess or parse color for premium styling matching mockup
-                                const guessColor = (pName) => {
-                                    const name = (pName || '').toLowerCase();
-                                    if (name.includes('canvas low-top') || name.includes('canvas')) return 'Parchment White';
-                                    if (name.includes('atelier') || name.includes('runner')) return 'Sage Moss';
-                                    if (name.includes('white')) return 'White';
-                                    if (name.includes('black')) return 'Black';
-                                    if (name.includes('beige')) return 'Beige';
-                                    if (name.includes('olive') || name.includes('green')) return 'Olive';
-                                    return 'Parchment White'; // Default luxury color
-                                };
+                        <!-- List Ordered Products -->
 
-                                const items = order.items || [];
-                                items.forEach(item => { 
-                            %>
-                                <div class="product-item">
-                                    <div class="product-img-box">
-                                        <img src="/uploads/products/<%= item.productImage %>" alt="<%= item.productName %>" onerror="this.src='/images/placeholder-shoe.png'">
-                                    </div>
-                                    <div class="product-info">
-                                        <h4 class="product-name"><%= item.productName %></h4>
-                                        <p class="product-meta">
-                                            <span class="meta-label">Color:</span> <span class="meta-val"><%= guessColor(item.productName) %></span>
-                                            <span class="meta-divider">|</span>
-                                            <span class="meta-label">Size:</span> <span class="meta-val"><%= item.size %></span>
-                                            <span class="meta-divider">|</span>
-                                            <span class="meta-label">Qty:</span> <span class="meta-val"><%= item.quantity %></span>
-                                        </p>
-                                    </div>
-                                    <div class="product-price">
-                                        ₹<%= (item.price * item.quantity).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %>
-                                    </div>
+                    <div class="ordered-items">
+
+                        <% 
+                            const items = order.items || [];
+
+                            items.forEach(item => { 
+                        %>
+
+                            <div class="product-item">
+
+                                <div class="product-img-box">
+
+                                    <img 
+                                    src="/uploads/products/<%= item.productImage %>" 
+                                    alt="<%= item.productName %>"
+                                    onerror="this.src='/images/placeholder-shoe.png'"
+                                    >
+
                                 </div>
-                            <% }); %>
-                        </div>
+
+
+                                <div class="product-info">
+
+                                    <h4 class="product-name">
+
+                                        <%= item.productName %>
+
+                                    </h4>
+
+
+                                    <p class="product-meta">
+
+
+                                        <span class="meta-label">
+
+                                            Size:
+
+                                        </span>
+
+
+                                        <span class="meta-val">
+
+                                            <%= item.size %>
+
+                                        </span>
+
+
+                                        <span class="meta-divider">
+
+                                            |
+
+                                        </span>
+
+
+                                        <span class="meta-label">
+
+                                            Qty:
+
+                                        </span>
+
+
+                                        <span class="meta-val">
+
+                                            <%= item.quantity %>
+
+                                        </span>
+
+
+                                    </p>
+
+
+                                </div>
+
+
+                                <div class="product-price">
+
+                                    ₹<%= (item.price * item.quantity)
+                                    .toLocaleString(
+                                    'en-IN',
+                                    { minimumFractionDigits: 2 }
+                                    ) %>
+
+                                </div>
+
+
+                            </div>
+
+
+                        <% }); %>
+
+
+                    </div>
                         
                         <!-- Totals Section -->
                         <div class="totals-section">

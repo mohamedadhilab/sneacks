@@ -62,64 +62,6 @@ function triggerCancelItem(itemId, itemName) {
     }
 }
 
-function triggerReturnItem(itemId, itemName) {
-    if (typeof Swal !== 'undefined') {
-        Swal.fire({
-            title: 'Request Return?',
-            text: `Please select a reason for returning "${itemName}":`,
-            input: 'select',
-            inputOptions: {
-                'size-mismatch': 'Size Mismatch / Fit issue',
-                'defective': 'Product Defect / Faulty item',
-                'not-as-expected': 'Not as expected / Changed mind',
-                'wrong-item': 'Received incorrect item'
-            },
-            inputPlaceholder: 'Select a reason',
-            showCancelButton: true,
-            confirmButtonColor: '#2c2c1e', // Dark text primary
-            cancelButtonColor: '#a89f91',
-            confirmButtonText: 'Submit Return Request',
-            cancelButtonText: 'Cancel',
-            reverseButtons: true,
-            inputValidator: (value) => {
-                return new Promise((resolve) => {
-                    if (value) {
-                        resolve();
-                    } else {
-                        resolve('You need to select a reason for return');
-                    }
-                });
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Return Requested',
-                    text: `Your return request for "${itemName}" has been submitted. Our concierge team will review it shortly.`,
-                    icon: 'success',
-                    confirmButtonColor: '#6b7a45'
-                }).then(() => {
-                    // Update UI state
-                    const card = document.querySelector(`[data-item-id="${itemId}"]`);
-                    if (card) {
-                        const statusTag = card.querySelector('.prod-status-inline');
-                        if (statusTag) {
-                            statusTag.className = 'prod-status-inline status-returned';
-                            statusTag.innerText = 'Return Requested';
-                        }
-                        const actionArea = card.querySelector('.prod-actions');
-                        if (actionArea) {
-                            actionArea.innerHTML = '<span class="badge-cancelled-tag">Return Requested</span>';
-                        }
-                    }
-                });
-            }
-        });
-    } else {
-        if (confirm(`Request return for "${itemName}"?`)) {
-            alert('Return request submitted.');
-        }
-    }
-}
 
 function triggerWriteReview(productId, productName) {
     if (typeof Swal !== 'undefined') {
@@ -289,123 +231,116 @@ text:data.message
 
 }
 
-async function triggerReturnItem(itemId, productName){
+async function returnItem(orderId,itemId){
 
 
-    const result = await Swal.fire({
+const result = await Swal.fire({
 
-        title: 'Return Product?',
+    title:'Return Product',
 
-        text: productName,
+    text:'Please enter your return reason',
 
-        input: 'textarea',
+    input:'textarea',
 
-        inputPlaceholder: 'Enter return reason...',
+    inputPlaceholder:'Enter return reason...',
 
-        inputValidator: (value)=>{
+    inputValidator:(value)=>{
 
-            if(!value){
+        if(!value){
 
-                return 'Return reason is required';
-
-            }
-
-        },
-
-        showCancelButton: true,
-
-        confirmButtonText: 'Return Item'
-
-    });
-
-
-
-    if(result.isConfirmed){
-
-
-        const orderId = 
-        window.location.pathname.split('/').pop();
-
-
-
-        const response = await fetch(
-
-            `/return-item/${orderId}/${itemId}`,
-
-            {
-
-                method:'PATCH',
-
-                headers:{
-
-                    'Content-Type':'application/json'
-
-                },
-
-
-                body:JSON.stringify({
-
-                    reason:result.value
-
-                })
-
-            }
-
-        );
-
-
-
-        const data =
-        await response.json();
-
-
-
-        if(data.success){
-
-
-            Swal.fire({
-
-                icon:'success',
-
-                title:'Success',
-
-                text:data.message,
-
-                timer:1500,
-
-                showConfirmButton:false
-
-
-            }).then(()=>{
-
-
-                location.reload();
-
-
-            });
-
+            return 'Return reason is required';
 
         }
 
+    },
 
-        else{
+    showCancelButton:true,
 
+    confirmButtonText:'Return Item'
 
-            Swal.fire({
-
-                icon:'error',
-
-                title:'Failed',
-
-                text:data.message
-
-            });
+});
 
 
-        }
+
+if(!result.isConfirmed){
+
+    return;
+
+}
 
 
-    }
+
+const response = await fetch(
+
+`/return-item/${orderId}/${itemId}`,
+
+{
+
+method:'PATCH',
+
+headers:{
+
+'Content-Type':'application/json'
+
+},
+
+body:JSON.stringify({
+
+reason:result.value
+
+})
+
+}
+
+);
+
+
+
+const data = await response.json();
+
+
+
+if(data.success){
+
+
+Swal.fire({
+
+icon:'success',
+
+title:'Success',
+
+text:data.message,
+
+timer:1500,
+
+showConfirmButton:false
+
+
+}).then(()=>{
+
+
+location.reload();
+
+
+});
+
+
+}else{
+
+
+Swal.fire({
+
+icon:'error',
+
+title:'Failed',
+
+text:data.message
+
+
+});
+
+
+}
 
 
 }
