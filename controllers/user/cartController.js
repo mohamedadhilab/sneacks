@@ -212,34 +212,47 @@ const addToCart = async (req, res) => {
   
 
         await cart.save();
+
+        const cartCount = cart.items.reduce(
+
+            (total,item)=>{
+
+                return total + item.quantity;
+
+            },
+
+            0
+
+        );
       
 
        await Wishlist.updateOne(
 
-    { userId },
+        { userId },
 
-    {
-        $pull: {
+        {
+            $pull: {
 
-            items: {
+                items: {
 
-                productId
+                    productId
+
+                }
 
             }
 
         }
 
-    }
-
-);
+        );
 
 
         return res.status(200).json({
 
-            success: true,
+            success:true,
 
-            message:
-                'Product added to cart'
+            message:'Product added to cart',
+
+            cartCount:cartCount
 
         });
 
@@ -323,7 +336,10 @@ const loadCart = async (req, res) => {
 
   
 
-        let cartTotal = 0;
+       let cartTotal = 0;
+
+        let hasStockIssue = false;
+
 
         if (
             cart &&
@@ -332,22 +348,51 @@ const loadCart = async (req, res) => {
 
             cart.items.forEach(item => {
 
-                cartTotal +=
 
-                    item.productId.price *
-                    item.quantity;
+                const variant =
+                    item.productId.variants.find(v =>
+
+                        v.size == item.size
+
+                    );
+
+
+                if (
+                    !variant ||
+                    variant.stock < item.quantity
+                ) {
+
+                    item.stockIssue = true;
+
+                    hasStockIssue = true;
+
+                }
+
+
+                else {
+
+                    item.stockIssue = false;
+
+
+                    cartTotal +=
+
+                        item.productId.price *
+                        item.quantity;
+
+                }
+
 
             });
 
         }
 
 
-
         res.render('user/cart', {
 
             cart,
 
-            cartTotal
+            cartTotal,
+            hasStockIssue
 
         });
 

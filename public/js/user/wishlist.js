@@ -2,144 +2,166 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const removeButtons =
-        document.querySelectorAll(
-            '.wishlist-remove-btn'
-        );
+    const cartButtons =
+    document.querySelectorAll(
+        '.wishlist-cart-btn'
+    );
 
-    removeButtons.forEach(button => {
 
-        button.addEventListener(
-            'click',
-            async () => {
+    cartButtons.forEach(button=>{
 
-                try {
 
-                    const productId =
-                        button.dataset.productId;
+    button.addEventListener(
+    'click',
+    async()=>{
 
-                    
 
-                    const response = await fetch(
+    const productId =
+    button.dataset.productId;
 
-                        '/remove-wishlist-item',
 
-                        {
+    const card =
+    button.closest(
+    '.wishlist-item-wrapper'
+    );
 
-                            method: 'DELETE',
 
-                            headers: {
+    const size =
+    card.querySelector(
+    '.wishlist-size-select'
+    ).value;
 
-                                'Content-Type':
-                                    'application/json'
 
-                            },
 
-                            body: JSON.stringify({
+    if(!size){
 
-                                productId
 
-                            })
+    Swal.fire({
 
-                        }
+    icon:'warning',
 
-                    );
+    title:'Select size first'
 
-                    const data =
-                        await response.json();
+    });
 
-              
 
-                    if (!data.success) {
+    return;
 
-                        Swal.fire({
 
-                            icon: 'error',
+    }
 
-                            title: 'Oops',
 
-                            text: data.message,
 
-                            confirmButtonColor:
-                                '#111'
+    const response =
+    await fetch('/add-to-cart',{
 
-                        });
 
-                        return;
+    method:'POST',
 
-                    }
 
-                    
+    headers:{
 
-                    const card =
-                        button.closest(
-                            '.wishlist-item-wrapper'
-                        );
+    'Content-Type':'application/json'
 
-                    card.style.opacity = '0';
+    },
 
-                    setTimeout(() => {
 
-                        card.remove();
+    body:JSON.stringify({
 
-                       
 
-                        const remainingItems =
-                            document.querySelectorAll(
-                                '.wishlist-item-wrapper'
-                            );
+    productId:productId,
 
-                        if (
-                            remainingItems.length === 0
-                        ) {
 
-                            location.reload();
+    selectedSize:size,
 
-                        }
 
-                    }, 300);
+    quantity:1
 
-                   
 
-                    Swal.fire({
+    })
 
-                        icon: 'success',
 
-                        title: 'Removed',
+    });
 
-                        text: data.message,
 
-                        timer: 1200,
 
-                        showConfirmButton: false
+    const data =
+    await response.json();
 
-                    });
 
-                }
 
-                catch (error) {
+    if(!data.success){
 
-                    console.log(error);
 
-                    Swal.fire({
+    Swal.fire({
 
-                        icon: 'error',
+    icon:'error',
 
-                        title: 'Error',
+    text:data.message
 
-                        text:
-                            'Something went wrong',
+    });
 
-                        confirmButtonColor:
-                            '#111'
 
-                    });
+    return;
 
-                }
+    }
 
-            }
 
-        );
+
+
+    // update cart badge
+
+    const badge =
+    document.getElementById(
+    'cartCountBadge'
+    );
+
+
+    if(badge){
+
+
+    badge.innerText =
+    data.cartCount;
+
+
+    badge.style.display =
+    'flex';
+
+
+    }
+
+
+
+    // remove wishlist card
+
+    card.remove();
+
+
+
+    Swal.fire({
+
+
+    icon:'success',
+
+
+    title:'Added to cart',
+
+
+    timer:1000,
+
+
+    showConfirmButton:false
+
+
+    });
+
+
+
+    }
+
+
+    );
+
 
     });
 

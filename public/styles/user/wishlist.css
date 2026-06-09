@@ -207,3 +207,98 @@
     }
 
 }
+
+/* =========================
+   WISHLIST SIZE SELECT
+========================= */
+
+.wishlist-size-select {
+
+    width: 120px;
+
+    height: 48px;
+
+    padding: 0 15px;
+
+    border: 1px solid #d8d3c8;
+
+    background: #f7f5ef;
+
+    color: #222;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+
+    appearance: none;
+
+
+    background-image:
+    linear-gradient(
+        45deg,
+        transparent 50%,
+        #222 50%
+    ),
+    linear-gradient(
+        135deg,
+        #222 50%,
+        transparent 50%
+    );
+
+
+    background-position:
+
+        calc(100% - 18px) 20px,
+
+        calc(100% - 13px) 20px;
+
+
+    background-size:
+
+        5px 5px,
+
+        5px 5px;
+
+
+    background-repeat: no-repeat;
+
+}
+
+
+.wishlist-size-select:hover {
+
+    border-color: #252817;
+
+}
+
+
+.wishlist-size-select:focus {
+
+    border-color: #252817;
+
+    background-color: #fff;
+
+}
+
+
+
+/* button + select alignment */
+
+.wishlist-item-wrapper 
+.wishlist-cart-btn {
+
+    height: 48px;
+
+    margin-left: 8px;
+
+}

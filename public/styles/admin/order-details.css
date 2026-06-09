@@ -768,3 +768,79 @@
 .btn-modal-primary:hover{
     opacity: .9;
 }
+.item-status-box{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+
+.order-item-status{
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    width:max-content;
+
+}
+
+
+/* COLORS */
+
+.status-pending{
+
+    background:#3a3218;
+
+    color:#f5c542;
+
+}
+
+
+.status-delivered{
+
+    background:#103b28;
+
+    color:#27e58b;
+
+}
+
+
+.status-cancelled{
+
+    background:#3b1111;
+
+    color:#ff5c5c;
+
+}
+
+
+.status-returned{
+
+    background:#35204d;
+
+    color:#c77dff;
+
+}
+
+
+.status-shipped{
+
+    background:#123047;
+
+    color:#4db8ff;
+
+}
+.status-out-for-delivery{
+
+    background:#4a2b12;
+
+    color:#ff9f43;
+
+}

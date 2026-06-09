@@ -79,6 +79,34 @@ const loadCheckout = async (req, res) => {
             });
 
         await cart.save();
+        for(const item of cart.items){
+
+
+        const product =
+            item.productId;
+
+
+        const variant =
+            product.variants.find(v =>
+
+                v.size == item.size
+
+            );
+
+
+        if(
+            !variant ||
+            variant.stock < item.quantity
+        ){
+
+
+            return res.redirect('/cart');
+
+
+        }
+
+
+    }
 
       
 

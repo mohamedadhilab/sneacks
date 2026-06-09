@@ -127,7 +127,11 @@
                         <span class="stat-title">Pending Dispatch</span>
                         <i class="fas fa-clock stat-icon"></i>
                     </div>
-                    <div class="stat-value">42</div>
+                    <div class="stat-value">
+
+                    <%= pendingCount %>
+
+                    </div>
                     <div class="stat-meta">
                         <span class="stat-change negative">+5 overdue</span>
                     </div>
@@ -138,8 +142,12 @@
                         <span class="stat-title">In Transit</span>
                         <i class="fas fa-shipping-fast stat-icon"></i>
                     </div>
-                    <div class="stat-value">186</div>
-                    <div class="stat-meta">
+                    <div class="stat-value">
+
+                    <%= inTransitCount %>
+
+                    </div> 
+                  <div class="stat-meta">
                         <span class="stat-change positive">84% on time</span>
                     </div>
                 </div>
@@ -149,8 +157,11 @@
                         <span class="stat-title">Revenue (24H)</span>
                         <i class="fas fa-wallet stat-icon"></i>
                     </div>
-                    <div class="stat-value">₹12,482</div>
-                    <div class="stat-meta">
+                    <div class="stat-value">
+
+                    ₹<%= totalRevenue.toLocaleString('en-IN') %>
+
+                    </div>                    <div class="stat-meta">
                         <span class="stat-change positive">+8%</span>
                     </div>
                 </div>
@@ -160,7 +171,11 @@
                         <span class="stat-title">Return Rate</span>
                         <i class="fas fa-undo-alt stat-icon"></i>
                     </div>
-                    <div class="stat-value">1.2%</div>
+                    <div class="stat-value">
+
+                    <%= returnRate %>%
+
+                    </div>
                     <div class="stat-meta">
                         <span class="stat-subtext">Industry avg: 4%</span>
                     </div>
@@ -403,6 +418,8 @@ Page <%= currentPage %> of <%= totalPages %>
 <a 
 class="btn-pag"
 href="/admin/orders?page=<%= currentPage-1 %>&status=<%= status %>&sort=<%= sort %>"
+>
+
 <i class="fas fa-chevron-left"></i>
 
 </a>
@@ -416,7 +433,9 @@ href="/admin/orders?page=<%= currentPage-1 %>&status=<%= status %>&sort=<%= sort
 
 
 <a 
-href="/admin/orders?page=<%= i %>&status=<%= status %>&sort=<%= sort %>"class="btn-pag <%= currentPage===i?'active':'' %>">
+href="/admin/orders?page=<%= i %>&status=<%= status %>&sort=<%= sort %>"
+class="btn-pag <%= currentPage===i?'active':'' %>"
+>
 
 <%= i %>
 
@@ -427,19 +446,16 @@ href="/admin/orders?page=<%= i %>&status=<%= status %>&sort=<%= sort %>"class="b
 
 
 
-
 <% if(currentPage < totalPages){ %>
-
 
 <a
 class="btn-pag"
 href="/admin/orders?page=<%= currentPage+1 %>&status=<%= status %>&sort=<%= sort %>"
+>
 
 <i class="fas fa-chevron-right"></i>
 
-
 </a>
-
 
 <% } %>
 

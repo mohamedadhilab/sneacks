@@ -376,64 +376,90 @@ Swal.fire({
 
               let data;
 
-try {
+                try {
 
-    data = await response.json();
+                    data = await response.json();
 
-} catch {
+                } catch {
 
-    Swal.fire({
+                    Swal.fire({
 
-        icon: 'warning',
+                        icon: 'warning',
 
-        title: 'Login Required',
+                        title: 'Login Required',
 
-        text: 'Please login first',
+                        text: 'Please login first',
 
-        confirmButtonColor: '#111'
+                        confirmButtonColor: '#111'
 
-    }).then(() => {
+                    }).then(() => {
 
-        window.location.href = '/login';
+                        window.location.href = '/login';
 
-    });
+                    });
 
-    return;
+                    return;
 
-}
-     
+                }
+                    
 
 
 
                 if (data.success) {
 
-Swal.fire({
 
-    icon: 'success',
+                    const badge =
+                        document.getElementById(
+                            'cartCountBadge'
+                        );
 
-    title: 'Success',
 
-    text: data.message,
+                    if (badge) {
 
-    confirmButtonColor: '#111'
 
-});
+                        badge.innerText =
+                            data.cartCount;
+
+
+                        badge.style.display =
+                            'flex';
+
+
+                    }
+
+
+
+                    Swal.fire({
+
+                        icon: 'success',
+
+                        title: 'Success',
+
+                        text: data.message,
+
+                        confirmButtonColor: '#111'
+
+                    });
+
+
+
                     addToCartBtn.innerText =
                         'Added to Cart';
 
-                } else {
 
-Swal.fire({
+                }else {
 
-    icon: 'error',
+                Swal.fire({
 
-    title: 'Oops...',
+                    icon: 'error',
 
-    text: data.message,
+                    title: 'Oops...',
 
-    confirmButtonColor: '#111'
+                    text: data.message,
 
-});
+                    confirmButtonColor: '#111'
+
+                });
                     addToCartBtn.disabled = false;
 
                     addToCartBtn.innerText =
@@ -445,29 +471,29 @@ Swal.fire({
 
                 console.log(error);
 
-Swal.fire({
+            Swal.fire({
 
-    icon: 'error',
+                icon: 'error',
 
-    title: 'Error',
+                title: 'Error',
 
-    text: 'Something went wrong',
+                text: 'Something went wrong',
 
-    confirmButtonColor: '#111'
+                confirmButtonColor: '#111'
 
-});
+            });
 
-                addToCartBtn.disabled = false;
+                            addToCartBtn.disabled = false;
 
-                addToCartBtn.innerText =
-                    'Add to Cart';
+                            addToCartBtn.innerText =
+                                'Add to Cart';
+
+                        }
+
+                    }
+                );
 
             }
-
-        }
-    );
-
-}
 
 const wishlistBtn =
     document.getElementById('wishlistBtn');

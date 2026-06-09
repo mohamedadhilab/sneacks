@@ -177,8 +177,17 @@ const cancelOrder = async (req, res) => {
         // UPDATE STATUS
         // =================================
 
+       order.items.forEach(item => {
+
+            item.status = 'Cancelled';
+
+        });
+
+
+        order.markModified('items');
         order.orderStatus =
-            'Cancelled';
+
+        'Cancelled';
 
         await order.save();
 
@@ -503,6 +512,33 @@ const returnItem = async (req,res)=>{
 
         item.returnReason =
         reason;
+                const product =
+        await Product.findById(
+            item.productId
+        );
+
+
+        if(product){
+
+
+            const variant =
+            product.variants.find(
+
+                v => v.size == item.size
+
+            );
+
+
+            if(variant){
+
+                variant.stock += item.quantity;
+
+            }
+
+
+            await product.save();
+
+        }
 
 
 

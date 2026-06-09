@@ -806,3 +806,22 @@
     }
 
 }
+
+.edit-product-card{
+
+    max-height:90vh;
+
+    overflow:hidden;
+
+}
+
+
+.edit-body{
+
+    max-height:65vh;
+
+    overflow-y:auto;
+
+    padding-right:10px;
+
+}

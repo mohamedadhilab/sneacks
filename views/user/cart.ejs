@@ -52,6 +52,15 @@
                                         <span class="uppercase-label text-muted block mb-1"><%= item.productId.brand %></span>
                                         <a href="/product/<%= item.productId._id %>" class="item-name"><%= item.productId.product_name %></a>
                                         <p class="item-variant">Size: US <%= item.size %></p>
+                                        <% if(item.stockIssue){ %>
+
+                                        <p style="color:red;font-weight:600">
+
+                                            Out of stock
+
+                                        </p>
+
+                                        <% } %>
                                         <p class="item-price-mobile desktop-hide">₹<%= item.productId.price.toLocaleString() %></p>
                                         <button class="btn-remove remove-item-btn" data-item-id="<%= item._id %>">Remove</button>
                                     </div>
@@ -100,8 +109,32 @@
                             <span id="cartTotal">₹<%= typeof cartTotal !== 'undefined' ? cartTotal.toLocaleString() : 0 %></span>
                         </div>
 
-                        <a href="/checkout" class="btn btn-primary btn-full mt-4">Proceed to Checkout</a>
-                        
+                        <% if(hasStockIssue){ %>
+
+
+                        <button 
+                        class="btn btn-primary btn-full mt-4"
+                        disabled
+                        style="opacity:.5">
+
+                        Cannot Checkout
+
+                        </button>
+
+
+                        <% } else { %>
+
+
+                        <a 
+                        href="/checkout" 
+                        class="btn btn-primary btn-full mt-4">
+
+                        Proceed to Checkout
+
+                        </a>
+
+
+                        <% } %>                        
                         <div class="secure-checkout-msg mt-3 text-center text-sm text-muted">
                             <i class="fas fa-lock mr-1"></i> Secure Encrypted Checkout
                         </div>
@@ -128,6 +161,7 @@
 
     <!-- JS -->
     <script src="/js/user/cart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <%- include("../partials/toast") %>
 
 </body>

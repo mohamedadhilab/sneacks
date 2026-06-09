@@ -48,10 +48,43 @@ removeBtns.forEach(button => {
 
     button.addEventListener('click', () => {
 
-        const itemId =
-            button.dataset.itemId;
 
-        removeCartItem(itemId);
+        const itemId =
+        button.dataset.itemId;
+
+
+
+        Swal.fire({
+
+            title:'Remove item?',
+
+            text:'Are you sure you want to remove this product from cart?',
+
+            icon:'warning',
+
+            showCancelButton:true,
+
+            confirmButtonText:'Yes, remove',
+
+            cancelButtonText:'Cancel',
+
+            confirmButtonColor:'#252817'
+
+
+        }).then((result)=>{
+
+
+            if(result.isConfirmed){
+
+
+                removeCartItem(itemId);
+
+
+            }
+
+
+        });
+
 
     });
 

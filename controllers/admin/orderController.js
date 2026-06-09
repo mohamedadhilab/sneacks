@@ -1,12 +1,14 @@
 const Order = require('../../models/orderModel');
 const User = require('../../models/userModel');
+
+
 const loadOrders = async (req, res) => {
 
     try {
 
         const page = Number(req.query.page) || 1;
 
-        const limit = 10;
+        const limit = 5;
 
         const skip = (page - 1) * limit;
 
@@ -112,6 +114,86 @@ const loadOrders = async (req, res) => {
 
         const totalOrders = await Order.countDocuments(searchQuery);
 
+        const pendingCount = await Order.countDocuments({
+
+            orderStatus:'Pending'
+
+        });
+
+
+        const inTransitCount = await Order.countDocuments({
+
+            orderStatus:{
+
+                $in:[
+                    'Shipped',
+                    'Out For Delivery'
+                ]
+
+            }
+
+        });
+
+
+        const revenueData = await Order.aggregate([
+
+            {
+
+                $match:{
+
+                    orderStatus:'Delivered'
+
+                }
+
+            },
+
+
+            {
+
+                $group:{
+
+                    _id:null,
+
+                    total:{
+
+                        $sum:'$finalAmount'
+
+                    }
+
+                }
+
+            }
+
+        ]);
+
+
+        const totalRevenue =
+        revenueData.length > 0
+        ? revenueData[0].total
+        : 0;
+
+
+        // Return percentage
+
+        const returnedCount =
+        await Order.countDocuments({
+
+            orderStatus:'Returned'
+
+        });
+
+
+        const allOrders =
+        await Order.countDocuments();
+
+
+        const returnRate =
+        allOrders > 0
+        ?
+        ((returnedCount/allOrders)*100).toFixed(1)
+        :
+        0;
+
         const orders = await Order.find(searchQuery)
 
             .populate('userId')
@@ -123,7 +205,7 @@ const loadOrders = async (req, res) => {
 
         const totalPages = Math.ceil(totalOrders / limit);
 
-        res.render('admin/orders', {
+       res.render('admin/orders', {
 
             orders,
             currentPage:page,
@@ -131,7 +213,12 @@ const loadOrders = async (req, res) => {
             search,
             status,
             sort,
-            totalOrders
+            totalOrders,
+
+            pendingCount,
+            inTransitCount,
+            totalRevenue,
+            returnRate
 
         });
 

@@ -44,11 +44,15 @@
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <path d="M16 10a4 4 0 0 1-8 0" />
                 </svg>
-                <% if(typeof cartCount !== 'undefined' && cartCount > 0){ %>
-                    <span class="cart-badge">
-                        <%= cartCount %>
-                    </span>
-                <% } %>
+                <span 
+                    class="cart-badge"
+                    id="cartCountBadge"
+                    style= "<%= cartCount > 0 ? '' : 'display:none;' %>"
+                    >
+
+                    <%= cartCount || 0 %>
+
+                </span>
             </a>
         </div>
     </div>

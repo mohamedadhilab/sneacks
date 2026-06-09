@@ -164,6 +164,34 @@
                                         <span class="spec-label">PRICE</span>
                                         <span class="price-val">₹<%= item.price.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
                                     </div>
+                                    <div class="item-status-box">
+
+                                    
+
+
+                                   <div class="item-status-box">
+
+                                    <span class="spec-label">
+                                        STATUS
+                                    </span>
+
+
+                                    <span 
+                                        class="
+                                        order-item-status 
+                                        status-<%= item.status.toLowerCase().replaceAll(' ','-') %>
+                                        "
+                                    >
+
+                                        <%= item.status %>
+
+                                    </span>
+
+
+                                </div>
+
+
+                                </div>
                                 </div>
                             <% }); %>
                         </div>
