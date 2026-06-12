@@ -75,13 +75,13 @@ const addToWishlist = async (req, res) => {
 
             );
 
-             if (alreadyExists) {
+          if (alreadyExists) {
 
 
             wishlist.items =
             wishlist.items.filter(item =>
 
-                item.productId.toString() !== productId
+            item.productId.toString() !== productId
 
             );
 
@@ -91,16 +91,18 @@ const addToWishlist = async (req, res) => {
 
             return res.json({
 
-                success:true,
+            success:true,
 
-                removed:true,
+            removed:true,
 
-                message:'Removed from wishlist'
+            wishlistCount:wishlist.items.length,
+
+            message:'Removed from wishlist'
 
             });
 
 
-        }
+            }
 
      
 
@@ -115,12 +117,13 @@ const addToWishlist = async (req, res) => {
         await wishlist.save();
 
 
-        return res.json({
+       return res.json({
 
-            success: true,
+        success:true,
 
-            message:
-                'Added to wishlist'
+        wishlistCount:wishlist.items.length,
+
+        message:'Added to wishlist'
 
         });
 
@@ -275,12 +278,15 @@ const removeWishlistItem = async (req, res) => {
 
         return res.json({
 
-            success: true,
+            success:true,
 
-            message:
-                'Removed from wishlist'
+            removed:true,
 
-        });
+            message:'Removed from wishlist',
+
+            wishlistCount:wishlist.items.length
+
+            });
 
     }
 

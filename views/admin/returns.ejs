@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Returns | SNEACKS Admin</title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+<link rel="stylesheet" href="/styles/admin/layout.css">
+
+<link rel="stylesheet" href="/styles/admin/orders.css">
+
+
+</head>
+
+
+<body>
+
+
+<%- include('../partials/admin/sidebar', { page:'returns' }) %>
+
+
+<div class="main-content">
+
+
+<%- include('../partials/admin/topbar', { 
+
+searchPlaceholder:'Search return requests...'
+
+}) %>
+
+
+
+<div class="page-container animate-fade-up">
+
+
+<div class="orders-admin-header">
+
+<div>
+
+<h1 class="admin-page-title">
+RETURN REQUESTS
+</h1>
+
+
+<p class="admin-page-subtitle">
+
+Manage customer product returns
+
+</p>
+
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="table-controls-card card mb-4">
+
+
+<div class="table-responsive">
+
+
+<% if(orders && orders.length>0){ %>
+
+
+<table class="custom-table">
+
+
+<thead>
+
+<tr>
+
+<th>Product</th>
+
+<th>Customer</th>
+
+<th>Reason</th>
+
+<th>Date</th>
+
+<th>Status</th>
+
+<th class="text-right">
+Action
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+<% orders.forEach(order=>{ %>
+
+
+<% order.items.forEach(item=>{ %>
+
+
+<% if(
+item.status === 'Return Requested' ||
+item.status === 'Returned' ||
+item.status === 'Return Rejected'
+){ %>
+
+<tr>
+
+
+<td>
+
+
+<div class="customer-cell">
+
+
+<img 
+src="/uploads/products/<%= item.productImage %>"
+class="return-img"
+>
+
+
+<div class="cust-info">
+
+
+<span class="cust-name">
+
+<%= item.productName %>
+
+</span>
+
+
+<span class="cust-email">
+
+Size : <%= item.size %> | Qty : <%= item.quantity %>
+
+</span>
+
+
+</div>
+
+
+</div>
+
+
+</td>
+
+
+
+
+
+<td>
+
+
+<div class="cust-info">
+
+
+<span class="cust-name">
+
+<%= order.userId.name %>
+
+</span>
+
+
+<span class="cust-email">
+
+<%= order.userId.email %>
+
+</span>
+
+
+</div>
+
+
+</td>
+
+
+
+
+<td>
+
+
+<%= item.returnReason || 'No reason' %>
+
+
+</td>
+
+
+
+
+<td>
+
+
+<%= new Date(order.createdAt).toLocaleDateString() %>
+
+
+</td>
+
+
+
+
+
+<td>
+
+<span class="badge badge-returned">
+
+<%= item.status %>
+
+</span>
+
+
+</td>
+
+
+
+
+<td class="text-right">
+
+
+<% if(item.status === 'Return Requested'){ %>
+
+
+<div class="table-row-actions">
+
+
+<button
+
+class="btn-row-action text-orange"
+
+onclick="approveReturn(
+'<%= order._id %>',
+'<%= item._id %>'
+)"
+>
+
+<i class="fas fa-check"></i>
+
+</button>
+
+
+
+<button
+
+class="btn-row-action text-danger"
+
+onclick="rejectReturn(
+'<%= order._id %>',
+'<%= item._id %>'
+)"
+>
+
+<i class="fas fa-times"></i>
+
+</button>
+
+
+</div>
+
+
+<% } else { %>
+
+
+<span class="badge badge-returned">
+
+Completed
+
+</span>
+
+
+<% } %>
+
+
+</td>
+
+
+
+
+</tr>
+
+
+
+<% } %>
+
+
+<% }) %>
+
+
+<% }) %>
+
+
+</tbody>
+
+
+
+</table>
+
+
+<% } else { %>
+
+
+<div class="admin-table-empty">
+
+
+<i class="fas fa-undo empty-icon"></i>
+
+
+<h3>No Return Requests</h3>
+
+
+<p>
+
+All customer return requests will appear here.
+
+</p>
+
+
+</div>
+
+
+
+<% } %>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script src="/js/admin/returns.js"></script>
+
+
+
+</body>
+
+</html>

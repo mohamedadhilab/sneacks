@@ -591,6 +591,39 @@ if (wishlistBtn) {
 
 
                 if (data.success) {
+                    const wishlistBadge =
+                    document.getElementById(
+                    'wishlistCountBadge'
+                    );
+
+
+                    if(wishlistBadge){
+
+
+                    wishlistBadge.innerText =
+                    data.wishlistCount;
+
+
+
+                    if(data.wishlistCount > 0){
+
+
+                    wishlistBadge.style.display =
+                    'flex';
+
+
+                    }else{
+
+
+                    wishlistBadge.style.display =
+                    'none';
+
+
+                    }
+
+
+                    }
+                                    
 
 
                     wishlistBtn.classList.toggle(

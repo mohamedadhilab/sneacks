@@ -10,11 +10,9 @@ const validate = require('../middleware/validateMiddleware');
 const adminValidation = require('../validations/adminValidation');
 const categoryController = require('../controllers/admin/categoryController');
 const categoryUpload = require('../middleware/upload');
-const productController =
-require('../controllers/admin/productController');
-
-const productUpload =
-require('../middleware/productUpload');
+const productController =require('../controllers/admin/productController');
+const returnController =require('../controllers/admin/returnController');
+const productUpload =require('../middleware/productUpload');
 const orderController = require('../controllers/admin/orderController');
 const {
   isAdminLoggedIn,
@@ -214,5 +212,25 @@ router.patch(
     isAdminLoggedIn,
     orderController.updateOrderStatus
 );
+router.get(
+'/returns',
+isAdminLoggedIn,
+returnController.loadReturns
+);
+
+
+router.patch(
+'/approve-return/:orderId/:itemId',
+isAdminLoggedIn,
+returnController.approveReturn
+);
+
+
+router.patch(
+'/reject-return/:orderId/:itemId',
+isAdminLoggedIn,
+returnController.rejectReturn
+);
+
 
 module.exports = router;

@@ -838,3 +838,36 @@ width:250px;
 width:auto;
 
 }
+
+.return-img{
+
+width:55px;
+
+height:55px;
+
+object-fit:cover;
+
+border-radius:8px;
+
+background:#222;
+
+border:1px solid var(--border-color);
+
+}
+
+
+.badge-returned{
+
+background:rgba(199,125,255,.12);
+
+color:#c77dff;
+
+padding:7px 14px;
+
+border-radius:20px;
+
+font-size:12px;
+
+font-weight:700;
+
+}

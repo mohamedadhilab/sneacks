@@ -28,32 +28,27 @@ const orderItemSchema = new mongoose.Schema({
 
     totalPrice: Number,
 
-    status: {
+   status: {
 
-    type: String,
+type:String,
 
-    enum:[
+enum:[
 
-        'Pending',
+'Pending',
+'Processing',
+'Shipped',
+'Out For Delivery',
+'Delivered',
+'Cancelled',
+'Return Requested',
+'Returned',
+'Return Rejected'
 
-        'Processing',
+],
 
-        'Shipped',
-
-        'Out For Delivery',
-
-        'Delivered',
-
-        'Cancelled',
-
-        'Returned'
-
-    ],
-
-    default:'Pending'
+default:'Pending'
 
 },
-
 
 cancelReason: {
 
@@ -69,6 +64,45 @@ returnReason: {
     type:String,
 
     default:null
+
+},
+returnStatus:{
+
+type:String,
+
+enum:[
+'None',
+'Requested',
+'Approved',
+'Rejected'
+],
+
+default:'None'
+
+},
+
+
+returnRequestedAt:{
+
+type:Date,
+
+default:null
+
+},
+
+
+returnedAt:{
+
+type:Date,
+
+default:null
+
+},
+returnRejectedAt:{
+
+type:Date,
+
+default:null
 
 }
 });
@@ -172,23 +206,19 @@ address: {
 
     type:String,
 
-    enum:[
+   enum:[
 
-        'Pending',
+'Pending',
+'Processing',
+'Shipped',
+'Out For Delivery',
+'Delivered',
+'Cancelled',
+'Return Requested',
+'Returned',
+'Return Rejected'
 
-        'Processing',
-
-        'Shipped',
-
-        'Out For Delivery',
-
-        'Delivered',
-
-        'Cancelled',
-
-        'Returned'
-
-    ],
+],
 
     default:'Pending'
 

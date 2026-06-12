@@ -506,61 +506,40 @@ const returnItem = async (req,res)=>{
 
 
 
-        item.status =
-        'Returned';
+        item.status = 'Return Requested';
 
 
-        item.returnReason =
-        reason;
-                const product =
-        await Product.findById(
-            item.productId
-        );
+        item.returnReason = reason;
 
 
-        if(product){
+        item.returnStatus = 'Requested';
 
 
-            const variant =
-            product.variants.find(
-
-                v => v.size == item.size
-
-            );
+        item.returnRequestedAt = new Date();
 
 
-            if(variant){
-
-                variant.stock += item.quantity;
-
-            }
-
-
-            await product.save();
-
-        }
-
+       
 
 
         order.markModified('items');
 
 
 
-        const allReturned =
+       const allReturnRequested =
         order.items.every(
 
             item =>
-            item.status === 'Returned'
+            item.status === 'Return Requested'
 
         );
 
 
-
-        if(allReturned){
+        if(allReturnRequested){
 
 
             order.orderStatus =
-            'Returned';
+            'Return Requested';
+
 
         }
 

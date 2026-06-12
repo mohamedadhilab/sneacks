@@ -330,11 +330,15 @@ const updateOrderStatus = async (req, res) => {
             ],
 
 
-            Delivered:[
+            Delivered:[],
+
+                'Return Requested':[
 
                 'Returned'
 
-            ],
+                ],
+
+
 
 
             Cancelled:[],
@@ -380,13 +384,12 @@ const updateOrderStatus = async (req, res) => {
         order.items.forEach((item)=>{
 
 
-            if(
-                item.status !== 'Cancelled' &&
-                item.status !== 'Returned'
+           if(
+            item.status !== 'Cancelled'
             ){
 
 
-                item.status = status;
+            item.status = status;
 
 
             }

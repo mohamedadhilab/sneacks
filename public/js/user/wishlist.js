@@ -7,6 +7,135 @@ document.addEventListener('DOMContentLoaded', () => {
         '.wishlist-cart-btn'
     );
 
+    const removeButtons =
+document.querySelectorAll(
+'.wishlist-remove-btn'
+);
+
+
+
+removeButtons.forEach(button=>{
+
+
+button.addEventListener('click',async()=>{
+
+
+const productId =
+button.dataset.productId;
+
+
+
+const response =
+await fetch('/remove-wishlist-item',{
+
+method:'DELETE',
+
+headers:{
+
+'Content-Type':'application/json'
+
+},
+
+body:JSON.stringify({
+
+productId
+
+})
+
+});
+
+
+
+const data =
+await response.json();
+
+
+if(data.success){
+
+
+const card =
+button.closest(
+'.wishlist-item-wrapper'
+);
+
+
+card.remove();
+
+
+
+// UPDATE WISHLIST BADGE
+
+const wishlistBadge =
+document.getElementById(
+'wishlistCountBadge'
+);
+
+
+
+if(wishlistBadge){
+
+
+wishlistBadge.innerText =
+data.wishlistCount;
+
+
+
+if(data.wishlistCount > 0){
+
+
+wishlistBadge.style.display =
+'flex';
+
+
+}else{
+
+
+wishlistBadge.style.display =
+'none';
+
+
+}
+
+
+}
+
+
+
+
+Swal.fire({
+
+icon:'success',
+
+title:data.message,
+
+timer:1000,
+
+showConfirmButton:false
+
+});
+
+
+}else{
+
+
+Swal.fire({
+
+icon:'error',
+
+text:data.message
+
+
+});
+
+
+}
+
+
+});
+
+
+});
+
 
     cartButtons.forEach(button=>{
 
@@ -135,6 +264,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // remove wishlist card
 
     card.remove();
+    const wishlistBadge =
+    document.getElementById(
+    'wishlistCountBadge'
+    );
+
+
+    if(wishlistBadge){
+
+
+    let count =
+    Number(wishlistBadge.innerText) - 1;
+
+
+    wishlistBadge.innerText =
+    count;
+
+
+    if(count <= 0){
+
+    wishlistBadge.style.display =
+    'none';
+
+    }
+
+
+    }
 
 
 

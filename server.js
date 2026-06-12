@@ -12,7 +12,8 @@ require('./config/passport');
 
 const cartCountMiddleware =
 require('./middleware/cartCountMiddleware');
-
+const wishlistCountMiddleware =
+require('./middleware/wishlistCountMiddleware');
 const app = express();
 
 
@@ -37,7 +38,7 @@ app.use(
   })
 );
 app.use(cartCountMiddleware);
-
+app.use(wishlistCountMiddleware);
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.message = req.session.message || null;
