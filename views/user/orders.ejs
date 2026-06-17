@@ -50,10 +50,31 @@
                 </div>
 
                     <!-- Search Bar -->
-                    <div class="orders-search-box">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="orderSearchInput" class="form-input" placeholder="Search your orders by Order ID or Product Name..." />
-                    </div>
+                <div class="orders-search-box">
+
+                    <i class="fas fa-search search-icon"></i>
+
+                    <input 
+                    type="text"
+                    id="orderSearchInput"
+                    class="form-input"
+                    placeholder="Search your orders by Order ID or Product Name..."
+                    >
+
+
+                    <button 
+                    id="clearOrderSearch"
+                    type="button"
+                    style="display:none;"
+                    class="clear-search-btn"
+                    >
+
+                        <i class="fas fa-times"></i>
+
+                    </button>
+
+
+                </div>
 
                     <!-- Orders Cards Listing -->
                     <% if (orders && orders.length > 0) { %>

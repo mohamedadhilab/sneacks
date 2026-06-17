@@ -6,14 +6,39 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // Search Order Cards Logic
-    const searchInput = document.getElementById('orderSearchInput');
-    const ordersList = document.getElementById('ordersList');
-    
+    const searchInput = 
+    document.getElementById('orderSearchInput');
+
+
+    const ordersList =
+    document.getElementById('ordersList');
+
+
+   const clearBtn =
+    document.getElementById('clearOrderSearch');
+
+
+    let orderCards = [];
+
+
+    if(ordersList){
+
+    orderCards =
+    ordersList.getElementsByClassName('order-card');
+
+    }
+
+        
     if (searchInput && ordersList) {
-        const orderCards = ordersList.getElementsByClassName('order-card');
         
         searchInput.addEventListener('input', (event) => {
             const query = event.target.value.toLowerCase().trim();
+            if(clearBtn){
+
+                clearBtn.style.display =
+                query ? 'block' : 'none';
+
+                }
             let visibleCount = 0;
             
             Array.from(orderCards).forEach((card) => {
@@ -57,6 +82,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    if(clearBtn){
+
+
+        clearBtn.addEventListener('click',()=>{
+
+
+        searchInput.value='';
+
+
+        clearBtn.style.display='none';
+
+
+
+        Array.from(orderCards).forEach(card=>{
+
+
+        card.style.display='flex';
+
+
+        card.style.opacity='1';
+
+
+        });
+
+
+
+        const emptyState =
+        document.getElementById('searchEmptyState');
+
+
+        if(emptyState){
+
+        emptyState.remove();
+
+        }
+
+
+
+        ordersList.style.display='flex';
+
+
+        });
+
+
+        }
 
     // Pagination Interaction Simulator
     const paginationNumbers = document.querySelectorAll('.pagination-number');

@@ -160,14 +160,20 @@ const cancelOrder = async (req, res) => {
 
                     );
 
-                if (variant) {
+                if(variant){
 
-                    variant.stock +=
-                        item.quantity;
 
-                }
+                    variant.stock =
+                    Number(variant.stock) + Number(item.quantity);
 
-                await product.save();
+
+                    }
+
+
+                    product.markModified('variants');
+
+
+                    await product.save();
 
             }
 
@@ -238,7 +244,13 @@ const cancelItem = async (req,res)=>{
 
 
         const order =
-            await Order.findById(orderId);
+            await Order.findOne({
+
+            _id:orderId,
+
+            userId:req.session.user.id
+
+            });
 
 
 
@@ -279,27 +291,24 @@ const cancelItem = async (req,res)=>{
 
 
 
-        if(
+       if(
 
-            order.orderStatus !== 'Pending'
+            item.status !== 'Pending'
 
             &&
 
-            order.orderStatus !== 'Processing'
+            item.status !== 'Processing'
 
-        ){
-
+            ){
 
             return res.json({
 
-                success:false,
-
-                message:'Cannot cancel now'
+            success:false,
+            message:'Cannot cancel now'
 
             });
 
-
-        }
+            }
 
 
 
@@ -354,27 +363,30 @@ const cancelItem = async (req,res)=>{
 
 
             const variant =
-                product.variants.find(
+            product.variants.find(
 
-                    v => v.size == item.size
+            v => v.size == item.size
 
-                );
+            );
 
 
             if(variant){
 
 
-                variant.stock +=
-                    item.quantity;
+            variant.stock =
+            Number(variant.stock) + Number(item.quantity);
 
 
             }
 
 
+            product.markModified('variants');
+
+
             await product.save();
 
 
-        }
+            }
 
 
 

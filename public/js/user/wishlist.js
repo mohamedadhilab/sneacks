@@ -62,7 +62,7 @@ button.closest(
 card.remove();
 
 
-
+ 
 // UPDATE WISHLIST BADGE
 
 const wishlistBadge =
