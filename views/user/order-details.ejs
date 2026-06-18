@@ -373,8 +373,18 @@ Delivery Address
                             </div>
                             <% if (order.discount && order.discount > 0) { %>
                                 <div class="totals-row discount-row">
-                                    <span class="totals-label">Discount</span>
-                                    <span class="totals-value">-₹<%= order.discount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+                                <span class="totals-label">
+
+                                Discount
+
+                                <% if(order.coupon && order.coupon.couponCode){ %>
+
+                                (<%= order.coupon.couponCode %>)
+
+                                <% } %>
+
+                                </span>                                    
+                                <span class="totals-value">-₹<%= order.discount.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
                                 </div>
                             <% } %>
                             

@@ -228,15 +228,49 @@ address: {
 
     shippingCharge: Number,
 
-    discount: Number,
-    tax:{
+   discount: {
 
     type:Number,
 
     default:0
 
 },
-    finalAmount: Number
+
+
+coupon: {
+
+    couponId: {
+
+        type: mongoose.Schema.Types.ObjectId,
+
+        ref:'Coupon',
+
+        default:null
+
+    },
+
+
+    couponCode: {
+
+        type:String,
+
+        default:null
+
+    }
+
+},
+
+
+tax:{
+
+    type:Number,
+
+    default:0
+
+},
+
+
+finalAmount:Number
 
 }, {
 

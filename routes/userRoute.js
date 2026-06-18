@@ -344,4 +344,26 @@ router.get(
     orderController.downloadInvoice
 
 );
+
+router.post(
+
+'/apply-coupon',
+
+isLoggedIn,
+
+checkoutController.applyCoupon
+
+);
+
+
+
+router.post(
+
+'/remove-coupon',
+
+isLoggedIn,
+
+checkoutController.removeCoupon
+
+);
 module.exports = router;

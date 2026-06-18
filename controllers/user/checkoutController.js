@@ -3,6 +3,7 @@ const Cart = require('../../models/cartModel');
 const Address = require('../../models/addressModel');
 const Order = require('../../models/orderModel');
 const Product = require('../../models/productModel');
+const Coupon = require('../../models/couponModel');
 const generateOrderId = () => {
 
     return 'ORD-' + Date.now();
@@ -315,46 +316,139 @@ const placeOrder = async (req, res) => {
         // =====================================
         // CREATE ORDER
         // =====================================
+            let discount = 0;
 
-        const order = new Order({
+
+            let couponData = {
+
+                couponId:null,
+
+                couponCode:null
+
+            };
+
+
+
+            if(req.session.coupon){
+
+
+                discount =
+                req.session.coupon.discount;
+
+
+                couponData = {
+
+
+                    couponId:
+                    req.session.coupon.couponId,
+
+
+                    couponCode:
+                    req.session.coupon.couponCode
+
+
+                };
+
+
+            }
+
+
+
+            const finalAmount =
+
+            subtotal - discount;
+
+
+
+            const order = new Order({
+
 
             userId,
 
+
             orderId:
-                generateOrderId(),
+            generateOrderId(),
 
-            items: orderItems,
 
-           address: {
+            items:orderItems,
 
-    full_name: address.full_name,
 
-    phone_number: address.phone_number,
+            address:{
 
-    city: address.city,
 
-    state: address.state,
+            full_name:
+            address.full_name,
 
-    pincode: address.pincode,
 
-    address: address.address
+            phone_number:
+            address.phone_number,
 
-},
+
+            city:
+            address.city,
+
+
+            state:
+            address.state,
+
+
+            pincode:
+            address.pincode,
+
+
+            address:
+            address.address
+
+
+            },
+
 
             paymentMethod,
 
+
             subtotal,
 
-            shippingCharge: 0,
 
-            discount: 0,
+            shippingCharge:0,
 
-            finalAmount: subtotal
 
-        });
+            discount,
+
+
+            coupon:couponData,
+
+
+            finalAmount
+
+
+            });
 
         await order.save();
+            if(req.session.coupon){
 
+
+            await Coupon.findByIdAndUpdate(
+
+            req.session.coupon.couponId,
+
+            {
+
+            $push:{
+
+            usedUsers:userId
+
+            }
+
+            }
+
+            );
+
+
+
+            delete req.session.coupon;
+
+
+            }
         // =====================================
         // CLEAR CART
         // =====================================
@@ -425,11 +519,286 @@ const loadSuccessPage = async (req, res) => {
 
 };
 
+const applyCoupon = async(req,res)=>{
+
+
+try{
+
+
+const userId = req.session.user.id;
+
+
+const {couponCode} = req.body;
+
+
+
+const cart =
+await Cart.findOne({
+
+userId
+
+}).populate('items.productId');
+
+
+
+if(!cart){
+
+
+return res.json({
+
+success:false,
+
+message:'Cart not found'
+
+});
+
+
+}
+
+
+
+let cartTotal = 0;
+
+
+cart.items.forEach(item=>{
+
+
+cartTotal +=
+
+item.productId.price *
+
+item.quantity;
+
+
+});
+
+
+
+
+const coupon =
+await Coupon.findOne({
+
+couponCode:couponCode.toUpperCase(),
+
+isActive:true,
+
+isDeleted:false
+
+});
+
+
+
+
+if(!coupon){
+
+
+return res.json({
+
+success:false,
+
+message:'Invalid coupon'
+
+});
+
+
+}
+
+
+
+
+
+if(coupon.expiryDate < new Date()){
+
+
+return res.json({
+
+success:false,
+
+message:'Coupon expired'
+
+});
+
+
+}
+
+
+
+
+
+if(cartTotal < coupon.minimumAmount){
+
+
+return res.json({
+
+success:false,
+
+message:`Minimum purchase ₹${coupon.minimumAmount}`
+
+});
+
+
+}
+
+
+
+
+
+if(
+
+coupon.usedUsers.includes(userId)
+
+){
+
+
+return res.json({
+
+success:false,
+
+message:'Coupon already used'
+
+});
+
+
+}
+// CHECK COUPON LIMIT
+
+if(
+
+coupon.usedUsers.length >= coupon.usageLimit
+
+){
+
+
+return res.json({
+
+success:false,
+
+message:'Coupon usage limit reached'
+
+});
+
+
+}
+
+
+
+
+
+let discount = 0;
+
+
+
+if(coupon.discountType === 'percentage'){
+
+
+discount =
+
+(cartTotal * coupon.discountValue) / 100;
+
+
+
+if(
+
+coupon.maximumDiscount > 0 &&
+
+discount > coupon.maximumDiscount
+
+){
+
+
+discount = coupon.maximumDiscount;
+
+
+}
+
+
+}else{
+
+
+discount = coupon.discountValue;
+
+
+}
+if(discount > cartTotal){
+
+    discount = cartTotal;
+
+}
+
+
+
+req.session.coupon = {
+
+couponId:coupon._id,
+
+couponCode:coupon.couponCode,
+
+discount
+
+};
+
+
+
+
+return res.json({
+
+success:true,
+
+message:'Coupon applied',
+
+discount,
+
+finalAmount:cartTotal-discount
+
+});
+
+
+
+
+}catch(error){
+
+
+console.log(error);
+
+
+res.json({
+
+success:false,
+
+message:'Something went wrong'
+
+});
+
+
+}
+
+
+};
+const removeCoupon = async(req,res)=>{
+
+
+delete req.session.coupon;
+
+
+
+res.json({
+
+success:true,
+
+message:'Coupon removed'
+
+});
+
+
+};
+
 
 module.exports = {
 
     loadCheckout,
     placeOrder,
-    loadSuccessPage
+    loadSuccessPage,
+    applyCoupon,
+    removeCoupon
 
 };

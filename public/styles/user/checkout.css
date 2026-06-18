@@ -230,3 +230,76 @@
         margin-top: var(--space-sm);
     }
 }
+
+/* ============================
+   ORDER SUMMARY TOTAL FIX
+============================ */
+
+
+.summary-box {
+
+    padding: 45px;
+
+}
+
+
+.summary-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 14px;
+
+    font-size: 16px;
+
+    color: var(--text-dark);
+
+}
+
+
+.summary-row span:first-child {
+
+    color:#666;
+
+}
+
+
+.summary-row span:last-child {
+
+    font-weight:600;
+
+    color:#252819;
+
+}
+
+
+.total-row {
+
+    margin-top:20px;
+
+    padding-top:20px;
+
+    border-top:1px solid rgba(0,0,0,.15);
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+
+
+#discountRow span:last-child {
+
+    color:#2e7d32;
+
+}
+
+
+.summary-divider {
+
+    margin:15px 0;
+
+}

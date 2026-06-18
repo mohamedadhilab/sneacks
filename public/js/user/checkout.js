@@ -554,3 +554,197 @@ behavior:'smooth'
 });
 });
 
+
+// ===============================
+// COUPON APPLY
+// ===============================
+
+
+const applyCouponBtn =
+document.getElementById('applyCouponBtn');
+
+
+const removeCouponBtn =
+document.getElementById('removeCouponBtn');
+
+
+if(applyCouponBtn){
+
+
+applyCouponBtn.addEventListener(
+'click',
+async()=>{
+
+
+const code =
+document.getElementById('couponInput').value;
+
+
+
+const res =
+await fetch('/apply-coupon',{
+
+
+method:'POST',
+
+headers:{
+
+'Content-Type':'application/json'
+
+},
+
+
+body:JSON.stringify({
+
+couponCode:code
+
+})
+
+
+});
+
+
+
+const data =
+await res.json();
+
+
+
+if(data.success){
+
+applyCouponBtn.classList.add('hidden');
+
+
+document.getElementById('couponInput')
+.setAttribute('readonly',true);
+
+
+document.getElementById('discountRow')
+.classList.remove('hidden');
+
+
+
+document.getElementById('discountAmount')
+.innerText =
+'- ₹' + data.discount.toFixed(2);
+
+
+
+document.getElementById('finalTotal')
+.innerText =
+'₹'+data.finalAmount;
+
+
+
+removeCouponBtn.classList.remove('hidden');
+
+
+Swal.fire(
+'Applied',
+data.message,
+'success'
+);
+
+
+
+}else{
+
+
+Swal.fire(
+
+'Error',
+
+data.message,
+
+'error'
+
+);
+
+
+}
+
+
+}
+
+);
+
+
+}
+
+
+
+/// REMOVE COUPON
+
+
+if(removeCouponBtn){
+
+
+removeCouponBtn.addEventListener(
+
+'click',
+
+async()=>{
+
+
+const res =
+await fetch('/remove-coupon',{
+
+method:'POST'
+
+});
+
+
+const data =
+await res.json();
+
+
+if(data.success){
+
+
+removeCouponBtn.classList.add('hidden');
+
+
+applyCouponBtn.classList.remove('hidden');
+
+
+document.getElementById('couponInput')
+.removeAttribute('readonly');
+
+
+document.getElementById('couponInput').value='';
+
+
+document.getElementById('discountRow')
+.classList.add('hidden');
+
+
+// restore original total
+
+document.getElementById('finalTotal')
+.innerText =
+document.getElementById('subtotalAmount')
+.innerText;
+
+
+
+Swal.fire(
+
+'Removed',
+
+data.message,
+
+'success'
+
+);
+
+
+}
+
+
+}
+
+
+);
+
+
+}

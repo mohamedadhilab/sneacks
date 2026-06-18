@@ -807,14 +807,59 @@ y
 y +=20;
 
 
+// COUPON DISCOUNT
+
+
+if(order.discount && order.discount > 0){
+
+
+let couponText = '';
+
+
+if(
+
+order.coupon &&
+
+order.coupon.couponCode
+
+){
+
+couponText =
+` (${order.coupon.couponCode})`;
+
+}
+
+
+
+doc.text(
+
+`Discount${couponText}: -Rs.${order.discount}`,
+
+350,
+
+y
+
+);
+
+
+y +=20;
+
+
+}
+
+
+
 doc
 .fontSize(14)
 .text(
-`Grand Total: Rs.${order.finalAmount}`,
-350,
-y
-);
 
+`Grand Total: Rs.${order.finalAmount}`,
+
+350,
+
+y
+
+);
 
 
 

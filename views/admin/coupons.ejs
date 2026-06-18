@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Coupons | Sneacks Admin</title>
+
+<link 
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<link rel="stylesheet" href="/styles/admin/layout.css">
+<link rel="stylesheet" href="/styles/admin/products.css">
+<link rel="stylesheet" href="/styles/admin/coupons.css">
+
+</head>
+
+
+<body>
+
+
+<%- include('../partials/admin/sidebar',
+{
+page:'coupons'
+})
+%>
+
+
+
+<div class="main-content">
+
+
+<%- include('../partials/admin/topbar',
+{
+searchPlaceholder:'Search coupons...',
+searchAction:'/admin/coupons',
+search:''
+})
+%>
+
+
+
+
+<div class="page-container">
+
+
+<header class="page-header">
+
+
+<div class="header-titles">
+
+<h1 class="premium-title">
+
+COUPON <span class="text-orange">CONTROL</span>
+
+</h1>
+
+
+<p class="premium-subtitle">
+
+Create and manage discounts for your customers.
+
+</p>
+
+
+</div>
+
+
+
+<div class="header-actions">
+
+<button 
+class="btn-premium-glow"
+onclick="openCouponModal()"
+>
+
+<i class="fas fa-plus"></i>
+
+ADD COUPON
+
+</button>
+
+</div>
+
+
+
+
+</header>
+
+<section class="filter-pills">
+
+
+<span class="filter-label">
+
+FILTER BY:
+
+</span>
+
+
+<a 
+href="/admin/coupons"
+class="pill <%= !trash ? 'active' : '' %>"
+>
+
+ACTIVE
+
+</a>
+
+
+
+<a 
+href="/admin/coupons?trash=true"
+class="pill <%= trash ? 'active' : '' %>"
+>
+
+TRASH
+
+</a>
+
+
+</section>
+
+
+
+
+
+<section class="table-container card">
+
+
+<div class="responsive-table">
+
+
+<table class="premium-table">
+
+
+<thead>
+
+<tr>
+
+<th>CODE</th>
+
+<th>TYPE</th>
+
+<th>DISCOUNT</th>
+
+<th>MIN PURCHASE</th>
+
+<th>EXPIRY</th>
+
+<th>STATUS</th>
+
+<th>ACTION</th>
+
+
+</tr>
+
+</thead>
+
+
+
+<tbody>
+
+
+<% if(coupons.length===0){ %>
+
+
+<tr>
+
+<td colspan="7">
+
+<div class="empty-state">
+
+<i class="fas fa-ticket-alt"></i>
+
+<h3>No Coupons Found</h3>
+
+
+</div>
+
+</td>
+
+
+</tr>
+
+
+<% } %>
+
+
+
+
+<% coupons.forEach(coupon=>{ %>
+
+
+<tr>
+
+
+<td>
+
+<span class="coupon-code">
+
+<%= coupon.couponCode %>
+
+</span>
+
+</td>
+
+
+
+<td>
+
+<%= coupon.discountType %>
+
+</td>
+
+
+
+<td>
+
+<span class="discount-badge">
+
+<%= coupon.discountValue %>
+
+</span>
+
+
+</td>
+
+
+
+<td>
+
+₹<%= coupon.minimumAmount %>
+
+</td>
+
+
+
+<td>
+
+<%= new Date(coupon.expiryDate).toLocaleDateString() %>
+
+</td>
+
+
+
+<td>
+
+
+<span class="status-badge 
+<%= coupon.isActive ? 'status-active':'status-blocked' %>">
+
+<%= coupon.isActive ? 'ACTIVE':'BLOCKED' %>
+
+</span>
+
+
+</td>
+
+
+
+<td>
+
+<div class="coupon-actions">
+
+
+<% if(!trash){ %>
+
+
+<a href="/admin/toggle-coupon/<%= coupon._id %>">
+
+<i class="fas fa-eye"></i>
+
+</a>
+
+
+
+<a
+href="#"
+onclick='openEditCouponModal(
+event,
+"<%= coupon._id %>",
+"<%= coupon.couponCode %>",
+"<%= coupon.discountType %>",
+"<%= coupon.discountValue %>",
+"<%= coupon.minimumAmount %>",
+"<%= coupon.maximumDiscount %>",
+"<%= coupon.expiryDate.toISOString().split("T")[0] %>",
+"<%= coupon.usageLimit %>"
+)'
+>
+
+<i class="fas fa-edit"></i>
+
+</a>
+
+
+
+<a 
+onclick="confirmDeleteCoupon(event,this.href)"
+href="/admin/delete-coupon/<%= coupon._id %>"
+>
+
+<i class="fas fa-trash"></i>
+
+</a>
+
+
+
+<% } else { %>
+
+
+<a
+href="/admin/restore-coupon/<%= coupon._id %>"
+>
+
+<i class="fas fa-rotate-left"></i>
+
+</a>
+
+
+<% } %>
+
+
+</div>
+
+
+</td>
+
+
+</tr>
+
+
+<% }) %>
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</section>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- ================= MODAL ================= -->
+
+
+<div class="coupon-modal" id="couponModal">
+
+
+<div class="coupon-modal-card">
+
+
+<div class="coupon-modal-header">
+
+<h2>
+ADD <span class="text-orange">COUPON</span>
+</h2>
+
+
+<button 
+class="close-coupon-modal"
+onclick="closeCouponModal()"
+>
+
+&times;
+
+</button>
+
+
+</div>
+
+
+
+
+<form 
+method="POST"
+action="/admin/add-coupon"
+>
+
+
+
+<div class="coupon-form-grid">
+
+
+<input
+class="coupon-input"
+name="couponCode"
+placeholder="Coupon Code"
+>
+
+
+<select 
+class="coupon-input"
+name="discountType"
+>
+
+<option value="percentage">
+
+Percentage
+
+</option>
+
+
+<option value="fixed">
+
+Fixed Amount
+
+</option>
+
+
+</select>
+
+
+
+
+<input
+class="coupon-input"
+name="discountValue"
+placeholder="Discount Value"
+>
+
+
+<input
+class="coupon-input"
+name="minimumAmount"
+placeholder="Minimum Amount"
+>
+
+
+
+<input
+class="coupon-input"
+name="maximumDiscount"
+placeholder="Maximum Discount"
+>
+
+
+
+<input
+class="coupon-input"
+type="date"
+name="expiryDate"
+>
+
+
+
+<input
+class="coupon-input"
+name="usageLimit"
+placeholder="Usage Limit"
+>
+
+
+</div>
+
+
+
+<div class="modal-footer">
+
+
+<button
+type="button"
+class="btn-cancel"
+onclick="closeCouponModal()"
+>
+
+Cancel
+
+</button>
+
+
+
+<button 
+class="btn-premium-glow"
+type="submit"
+>
+
+SAVE COUPON
+
+</button>
+
+
+</div>
+
+
+
+</form>
+
+
+</div>
+
+
+</div>
+<!-- EDIT COUPON MODAL -->
+
+
+<div class="coupon-modal" id="editCouponModal">
+
+
+<div class="coupon-modal-card">
+
+
+<div class="coupon-modal-header">
+
+
+<h2>
+
+EDIT <span class="text-orange">COUPON</span>
+
+</h2>
+
+
+<button 
+class="close-coupon-modal"
+onclick="closeEditCouponModal()"
+>
+
+&times;
+
+</button>
+
+
+</div>
+
+
+
+
+<form 
+method="POST"
+id="editCouponForm"
+>
+
+
+<div class="coupon-form-grid">
+
+
+<input
+class="coupon-input"
+name="couponCode"
+id="editCouponCode"
+>
+
+
+<select
+class="coupon-input"
+name="discountType"
+id="editDiscountType"
+>
+
+
+<option value="percentage">
+
+Percentage
+
+</option>
+
+
+<option value="fixed">
+
+Fixed Amount
+
+</option>
+
+
+</select>
+
+
+
+
+<input
+class="coupon-input"
+name="discountValue"
+id="editDiscountValue"
+>
+
+
+
+<input
+class="coupon-input"
+name="minimumAmount"
+id="editMinimumAmount"
+>
+
+
+
+<input
+class="coupon-input"
+name="maximumDiscount"
+id="editMaximumDiscount"
+>
+
+
+
+<input
+class="coupon-input"
+type="date"
+name="expiryDate"
+id="editExpiryDate"
+>
+
+
+
+<input
+class="coupon-input"
+name="usageLimit"
+id="editUsageLimit"
+>
+
+
+
+</div>
+
+
+
+<div class="modal-footer">
+
+
+<button
+type="button"
+class="btn-cancel"
+onclick="closeEditCouponModal()"
+>
+
+Cancel
+
+</button>
+
+
+
+<button
+class="btn-premium-glow"
+type="submit"
+>
+
+UPDATE COUPON
+
+</button>
+
+
+</div>
+
+
+
+</form>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="/js/admin/coupons.js"></script>
+
+
+<%- include('../partials/toast') %>
+
+
+</body>
+
+
+</html>

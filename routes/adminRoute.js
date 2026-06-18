@@ -14,6 +14,8 @@ const productController =require('../controllers/admin/productController');
 const returnController =require('../controllers/admin/returnController');
 const productUpload =require('../middleware/productUpload');
 const orderController = require('../controllers/admin/orderController');
+const couponController =require('../controllers/admin/couponController');
+
 const {
   isAdminLoggedIn,
   isAdminLoggedOut
@@ -232,5 +234,50 @@ isAdminLoggedIn,
 returnController.rejectReturn
 );
 
+
+router.get(
+'/coupons',
+isAdminLoggedIn,
+couponController.loadCoupons
+);
+
+
+
+router.post(
+'/add-coupon',
+isAdminLoggedIn,
+couponController.addCoupon
+);
+
+
+
+router.get(
+'/delete-coupon/:id',
+isAdminLoggedIn,
+couponController.deleteCoupon
+);
+
+
+
+router.get(
+'/toggle-coupon/:id',
+isAdminLoggedIn,
+couponController.toggleCoupon
+);
+
+router.post(
+'/edit-coupon/:id',
+isAdminLoggedIn,
+couponController.editCoupon
+);
+router.get(
+
+'/restore-coupon/:id',
+
+isAdminLoggedIn,
+
+couponController.restoreCoupon
+
+);
 
 module.exports = router;

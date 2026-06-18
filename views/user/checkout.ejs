@@ -641,36 +641,54 @@ Edit
 
                         <!-- COUPON -->
 
-                        <div
-                            class="coupon-section mb-4"
+                       <div class="coupon-section mb-4">
+
+
+                        <label class="form-label">
+
+                        Discount Code
+
+                        </label>
+
+
+                        <div class="flex gap-sm">
+
+
+                        <input
+                        type="text"
+                        id="couponInput"
+                        class="form-input"
+                        placeholder="Enter code"
                         >
 
-                            <label class="form-label">
 
-                                Discount Code
+                        <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="applyCouponBtn"
+                        >
 
-                            </label>
+                        Apply
 
-                            <div class="flex gap-sm">
+                        </button>
 
-                                <input
-                                    type="text"
-                                    id="couponInput"
-                                    class="form-input"
-                                    placeholder="Enter code"
-                                >
 
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary"
-                                    id="applyCouponBtn"
-                                >
+                        <button
+                        type="button"
+                        class="btn btn-secondary hidden"
+                        id="removeCouponBtn"
+                        >
 
-                                    Apply
+                        Remove
 
-                                </button>
+                        </button>
 
-                            </div>
+
+                        </div>
+
+
+                        <p id="couponMessage"></p>
+
 
                         </div>
 
@@ -684,9 +702,9 @@ Edit
 
                             </span>
 
-                            <span>
+                            <span id="subtotalAmount">
 
-                                ₹<%= cartTotal.toLocaleString() %>
+                            ₹<%= cartTotal.toLocaleString() %>
 
                             </span>
 
@@ -705,6 +723,27 @@ Edit
                                 Free
 
                             </span>
+
+                        </div>
+                        <div 
+                        class="summary-row hidden"
+                        id="discountRow"
+                        >
+
+
+                        <span>
+
+                        Discount
+
+                        </span>
+
+
+                        <span id="discountAmount">
+
+                        ₹0
+
+                        </span>
+
 
                         </div>
 

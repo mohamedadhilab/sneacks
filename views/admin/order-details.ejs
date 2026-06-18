@@ -273,12 +273,13 @@
                         <div class="card-divider"></div>
                         <div class="shipping-address-details">
                             <strong class="shipping-recipient"><%= order.userId.name %></strong>
-                            <p class="shipping-text"><%= order.address.address_line %></p>
-                            <% if (order.address.landmark) { %>
-                                <p class="shipping-text"><%= order.address.landmark %></p>
-                            <% } %>
+                            <p class="shipping-text">
+
+                            <%= order.address.address %>
+
+                            </p>  
+                          
                             <p class="shipping-text"><%= order.address.city %>, <%= order.address.state %> <%= order.address.pincode %></p>
-                            <p class="shipping-text"><%= order.address.country %></p>
                         </div>
                     </div>
 
@@ -300,6 +301,30 @@
                                 <span class="summary-label">Estimated Tax</span>
                                 <span class="summary-val">₹<%= (order.tax || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
                             </div>
+                            <% if(order.discount && order.discount > 0){ %>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Discount
+                                <% if(order.coupon && order.coupon.couponCode){ %>
+                                    (<%= order.coupon.couponCode %>)
+                                <% } %>
+                            </span>
+
+
+                            <span class="discount-text">
+
+                                -₹<%= order.discount.toFixed(2) %>
+
+                            </span>
+
+
+                        </div>
+
+
+                        <% } %>
                             <div class="card-divider"></div>
                             <div class="summary-row grand-total-row">
                                 <span class="grand-total-label">Total</span>

@@ -1,0 +1,398 @@
+/* ======================================
+   SNEACKS ADMIN - COUPON PAGE
+====================================== */
+
+
+/* ADD BUTTON */
+
+.add-coupon-btn {
+
+    height:45px;
+
+}
+
+
+/* COUPON CODE */
+
+.coupon-code {
+
+    color:#fff;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+    font-size:15px;
+
+}
+
+
+/* DISCOUNT */
+
+.discount-badge {
+
+    display:inline-block;
+
+    background:rgba(255,107,74,.15);
+
+    color:#FF6B4A;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+
+
+/* STATUS */
+
+.status-badge {
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+}
+
+
+.status-active {
+
+    background:rgba(0,230,118,.15);
+
+    color:#00E676;
+
+}
+
+
+.status-blocked {
+
+    background:rgba(255,74,74,.15);
+
+    color:#FF4A4A;
+
+}
+
+
+
+/* ==========================
+   COUPON MODAL
+========================== */
+
+
+.coupon-modal {
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.75);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:999;
+
+}
+
+
+
+.coupon-modal-card {
+
+    width:600px;
+
+    background:#1E1E1E;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 15px 40px rgba(0,0,0,.6);
+
+}
+
+
+
+.coupon-modal-header {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.coupon-modal-header h3 {
+
+    color:#fff;
+
+    font-size:25px;
+
+    font-weight:800;
+
+}
+
+
+
+.close-coupon-modal {
+
+    background:none;
+
+    border:none;
+
+    color:#888;
+
+    font-size:30px;
+
+    cursor:pointer;
+
+}
+
+
+
+.close-coupon-modal:hover {
+
+    color:#FF6B4A;
+
+}
+
+
+
+/* FORM */
+
+
+.coupon-form-grid {
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+
+}
+
+
+
+.coupon-input {
+
+    background:#111;
+
+    border:1px solid rgba(255,255,255,.1);
+
+    color:#fff;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    outline:none;
+
+}
+
+
+
+.coupon-input:focus {
+
+    border-color:#FF6B4A;
+
+}
+
+
+
+.full-width {
+
+    grid-column:1/-1;
+
+}
+
+
+
+/* FOOTER */
+
+.coupon-modal-footer {
+
+    margin-top:30px;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+}
+
+
+
+.btn-cancel {
+
+    background:#2b2b2b;
+
+    color:#fff;
+
+    border:none;
+
+    padding:12px 22px;
+
+    border-radius:50px;
+
+    cursor:pointer;
+
+}
+
+
+.btn-cancel:hover {
+
+    background:#333;
+
+}
+/* =====================
+ COUPON FIXES
+===================== */
+
+
+
+
+.coupon-code{
+
+letter-spacing:1px;
+
+font-size:14px;
+
+}
+
+
+.discount-badge{
+
+min-width:50px;
+
+text-align:center;
+
+}
+
+
+.coupon-actions{
+
+display:flex;
+
+gap:10px;
+
+align-items:center;
+
+}
+
+
+.coupon-actions a{
+
+width:35px;
+
+height:35px;
+
+border-radius:8px;
+
+background:rgba(255,255,255,.05);
+
+color:#888;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+text-decoration:none;
+
+}
+
+
+.coupon-actions a:hover{
+
+background:rgba(255,107,74,.15);
+
+color:#FF6B4A;
+
+}
+/* COUPON PAGE FINAL FIX */
+
+
+.coupon-code{
+
+letter-spacing:1px;
+
+}
+
+
+.premium-table td{
+
+white-space:nowrap;
+
+}
+
+
+.discount-badge{
+
+min-width:55px;
+
+text-align:center;
+
+}
+
+
+.coupon-actions{
+
+display:flex;
+
+gap:.5rem;
+
+}
+
+
+.coupon-actions a{
+
+width:32px;
+
+height:32px;
+
+border-radius:8px;
+
+background:rgba(255,255,255,.05);
+
+color:#888;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+transition:.2s;
+
+}
+
+
+.coupon-actions a:hover{
+
+background:rgba(255,107,74,.15);
+
+color:#FF6B4A;
+
+}
